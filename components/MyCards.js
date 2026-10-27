@@ -27,7 +27,7 @@ export default function MyCards() {
       <div className="card" style={{ padding: 28, display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-start' }}>
         <p style={{ margin: 0, fontWeight: 600 }}>No cards in this browser yet.</p>
         <p className="muted" style={{ margin: 0, lineHeight: 1.6 }}>Cards you buy are saved here on this device. If you bought one in another browser, open it there.</p>
-        <Link href="/spend" className="btn btn-primary">Get your first card</Link>
+        <Link href="/#shop" className="btn btn-primary">Get your first card</Link>
       </div>
     );
   }
@@ -41,7 +41,7 @@ export default function MyCards() {
           <div key={c.id} className="card" style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <span style={{ font: '700 18px var(--display)' }}>{c.name}</span>
+                <span style={{ font: '600 18px var(--display)' }}>{c.name}</span>
                 <span className="muted" style={{ fontSize: 14 }}>{c.value} {c.currency} · {new Date(c.at).toLocaleDateString()}</span>
               </div>
               <button type="button" className="btn btn-ghost" onClick={() => reveal(c)} disabled={s.loading}>

@@ -13,7 +13,7 @@ import {
 } from '@solana/spl-token';
 import QrCode from './QrCode';
 import { CHAINS, getChain, isValidAddress } from '@/lib/chains';
-import { loadCards, saveCards } from '@/lib/cards';
+import { loadCards, saveCards, statusUrl } from '@/lib/cards';
 
 const STATUS_TEXT = {
   PENDING_DEPOSIT: 'Waiting for your deposit',
@@ -149,7 +149,7 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
         if (['KNOWN_DEPOSIT_TX', 'PROCESSING'].includes(s.status)) setPhase((p) => (p === 'deposit' ? 'tracking' : p));
         if (['REFUNDED', 'FAILED'].includes(s.status)) { setPhase('idle'); setError(STATUS_TEXT[s.status]); return; }
         if (s.status === 'SUCCESS') {
-          const inv = await fetch(`/api/invoice/${encodeURIComponent(entry.id)}?token=${encodeURIComponent(entry.token)}`).then((r) => r.json());
+          const inv = await fetch(statusUrl(entry)).then((r) => r.json());
           if (inv.status === 'complete' && inv.redemption) { setResult({ ...entry, redemption: inv.redemption }); setPhase('done'); return; }
         }
       } catch {}
@@ -163,12 +163,12 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
 
   return (
     <>
-      <div className="card" style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 14 }}>
-        <span className="label">2 · Pay privately</span>
-        <div className="notice notice-info">
-          The shop gets paid by the NEAR Intents network, not by your wallet. Your wallet only shows a deposit into the network.
+      <div className="card" style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 10, font: '600 17px var(--display)', letterSpacing: '-0.01em' }}><span className="step-num">2</span>Pay privately</span>
+          <span className="muted" style={{ fontSize: 13 }}>Any of 8 chains</span>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10 }}>
           <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <span className="label">Pay from chain</span>
             <select className="input" value={chain} onChange={(e) => { setChain(e.target.value); setRefundTo(''); }} disabled={phase !== 'idle'}>
@@ -194,14 +194,17 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
         </label>
       </div>
 
-      <div className="card" style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <span className="label">3 · Review and pay</span>
+      <div className="card" style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 10, font: '600 17px var(--display)', letterSpacing: '-0.01em' }}><span className="step-num">3</span>Get your deposit address</span>
+          <span className="muted" style={{ fontSize: 13 }}>No wallet needed</span>
+        </div>
 
         {phase === 'idle' && (
           <>
             <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 14, lineHeight: 1.5, cursor: 'pointer' }}>
               <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} style={{ marginTop: 3, width: 18, height: 18 }} />
-              <span>I understand private checkout hides the link between my wallet and the shop’s payment, but my deposit into the network is still public, and the card is tied to whatever account I redeem it on.</span>
+              <span>I understand private checkout hides the link between my wallet and the shop’s payment. My deposit into the network is still public, and the card is tied to the account I redeem it on.</span>
             </label>
             <button className="btn btn-primary" type="button" disabled={!ready} onClick={start}>Get private deposit address</button>
           </>

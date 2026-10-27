@@ -10,38 +10,36 @@ export default function Footer() {
     ['DEX Screener', site.links.dexscreener],
   ].filter(([, href]) => href);
 
+  const cols = [
+    ['Product', [['Shop', '/#shop'], ['Live orders', '/#live'], ['My cards', '/cards']]],
+    ['Learn', [['Docs', '/docs'], ['Private checkout', '/docs#private'], ['Fees', '/docs#fees']]],
+    ['Legal', [['Terms', '/terms'], ['Privacy', '/privacy']]],
+  ];
+
   return (
-    <footer style={{ borderTop: '1px solid var(--line)', marginTop: 40 }}>
-      <div className="wrap" style={{ padding: '40px 20px', display: 'flex', flexWrap: 'wrap', gap: 28, justifyContent: 'space-between' }}>
-        <div style={{ flex: '1 1 320px', display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 520 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <Mascot size={32} variant="icon" title="" />
-            <span style={{ font: '700 20px var(--display)', letterSpacing: '-0.03em' }}>gifted</span>
+    <footer style={{ borderTop: '1.5px solid var(--line)', background: 'var(--surface)', marginTop: 40 }}>
+      <div className="wrap" style={{ padding: '48px 20px 36px', display: 'flex', flexWrap: 'wrap', gap: 40, justifyContent: 'space-between' }}>
+        <div style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: 14, maxWidth: 440 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Mascot size={30} variant="icon" title="" />
+            <span style={{ font: '600 20px var(--display)', letterSpacing: '-0.04em' }}>gifted</span>
           </div>
           <p className="muted" style={{ margin: 0, fontSize: 13, lineHeight: 1.65 }}>
-            $GIFTED is a meme coin with no promised value or returns. The shop is free to use and holding $GIFTED is not required.
-            Gift cards are fulfilled through Bitrefill. gifted never holds your funds: you sign every payment from your own wallet.
-            Card availability depends on your country.
+            $GIFTED is a meme coin with no promised value or returns. The shop is free to use, and holding $GIFTED isn’t required.
+            Gift cards are fulfilled through Bitrefill. gifted never holds your funds: you approve every payment from your own wallet.
           </p>
         </div>
-        <nav aria-label="Footer" style={{ display: 'flex', gap: 40, flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 14 }}>
-            <span className="label">Product</span>
-            <Link href="/spend">Open app</Link>
-            <Link href="/cards">My cards</Link>
-            <Link href="/#faq">FAQ</Link>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 14 }}>
-            <span className="label">Legal</span>
-            <Link href="/terms">Terms</Link>
-            <Link href="/privacy">Privacy</Link>
-          </div>
+        <nav aria-label="Footer" style={{ display: 'flex', gap: 48, flexWrap: 'wrap', fontSize: 14 }}>
+          {cols.map(([title, links]) => (
+            <div key={title} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <span className="label">{title}</span>
+              {links.map(([l, h]) => <Link key={h} href={h} style={{ textDecoration: 'none' }}>{l}</Link>)}
+            </div>
+          ))}
           {social.length > 0 && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 14 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <span className="label">Community</span>
-              {social.map(([label, href]) => (
-                <a key={label} href={href} target="_blank" rel="noopener noreferrer">{label}</a>
-              ))}
+              {social.map(([l, h]) => <a key={l} href={h} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>{l}</a>)}
             </div>
           )}
         </nav>

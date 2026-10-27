@@ -35,3 +35,10 @@
 - Rate limits on invoice creation and swap endpoints.
 - Non-custodial: USDC goes straight from the swap to Bitrefill's invoice address.
 - Demo mode runs safely until credentials are added.
+
+## Live orders feed (Upstash Redis)
+The homepage "Live orders" feed shows only orders Bitrefill confirms as delivered. Nothing is ever faked.
+1. Vercel → your project → Storage → Create → Upstash (Redis), free plan → connect it to this project (all environments).
+2. That adds KV_REST_API_URL and KV_REST_API_TOKEN automatically.
+3. Redeploy.
+Private-checkout orders appear with no token, no tx and a rounded time, so they can't be matched to a wallet.
