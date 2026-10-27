@@ -378,3 +378,22 @@ html.motion .fw-apps[data-reveal] { opacity: 1; transform: none; }
 html.motion .fw-apps[data-reveal] .fw-app { opacity: 0; transform: translateY(14px); transition: opacity .5s ease, transform .5s ease, border-color .2s, background .2s; transition-delay: calc(var(--i, 0) * 40ms); }
 html.motion .fw-apps[data-reveal].is-in .fw-app { opacity: 1; transform: none; }
 html.motion .fw-apps[data-reveal].is-in .fw-app:hover { transform: translateY(-2px); transition-delay: 0s; }
+
+/* Three-way checkout switch */
+.mode-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.mode-3 button { font-size: 14px; gap: 6px; padding: 0 6px; white-space: nowrap; }
+@media (max-width: 420px) { .mode-3 button svg { display: none; } }
+
+/* Max privacy */
+.mx-coins { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; max-height: 236px; overflow-y: auto; padding-bottom: 2px; }
+.mx-coin { display: flex; align-items: center; gap: 9px; min-height: 50px; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: transparent; color: var(--text); text-align: left; cursor: pointer; transition: border-color .15s, background .15s; }
+.mx-coin:hover { border-color: var(--line-strong); background: var(--surface-2); }
+.mx-coin[aria-pressed="true"] { border-color: #4A4A52; background: var(--surface-3); box-shadow: var(--hi); }
+.mx-steps { display: flex; flex-direction: column; gap: 10px; }
+.mx-step { display: flex; align-items: center; gap: 12px; font-size: 14.5px; color: var(--dim); transition: color .3s; }
+.mx-step[data-state="done"] { color: var(--muted); }
+.mx-step[data-state="now"] { color: var(--text); }
+.mx-dot { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--line-strong); flex: none; transition: background .3s, border-color .3s; }
+.mx-step[data-state="done"] .mx-dot { background: var(--mint); border-color: var(--mint); }
+.mx-step[data-state="now"] .mx-dot { background: var(--ribbon); border-color: var(--ribbon); }
+@media (prefers-reduced-motion: no-preference) { .mx-step[data-state="now"] .mx-dot { animation: mxpulse 1.6s ease-out infinite; } @keyframes mxpulse { 0% { box-shadow: 0 0 0 0 rgba(240,81,122,.5); } 100% { box-shadow: 0 0 0 9px rgba(240,81,122,0); } } }

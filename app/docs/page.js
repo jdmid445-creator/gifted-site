@@ -7,6 +7,7 @@ const toc = [
   ['quick-start', 'Quick start'],
   ['standard', 'Standard checkout'],
   ['private', 'Private checkout'],
+  ['max', 'Max privacy'],
   ['fees', 'Fees'],
   ['supported', 'Supported tokens & chains'],
   ['safety', 'Safety & custody'],
@@ -77,6 +78,17 @@ export default function Docs() {
           <div className="callout">Private, not invisible. Private checkout protects your financial privacy; it isn’t a way around the law. NEAR Intents screens deposits, and using GiftedSwaps for laundering or fraud is prohibited.</div>
           <h3>Refunds</h3>
           <p>If a swap can’t complete, NEAR refunds your deposit to the refund address on the chain you paid from. If a card can’t be delivered, Bitrefill refunds to the Solana address you gave as the card refund address.</p>
+
+          <h2 id="max">Max privacy</h2>
+          <p>Max privacy goes one step further. Your coins never touch NEAR or the shop directly. They go through Houdini Swap, which routes them through Monero, and come out as SOL in a brand-new wallet made in your browser just for this order. That wallet then buys the card on its own.</p>
+          <ol>
+            <li>Pick a card and any coin Houdini supports (BTC, ETH, SOL, XMR, USDT and many more).</li>
+            <li>Save the backup key for your one-time wallet, then send the exact amount to the deposit address.</li>
+            <li>Houdini swaps it through Monero (usually 15–45 minutes). Nothing on-chain links what you sent to what arrives.</li>
+            <li>When the SOL lands, the page swaps it to USDC and pays for the card in one transaction, signed with the one-time key. Leftover SOL stays in that wallet, and you have its key.</li>
+          </ol>
+          <div className="callout">Houdini requires your IP address, browser and timezone for its own compliance screening, so we pass those through. We don’t store them. Houdini blocks sanctioned countries and may hold deposits linked to illicit activity.</div>
+          <p>Keep the tab open until the card is delivered. If you close it, your SOL is safe in the one-time wallet: import the backup key into Phantom or Solflare to get it back.</p>
 
           <h2 id="fees">Fees</h2>
           <div className="table-scroll">

@@ -30,6 +30,7 @@ const faqs = [
   ['What does Private actually hide?', 'The shop gets paid by NEAR Intents instead of your wallet, so the purchase isn’t linked to you. Your own deposit is still visible on its blockchain, and the card is tied to whatever account you redeem it on.'],
   ['What does it cost?', 'GiftedSwaps charges no fee. You pay the card price from Bitrefill, plus the swap and a small network fee. You see the exact amount before you sign anything.'],
   ['Do I need an account or ID?', 'No. Standard checkout uses your Solana wallet. Private checkout works from any wallet on 8 chains, without connecting.'],
+  ['What is Max privacy?', 'The most private way to pay. Your coins go through Monero via Houdini Swap and arrive as SOL in a one-time wallet made in your browser, which then buys the card. Nothing on-chain connects what you sent to the card. It takes 15–45 minutes and costs a little more.'],
   ['Where do I get my code?', 'On screen as soon as it’s delivered, usually in under a minute. It’s also saved in this browser under My cards. Treat it like cash.'],
   ['What if something goes wrong?', 'If the payment doesn’t go through, your money goes back to your wallet. If a card can’t be delivered, Bitrefill refunds you in USDC on Solana.'],
   ['Can I use it outside the US?', 'Yes. Pick your country next to the search box. Gift cards are country-specific, so buy one for where you’ll use it.'],
