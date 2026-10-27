@@ -2,23 +2,23 @@
 
 // Make a fresh wallet in the browser, or open a wallet app to add a new account.
 // Nothing here talks to a server: keys are generated and shown on this device only.
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { newSolanaWallet, newEvmWallet, newBitcoinWallet, newLitecoinWallet, newDogecoinWallet, newTronWallet } from '@/lib/freshwallet';
-import { IconCopy, IconCheck } from './Icons';
+import { IconCopy, IconCheck, IconEyeOff, IconShield } from './Icons';
 
 const EVM_HOW = 'In MetaMask, Rabby or Coinbase Wallet: Add account → Import account, then paste the key. The same address works on every EVM chain.';
 const KINDS = {
-  sol: { label: 'Solana', make: newSolanaWallet, how: 'In Phantom, Solflare or Backpack: Add account → Import private key, then paste the key.' },
-  eth: { label: 'Ethereum', make: newEvmWallet, how: EVM_HOW },
-  base: { label: 'Base', make: newEvmWallet, how: EVM_HOW },
-  arb: { label: 'Arbitrum', make: newEvmWallet, how: EVM_HOW },
-  bnb: { label: 'BNB Chain', make: newEvmWallet, how: EVM_HOW },
-  polygon: { label: 'Polygon', make: newEvmWallet, how: EVM_HOW },
-  avax: { label: 'Avalanche', make: newEvmWallet, how: EVM_HOW },
-  btc: { label: 'Bitcoin', make: newBitcoinWallet, how: 'In Electrum: New wallet → Import Bitcoin addresses or private keys, then paste p2wpkh: followed by the key (no space). Sparrow and Exodus can import it too.' },
-  ltc: { label: 'Litecoin', make: newLitecoinWallet, how: 'In Electrum-LTC: New wallet → Import addresses or private keys, then paste p2wpkh: followed by the key (no space). Exodus can import it too.' },
-  doge: { label: 'Dogecoin', make: newDogecoinWallet, how: 'Import the private key in a wallet that supports it, like Exodus or Dogecoin Core.' },
-  tron: { label: 'Tron', make: newTronWallet, how: 'In TronLink: Add wallet → Import → Private key, then paste the key.' },
+  sol: { domain: 'solana.com', label: 'Solana', make: newSolanaWallet, how: 'In Phantom, Solflare or Backpack: Add account → Import private key, then paste the key.' },
+  eth: { domain: 'ethereum.org', label: 'Ethereum', make: newEvmWallet, how: EVM_HOW },
+  base: { domain: 'base.org', label: 'Base', make: newEvmWallet, how: EVM_HOW },
+  arb: { domain: 'arbitrum.io', label: 'Arbitrum', make: newEvmWallet, how: EVM_HOW },
+  bnb: { domain: 'bnbchain.org', label: 'BNB Chain', make: newEvmWallet, how: EVM_HOW },
+  polygon: { domain: 'polygon.technology', label: 'Polygon', make: newEvmWallet, how: EVM_HOW },
+  avax: { domain: 'avax.network', label: 'Avalanche', make: newEvmWallet, how: EVM_HOW },
+  btc: { domain: 'bitcoin.org', label: 'Bitcoin', make: newBitcoinWallet, how: 'In Electrum: New wallet → Import Bitcoin addresses or private keys, then paste p2wpkh: followed by the key (no space). Sparrow and Exodus can import it too.' },
+  ltc: { domain: 'litecoin.org', label: 'Litecoin', make: newLitecoinWallet, how: 'In Electrum-LTC: New wallet → Import addresses or private keys, then paste p2wpkh: followed by the key (no space). Exodus can import it too.' },
+  doge: { domain: 'dogecoin.com', label: 'Dogecoin', make: newDogecoinWallet, how: 'Import the private key in a wallet that supports it, like Exodus or Dogecoin Core.' },
+  tron: { domain: 'tron.network', label: 'Tron', make: newTronWallet, how: 'In TronLink: Add wallet → Import → Private key, then paste the key.' },
 };
 
 const APPS = [
@@ -40,6 +40,38 @@ const APPS = [
   ['Tangem', 'https://tangem.com/', 'Hardware card, most chains'],
 ];
 
+const favicon = (domain) => `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=64`;
+const hostOf = (url) => { try { return new URL(url).hostname.replace(/^www\./, ''); } catch { return ''; } };
+
+function Logo({ domain, size = 18, round = true }) {
+  const [ok, setOk] = useState(true);
+  if (!ok || !domain) return <span aria-hidden="true" style={{ width: size, height: size, borderRadius: round ? '50%' : 6, background: 'var(--surface-3)', flex: 'none' }} />;
+  return <img src={favicon(domain)} alt="" width={size} height={size} loading="lazy" referrerPolicy="no-referrer" onError={() => setOk(false)} style={{ width: size, height: size, borderRadius: round ? '50%' : 6, flex: 'none', background: '#fff' }} />;
+}
+
+// Characters roll through random glyphs, then settle left to right.
+const GLYPHS = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789';
+function Scramble({ text }) {
+  const [out, setOut] = useState(text);
+  const raf = useRef(0);
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setOut(text); return undefined; }
+    const start = performance.now();
+    const dur = 650;
+    const tick = (now) => {
+      const p = Math.min(1, (now - start) / dur);
+      const settled = Math.floor(p * text.length);
+      let s = text.slice(0, settled);
+      for (let i = settled; i < text.length; i++) s += GLYPHS[(Math.random() * GLYPHS.length) | 0];
+      setOut(s);
+      if (p < 1) raf.current = requestAnimationFrame(tick);
+    };
+    raf.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf.current);
+  }, [text]);
+  return <span>{out}</span>;
+}
+
 function CopyBtn({ value, label }) {
   const [ok, setOk] = useState(false);
   return (
@@ -52,12 +84,15 @@ function CopyBtn({ value, label }) {
 export default function FreshWallet() {
   const [kind, setKind] = useState('sol');
   const [wallet, setWallet] = useState(null);
+  const [n, setN] = useState(0);
   const [shown, setShown] = useState(false);
   const [saved, setSaved] = useState(false);
   const [sent, setSent] = useState(false);
+  const k = KINDS[kind];
 
   function make() {
-    setWallet(KINDS[kind].make());
+    setWallet(k.make());
+    setN((x) => x + 1);
     setShown(false); setSaved(false); setSent(false);
   }
 
@@ -67,61 +102,76 @@ export default function FreshWallet() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
-      <div className="card" style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <span style={{ font: '500 19px var(--display)' }}>Make one right here</span>
-        <div role="group" aria-label="Which chain" style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          {Object.entries(KINDS).map(([k, v]) => (
-            <button key={k} type="button" className="quick-chip" style={{ height: 36, padding: '0 14px', fontSize: 14 }} aria-pressed={kind === k} onClick={() => { setKind(k); setWallet(null); }}>{v.label}</button>
-          ))}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 56 }}>
+      <div className="card fw-card rise" style={{ '--d': '220ms' }}>
+        <div className="fw-row">
+          <span className="step-num">01</span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14, minWidth: 0, flex: 1 }}>
+            <span className="fw-h">Pick a chain</span>
+            <div role="group" aria-label="Which chain" className="fw-chips">
+              {Object.entries(KINDS).map(([key, v]) => (
+                <button key={key} type="button" className="fw-chip" aria-pressed={kind === key} onClick={() => { setKind(key); setWallet(null); }}>
+                  <Logo domain={v.domain} size={16} />{v.label}
+                </button>
+              ))}
+            </div>
+            <button type="button" className="btn btn-primary" style={{ alignSelf: 'flex-start' }} onClick={make}>
+              {wallet ? `Make another ${k.label} wallet` : `Make a ${k.label} wallet`}
+            </button>
+          </div>
         </div>
-        <button type="button" className="btn btn-primary" style={{ alignSelf: 'flex-start' }} onClick={make}>{wallet ? `Make another ${KINDS[kind].label} wallet` : `Make a ${KINDS[kind].label} wallet`}</button>
 
         {wallet && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <span className="label">Address (safe to share)</span>
-              <code className="code-box" style={{ fontSize: 15 }}>{wallet.address}</code>
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                <CopyBtn value={wallet.address} label="Copy address" />
+          <div key={n} className="fw-result">
+            <div className="fw-row">
+              <span className="step-num">02</span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, minWidth: 0, flex: 1 }}>
+                <span className="fw-h">Your new address</span>
+                <div className="key-line"><Logo domain={k.domain} size={20} /><code><Scramble text={wallet.address} /></code></div>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}><CopyBtn value={wallet.address} label="Copy address" /></div>
+              </div>
+            </div>
+
+            <div className="fw-row">
+              <span className="step-num">03</span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, minWidth: 0, flex: 1 }}>
+                <span className="fw-h">Save the private key</span>
+                <button type="button" className="key-line key-secret" data-shown={shown} onClick={() => setShown(true)} aria-label={shown ? 'Private key' : 'Show private key'}>
+                  <code className="code-text" aria-hidden={!shown}>{wallet.secret}</code>
+                  {!shown && <span className="code-cover"><IconEyeOff width={16} height={16} /> Tap to show</span>}
+                </button>
+                {shown && <div style={{ display: 'flex', gap: 8 }}><CopyBtn value={wallet.secret} label="Copy private key" /></div>}
+                <p className="muted" style={{ margin: 0, fontSize: 14, lineHeight: 1.55 }}>{k.how}</p>
+                <p className="fw-note"><IconShield width={16} height={16} /> Made on this device. gifted never sees or stores it, so if you close the tab without saving it, it’s gone.</p>
+                <label className="fw-check">
+                  <input type="checkbox" checked={saved} onChange={(e) => setSaved(e.target.checked)} />
+                  <span>I saved it in a wallet app</span>
+                </label>
                 {kind === 'sol' && (
-                  <button type="button" className="btn btn-primary btn-sm" onClick={useAsBackup} disabled={!saved}>
-                    {sent ? 'Added to your checkout tab' : 'Use as my backup address'}
+                  <button type="button" className="btn btn-primary" style={{ alignSelf: 'flex-start' }} onClick={useAsBackup} disabled={!saved || sent}>
+                    {sent ? <><IconCheck /> Added to your checkout</> : 'Use as my backup address'}
                   </button>
                 )}
               </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <span className="label">Private key (never share this)</span>
-              <button type="button" className="code-box code-reveal" data-shown={shown} onClick={() => setShown(true)} style={{ fontSize: 14 }}>
-                <span className="code-text" aria-hidden={!shown}>{wallet.secret}</span>
-                {!shown && <span className="code-cover">Tap to show your private key</span>}
-              </button>
-              {shown && <div style={{ display: 'flex', gap: 8 }}><CopyBtn value={wallet.secret} label="Copy private key" /></div>}
-              <span className="muted" style={{ fontSize: 13, lineHeight: 1.5 }}>{KINDS[kind].how}</span>
-            </div>
-            <div className="notice notice-warn">
-              This key is the wallet. It only exists on this screen: gifted never sees or stores it. Save it in a wallet app before you close this tab, or any refund sent here is lost.
-            </div>
-            <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 14, lineHeight: 1.5, cursor: 'pointer' }}>
-              <input type="checkbox" checked={saved} onChange={(e) => setSaved(e.target.checked)} style={{ marginTop: 3, width: 18, height: 18 }} />
-              <span>I saved the private key in a wallet app.</span>
-            </label>
           </div>
         )}
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <span style={{ font: '500 19px var(--display)' }}>Or add a new account in a wallet app</span>
-        <p className="muted" style={{ margin: 0, lineHeight: 1.6 }}>Most wallets let you add a second account in a couple of taps. It gets its own address that isn’t linked to your main one.</p>
-        <div className="grid-2">
-          {APPS.map(([name, href, chains]) => (
-            <a key={name} href={href} target="_blank" rel="noopener noreferrer" className="pick" style={{ textDecoration: 'none', justifyContent: 'space-between' }}>
-              <span style={{ display: 'flex', flexDirection: 'column' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div data-reveal style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <h2 style={{ margin: 0, font: '500 28px/1.15 var(--display)', letterSpacing: '-0.025em' }}>Or use a wallet app. <span className="dim">Add a second account.</span></h2>
+          <p className="muted" style={{ margin: 0, lineHeight: 1.6 }}>A new account in your wallet gets its own address, with no link to your main one.</p>
+        </div>
+        <div className="fw-apps" data-reveal>
+          {APPS.map(([name, href, chains], i) => (
+            <a key={name} href={href} target="_blank" rel="noopener noreferrer" className="fw-app" style={{ '--i': i }}>
+              <Logo domain={hostOf(href)} size={28} round={false} />
+              <span style={{ display: 'flex', flexDirection: 'column', minWidth: 0, flex: 1 }}>
                 <span style={{ fontWeight: 500 }}>{name}</span>
-                <span className="muted" style={{ fontSize: 12.5 }}>{chains}</span>
+                <span className="muted" style={{ fontSize: 12.5, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{chains}</span>
               </span>
-              <span className="muted" aria-hidden="true">↗</span>
+              <span className="fw-arrow" aria-hidden="true">↗</span>
             </a>
           ))}
         </div>
