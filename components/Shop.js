@@ -19,7 +19,7 @@ import PrivateCheckout from './PrivateCheckout';
 import { loadCards, saveCards, statusUrl } from '@/lib/cards';
 import CardThumb from './CardThumb';
 import TokenIcon from './TokenIcon';
-import { QUICK_PICKS } from '@/lib/brands';
+import { CATEGORIES } from '@/lib/brands';
 import { site } from '@/lib/site';
 import { IconSearch, IconBolt, IconEyeOff, IconWallet, IconCopy, IconCheck } from './Icons';
 
@@ -86,6 +86,7 @@ export default function Shop() {
 
   const [mode, setMode] = useState('standard');
   const [query, setQuery] = useState('');
+  const [cat, setCat] = useState('Popular');
   const [products, setProducts] = useState([]);
   const [demo, setDemo] = useState(false);
   const [loadingProducts, setLoadingProducts] = useState(true);
@@ -284,6 +285,16 @@ export default function Shop() {
 
   const maxIn = quote && !quote.direct && payToken?.decimals != null ? Number(quote.otherAmountThreshold || quote.inAmount) / 10 ** payToken.decimals : null;
 
+  // What the card grid shows: search results, or the shelf filtered by category.
+  const shown = useMemo(() => {
+    if (query.trim() || !products.some((p) => p.category)) return products;
+    if (cat === 'Popular') {
+      const top = products.filter((p) => p.top);
+      return top.length ? top : products;
+    }
+    return products.filter((p) => p.category === cat);
+  }, [products, query, cat]);
+
   // ---------- render ----------
   const cardColumn = (
     <div className="card" style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -293,18 +304,16 @@ export default function Shop() {
         <span style={{ position: 'absolute', left: 14, top: 14, color: 'var(--muted)' }}><IconSearch /></span>
         <input id="brand-q" className="input" style={{ paddingLeft: 44 }} placeholder="Search Nike, DoorDash, Chipotle…" value={query} onChange={(e) => setQuery(e.target.value)} />
       </form>
-      <div className="quick" role="group" aria-label="Popular brands">
-        {['Popular', ...QUICK_PICKS].map((b) => {
-          const on = b === 'Popular' ? !query.trim() : query.trim().toLowerCase() === b.toLowerCase();
-          return (
-            <button key={b} type="button" className="quick-chip" aria-pressed={on} onClick={() => { const q = b === 'Popular' ? '' : b; setQuery(q); search(q); }}>{b}</button>
-          );
-        })}
+      <div className="quick" role="group" aria-label="Categories">
+        {CATEGORIES.map((c) => (
+          <button key={c} type="button" className="quick-chip" aria-pressed={!query.trim() && cat === c}
+            onClick={() => { setCat(c); if (query.trim()) { setQuery(''); search(''); } }}>{c}</button>
+        ))}
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 8, maxHeight: 248, overflowY: 'auto', paddingBottom: 3 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 8, maxHeight: 300, overflowY: 'auto', paddingBottom: 3 }}>
         {loadingProducts && <span className="muted" style={{ fontSize: 14 }}>Loading cards…</span>}
-        {!loadingProducts && products.length === 0 && <span className="muted" style={{ fontSize: 14 }}>No cards found. Try another brand.</span>}
-        {products.map((p) => (
+        {!loadingProducts && shown.length === 0 && <span className="muted" style={{ fontSize: 14 }}>No cards found. Try another brand.</span>}
+        {shown.map((p) => (
           <button key={p.id} type="button" className="pick" aria-pressed={product?.id === p.id} style={{ minHeight: 54 }}
             onClick={() => { setProduct(p); setPkgId(defaultPkg(p)); setCustomValue(''); resetCheckout(); }}>
             <CardThumb key={p.id} name={p.name} image={p.image} domain={p.domain} width={44} />

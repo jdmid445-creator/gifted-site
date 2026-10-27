@@ -299,3 +299,4 @@ span.hdr-x:hover { background: none; color: var(--muted); }
 .quick-chip:hover { color: var(--text); border-color: var(--line-strong); }
 .quick-chip[aria-pressed="true"] { color: var(--text); background: var(--surface-3); border-color: var(--line-strong); }
 .console > * { min-width: 0; }
+.quick { -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent); mask-image: linear-gradient(90deg, #000 88%, transparent); padding-right: 24px; }
