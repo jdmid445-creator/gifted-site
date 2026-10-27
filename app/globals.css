@@ -181,7 +181,8 @@ select.input { appearance: auto; }
 .hero-art { display: flex; justify-content: flex-end; flex: 1 1 420px; }
 .stage { position: relative; width: 440px; height: 360px; flex: none; --tx: 0; --ty: 0; }
 .stage-cards { position: absolute; right: 0; top: 0; perspective: 1000px; }
-.stage-cards > div { transform: rotateY(calc(var(--tx) * 12deg)) rotateX(calc(var(--ty) * -9deg)); transform-style: preserve-3d; transition: transform .2s linear; }
+/* flat tilt (no preserve-3d) so the two cards never z-fight; JS already eases the values */
+.stage-cards > div { transform: rotateY(calc(var(--tx) * 10deg)) rotateX(calc(var(--ty) * -8deg)); will-change: transform; }
 .gc { transform: rotate(var(--r)); }
 .gc-shine { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.16) 45%, rgba(255,255,255,.04) 52%, transparent 60%); background-size: 260% 100%; background-position: 130% 0; }
 .stage-mascot:focus:not(:focus-visible) { outline: none; }
@@ -273,7 +274,7 @@ html.motion .path[data-reveal].is-in > div { opacity: 1; transform: none; }
 .hdr-wallet .wallet-adapter-button-start-icon { width: 18px; height: 18px; margin-right: 8px; }
 
 /* Front gift card: click to spin */
-.gc-front { transform-style: preserve-3d; -webkit-tap-highlight-color: transparent; }
+.gc-front { perspective: 900px; -webkit-tap-highlight-color: transparent; }
 .gc-front:focus:not(:focus-visible) { outline: none; }
 .gc-front:focus-visible { outline: 2.5px solid var(--ribbon); outline-offset: 4px; border-radius: 18px; }
 .gc-spin { position: absolute; inset: 0; display: block; transform-style: preserve-3d; }
@@ -287,7 +288,8 @@ html.motion .path[data-reveal].is-in > div { opacity: 1; transform: none; }
 }
 @media (prefers-reduced-motion: no-preference) {
   .gc-spin.is-spinning { animation: spin-y 1.25s cubic-bezier(.45,0,.2,1); }
-  .gc-front:hover .gc-spin:not(.is-spinning) { transform: translateZ(20px); transition: transform .3s ease; }
+  .gc-face { transition: filter .25s ease; }
+  .gc-front:hover .gc-face { filter: brightness(1.12); }
 }
 .hdr-x { padding: 0 10px; }
 span.hdr-x { cursor: default; opacity: .6; }
