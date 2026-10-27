@@ -112,18 +112,28 @@ export default function Shop() {
   const [copied, setCopied] = useState(false);
 
   // Catalog
+  // Empty query -> load the current category shelf; otherwise search.
+  const catRef = useRef('Popular');
+  const reqId = useRef(0);
+  const [loadError, setLoadError] = useState('');
   const search = useCallback(async (q) => {
+    const id = ++reqId.current;
     setLoadingProducts(true);
+    setLoadError('');
+    const url = q
+      ? `/api/products?q=${encodeURIComponent(q)}&country=${countryRef.current}`
+      : `/api/products?shelf=${encodeURIComponent(catRef.current)}&country=${countryRef.current}`;
     try {
-      const res = await fetch(`/api/products?q=${encodeURIComponent(q)}&country=${countryRef.current}`);
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Could not load gift cards');
+      const res = await fetch(url);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Couldn’t load gift cards.');
+      if (id !== reqId.current) return;
       setProducts(data.products || []);
       setDemo(Boolean(data.demo));
     } catch (e) {
-      setError(e.message);
+      if (id === reqId.current) { setProducts([]); setLoadError(e.message || 'Couldn’t load gift cards.'); }
     } finally {
-      setLoadingProducts(false);
+      if (id === reqId.current) setLoadingProducts(false);
     }
   }, []);
   const countryRef = useRef('US');
@@ -303,14 +313,7 @@ export default function Shop() {
   const maxIn = quote && !quote.direct && payToken?.decimals != null ? Number(quote.otherAmountThreshold || quote.inAmount) / 10 ** payToken.decimals : null;
 
   // What the card grid shows: search results, or the shelf filtered by category.
-  const shown = useMemo(() => {
-    if (query.trim() || !products.some((p) => p.category)) return products;
-    if (cat === 'Popular') {
-      const top = products.filter((p) => p.top);
-      return top.length ? top : products;
-    }
-    return products.filter((p) => p.category === cat);
-  }, [products, query, cat]);
+  const shown = products;
 
   // ---------- render ----------
   const cardColumn = (
@@ -330,13 +333,19 @@ export default function Shop() {
       <div className="quick" role="group" aria-label="Categories">
         {CATEGORIES.map((c) => (
           <button key={c} type="button" className="quick-chip" aria-pressed={!query.trim() && cat === c}
-            onClick={() => { setCat(c); if (query.trim()) { setQuery(''); search(''); } }}>{c}</button>
+            onClick={() => { setCat(c); catRef.current = c; setQuery(''); search(''); }}>{c}</button>
         ))}
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 8, maxHeight: 300, overflowY: 'auto', paddingBottom: 3 }}>
-        {loadingProducts && <span className="muted" style={{ fontSize: 14 }}>Loading cards…</span>}
-        {!loadingProducts && shown.length === 0 && <span className="muted" style={{ fontSize: 14 }}>No cards found. Try another brand.</span>}
-        {shown.map((p) => (
+        {loadingProducts && Array.from({ length: 6 }, (_, i) => <span key={`sk${i}`} className="skeleton" style={{ height: 54 }} />)}
+        {!loadingProducts && loadError && (
+          <span style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, fontSize: 14 }} className="muted">
+            {loadError}
+            <button type="button" className="btn btn-ghost btn-sm" onClick={() => search(query.trim())}>Try again</button>
+          </span>
+        )}
+        {!loadingProducts && !loadError && shown.length === 0 && <span className="muted" style={{ fontSize: 14, gridColumn: '1 / -1' }}>No cards found. Try another brand or country.</span>}
+        {!loadingProducts && shown.map((p) => (
           <button key={p.id} type="button" className="pick" aria-pressed={product?.id === p.id} style={{ minHeight: 54 }}
             onClick={() => { setProduct(p); setPkgId(defaultPkg(p)); setCustomValue(''); resetCheckout(); }}>
             <CardThumb key={p.id} name={p.name} image={p.image} domain={p.domain} width={44} />

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // A small gift-card-shaped thumbnail. Tries, in order: Bitrefill's product image,
 // the brand's logo (from its website), then a plain card in a tone picked from the name.
@@ -21,16 +21,21 @@ export default function CardThumb({ name = '', image = null, domain = null, widt
   const radius = Math.max(4, width / 9);
   const base = { width, height, borderRadius: radius, flex: 'none', display: 'block' };
   const next = () => setStep((s) => (s === 0 && domain ? 1 : 2));
+  const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (el && el.complete && el.naturalWidth === 0) next();
+  }, [step]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (step === 0) {
-    return <img src={`/api/icon?u=${encodeURIComponent(image)}`} alt="" width={width} height={height} loading="lazy" referrerPolicy="no-referrer" onError={next}
+    return <img ref={ref} src={`/api/icon?u=${encodeURIComponent(image)}`} alt="" width={width} height={height} loading="lazy" referrerPolicy="no-referrer" onError={next}
       style={{ ...base, objectFit: 'cover', background: '#fff', boxShadow: 'inset 0 0 0 1px rgba(255,255,255,.08)' }} />;
   }
   if (step === 1) {
     const s = Math.round(height * 0.62);
     return (
       <span aria-hidden="true" style={{ ...base, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F4F4F5', boxShadow: 'inset 0 -1px 0 rgba(0,0,0,.08)' }}>
-        <img src={logoUrl(domain)} alt="" width={s} height={s} loading="lazy" referrerPolicy="no-referrer" onError={next} style={{ width: s, height: s, objectFit: 'contain', borderRadius: 3 }} />
+        <img ref={ref} src={logoUrl(domain)} alt="" width={s} height={s} loading="lazy" referrerPolicy="no-referrer" onError={next} style={{ width: s, height: s, objectFit: 'contain', borderRadius: 3 }} />
       </span>
     );
   }

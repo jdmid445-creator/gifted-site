@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toneFor } from './CardThumb';
 
 // Known-good fallbacks for the majors, from the Solana token list.
@@ -16,9 +16,15 @@ export const relay = (u) => `/api/icon?u=${encodeURIComponent(u)}`;
 export default function TokenIcon({ mint, icon, symbol, size = 32 }) {
   const sources = [icon, FALLBACK[mint]].filter(Boolean).flatMap((u) => [relay(u), u]);
   const [i, setI] = useState(0);
+  const ref = useRef(null);
+  // An image that failed before React hydrated never fires onError; catch that case too.
+  useEffect(() => {
+    const el = ref.current;
+    if (el && el.complete && el.naturalWidth === 0) setI((n) => n + 1);
+  }, [i]);
   if (i < sources.length) {
     return (
-      <img key={sources[i]} src={sources[i]} alt="" width={size} height={size} loading="lazy" referrerPolicy="no-referrer"
+      <img ref={ref} key={sources[i]} src={sources[i]} alt="" width={size} height={size} loading="lazy" referrerPolicy="no-referrer"
         onError={() => setI((n) => n + 1)}
         style={{ width: size, height: size, borderRadius: '50%', flex: 'none', objectFit: 'cover', background: '#1E1E21' }} />
     );

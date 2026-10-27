@@ -338,3 +338,6 @@ span.hdr-x { opacity: 1; color: var(--muted) !important; }
 .hdr-ca:disabled { color: var(--muted) !important; }
 .hdr-wallet .wallet-adapter-button, .hdr-wallet .wallet-adapter-button-trigger { height: 36px !important; padding: 0 16px !important; border-radius: 999px !important; background: var(--ink) !important; color: var(--ink-text) !important; }
 .hdr-wallet .wallet-adapter-button:not([disabled]):hover { background: #fff !important; color: var(--ink-text) !important; }
+
+.skeleton { display: block; border-radius: var(--radius-sm); background: linear-gradient(90deg, var(--surface-2) 0%, #222226 50%, var(--surface-2) 100%); background-size: 200% 100%; }
+@media (prefers-reduced-motion: no-preference) { .skeleton { animation: sk 1.2s ease-in-out infinite; } @keyframes sk { from { background-position: 100% 0; } to { background-position: -100% 0; } } }
