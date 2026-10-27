@@ -263,7 +263,8 @@ html.motion .path[data-reveal].is-in > div { opacity: 1; transform: none; }
 @media (max-width: 900px) { html.motion .path[data-reveal]::before { display: none; } html.motion .path[data-reveal] { border-top-color: var(--ink); } }
 
 /* Header: logo hard left, everything else as plain links on the right */
-.hdr { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; padding: 0 clamp(16px, 3vw, 36px); }
+.hdr { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; padding: 0 clamp(12px, 1.4vw, 20px); }
+.hdr-logo-mark { display: block; transform: translateY(-3px); }
 .hdr-nav { display: flex; align-items: center; gap: 2px; }
 .hdr-link { display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 12px; border: 0; border-radius: 8px; background: none; color: var(--muted); font: 500 15px var(--display); text-decoration: none; cursor: pointer; transition: color .15s ease, background .15s ease; }
 .hdr-link:hover { color: var(--text); background: var(--surface-2); }

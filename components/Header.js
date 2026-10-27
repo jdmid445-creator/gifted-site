@@ -16,7 +16,7 @@ export default function Header() {
     <header className="site-header" style={{ position: 'sticky', top: 0, zIndex: 30, background: 'rgba(11,11,12,.78)', backdropFilter: 'saturate(1.4) blur(12px)', borderBottom: '1px solid var(--line)' }}>
       <div className="hdr">
         <Link href="/" aria-label="GiftedSwaps home" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-          <Mascot size={32} variant="icon" title="" />
+          <span className="hdr-logo-mark"><Mascot size={32} variant="icon" title="" /></span>
           <span style={{ font: '600 21px var(--display)', letterSpacing: '-0.03em' }}>GiftedSwaps</span>
         </Link>
         <nav aria-label="Main" className="hdr-nav">
