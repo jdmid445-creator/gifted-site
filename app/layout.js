@@ -1,4 +1,5 @@
 import './globals.css';
+import MotionObserver from '@/components/MotionObserver';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Providers from '@/components/Providers';
@@ -12,7 +13,7 @@ export const metadata = {
   twitter: { card: 'summary_large_image', title: `gifted: ${site.tagline}`, description: site.description, images: ['/og.png'] },
 };
 
-export const viewport = { themeColor: '#FFFFFF', width: 'device-width', initialScale: 1 };
+export const viewport = { themeColor: '#0B0B0C', width: 'device-width', initialScale: 1 };
 
 export default function RootLayout({ children }) {
   return (
@@ -28,6 +29,7 @@ export default function RootLayout({ children }) {
           <Header />
           <main id="main">{children}</main>
           <Footer />
+          <MotionObserver />
         </Providers>
       </body>
     </html>

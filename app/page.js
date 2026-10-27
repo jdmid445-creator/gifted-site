@@ -3,7 +3,7 @@ import Mascot from '@/components/Mascot';
 import Shop from '@/components/Shop';
 import LiveFeed from '@/components/LiveFeed';
 import CopyCA from '@/components/CopyCA';
-import GiftCardArt from '@/components/GiftCardArt';
+import HeroStage from '@/components/HeroStage';
 import { IconBolt, IconEyeOff, IconArrow } from '@/components/Icons';
 import { site } from '@/lib/site';
 
@@ -30,23 +30,24 @@ export default function Home() {
       <section className="wrap" style={{ paddingTop: 56, paddingBottom: 0 }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 32, marginBottom: 40 }}>
           <div style={{ flex: '999 1 560px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 20 }}>
-            <h1 style={{ margin: 0, font: '500 clamp(44px, 7.2vw, 92px)/0.98 var(--display)', letterSpacing: '-0.05em' }}>
-              Spend your bags<br />on <span className="serif" style={{ color: 'var(--ribbon)', letterSpacing: '-0.02em' }}>real things.</span>
+            <h1 className="hero-title" style={{ margin: 0, font: '500 clamp(42px, 6vw, 78px)/1 var(--display)', letterSpacing: '-0.05em' }}>
+              <span className="line"><span className="line-inner">Spend your crypto</span></span>
+              <span className="line"><span className="line-inner">on <span className="serif" style={{ color: 'var(--ribbon)', letterSpacing: '-0.02em' }}>real things.</span></span></span>
             </h1>
-            <p className="muted" style={{ margin: 0, fontSize: 19, lineHeight: 1.5, maxWidth: 540 }}>
+            <p className="muted rise" style={{ '--d': '380ms', margin: 0, fontSize: 19, lineHeight: 1.5, maxWidth: 540 }}>
               Pick a gift card, pick any token, and pay. Turn on Private and the purchase isn’t tied to your wallet.
             </p>
-            <div className="num muted" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 20px', fontSize: 13 }}>
+            <div className="num muted rise" style={{ '--d': '480ms', display: 'flex', flexWrap: 'wrap', gap: '8px 20px', fontSize: 13 }}>
               <span><span className="dot" style={{ background: 'var(--ribbon)', marginRight: 8 }} />Thousands of brands</span>
               <span><span className="dot" style={{ background: '#E0A82E', marginRight: 8 }} />170+ countries</span>
               <span><span className="dot" style={{ background: '#3B6FD8', marginRight: 8 }} />8 chains in Private</span>
             </div>
           </div>
-          <div className="hero-art">
-            <GiftCardArt />
+          <div className="hero-art rise" style={{ '--d': '200ms' }}>
+            <HeroStage />
           </div>
         </div>
-        <div id="shop" style={{ scrollMarginTop: 90 }}>
+        <div id="shop" className="rise" style={{ '--d': '560ms', scrollMarginTop: 90 }}>
           <Shop />
         </div>
       </section>
@@ -54,24 +55,24 @@ export default function Home() {
       {/* Live orders */}
       <section id="live" className="wrap section" style={{ scrollMarginTop: 70 }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 40, alignItems: 'flex-start' }}>
-          <div style={{ flex: '1 1 340px', display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 470 }}>
+          <div data-reveal style={{ flex: '1 1 340px', display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 470 }}>
             <span className="eyebrow">Live orders</span>
-            <h2 className="h2">Real bags, <span className="dim">real cards.</span></h2>
+            <h2 className="h2">Real crypto, <span className="dim">real cards.</span></h2>
             <p className="muted" style={{ margin: 0, lineHeight: 1.6, fontSize: 16 }}>
               Each order shows up here once Bitrefill delivers it. Standard orders link to their transaction on Solscan. Private orders show the card only.
             </p>
           </div>
-          <div style={{ flex: '999 1 440px', minWidth: 0 }}><LiveFeed limit={6} /></div>
+          <div data-reveal style={{ '--d': '120ms', flex: '999 1 440px', minWidth: 0 }}><LiveFeed limit={6} /></div>
         </div>
       </section>
 
       {/* Standard vs Private */}
       <section className="wrap section">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 32, maxWidth: 640 }}>
+        <div data-reveal style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 32, maxWidth: 640 }}>
           <span className="eyebrow">Checkout</span>
           <h2 className="h2">Fast, or <span className="dim">off the record.</span></h2>
         </div>
-        <div className="card table-scroll" style={{ padding: '22px 8px 6px' }}>
+        <div className="card table-scroll" data-reveal style={{ padding: '22px 8px 6px' }}>
           <table className="compare">
             <thead>
               <tr>
@@ -81,8 +82,8 @@ export default function Home() {
               </tr>
             </thead>
             <tbody>
-              {compare.map(([k, a, b]) => (
-                <tr key={k}><th scope="row">{k}</th><td>{a}</td><td>{b}</td></tr>
+              {compare.map(([k, a, b], i) => (
+                <tr key={k} style={{ '--i': i }}><th scope="row">{k}</th><td>{a}</td><td>{b}</td></tr>
               ))}
             </tbody>
           </table>
@@ -94,16 +95,16 @@ export default function Home() {
 
       {/* Order path */}
       <section className="wrap section">
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16, marginBottom: 32 }}>
+        <div data-reveal style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16, marginBottom: 32 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 640 }}>
             <span className="eyebrow">Where your money goes</span>
             <h2 className="h2">Wallet to code, <span className="dim">in one pass.</span></h2>
           </div>
           <Link href="/docs" className="btn btn-ghost">Read the docs <IconArrow width={18} height={18} /></Link>
         </div>
-        <div className="path">
+        <div className="path" data-reveal>
           {path.map(([name, text], i) => (
-            <div key={name}>
+            <div key={name} style={{ '--i': i }}>
               <span className="step-num">{String(i + 1).padStart(2, '0')}</span>
               <span style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 <span style={{ font: '500 17px var(--display)', letterSpacing: '-0.01em' }}>{name}</span>
@@ -116,7 +117,7 @@ export default function Home() {
 
       {/* Token */}
       <section id="token" className="wrap section" style={{ paddingBottom: 56 }}>
-        <div className="card" style={{ padding: 24, display: 'flex', flexWrap: 'wrap', gap: 20, alignItems: 'center', justifyContent: 'space-between' }}>
+        <div className="card" data-reveal style={{ padding: 24, display: 'flex', flexWrap: 'wrap', gap: 20, alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, flex: '1 1 300px' }}>
             <Mascot size={56} variant="icon" title="" />
             <div>

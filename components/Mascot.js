@@ -66,35 +66,43 @@ export default function Mascot({ size = 320, variant = 'full', title = 'The $GIF
       </g>
       <rect x="92" y="244" width="216" height="30" rx="14" fill="#12081C" />
       <g clipPath={`url(#${id('above')})`}>
+        <g className="m-pop">
         <ellipse cx="136" cy="172" rx="24" ry="31" fill={body} transform="rotate(-24 136 172)" />
         <ellipse cx="138" cy="175" rx="11" ry="17" fill="#FFD9E4" opacity="0.75" transform="rotate(-24 138 175)" />
         <ellipse cx="264" cy="172" rx="24" ry="31" fill={body} transform="rotate(24 264 172)" />
         <ellipse cx="262" cy="175" rx="11" ry="17" fill="#FFD9E4" opacity="0.75" transform="rotate(24 262 175)" />
         <ellipse cx="200" cy="264" rx="96" ry="106" fill={body} />
+        <g className="m-look">
+        <g className="m-eyes">
         <ellipse cx="168" cy="226" rx="15" ry="19" fill="#FFE08A" opacity="0.65" filter={`url(#${id('blur')})`} />
         <ellipse cx="232" cy="226" rx="15" ry="19" fill="#FFE08A" opacity="0.65" filter={`url(#${id('blur')})`} />
         <ellipse cx="168" cy="226" rx="10" ry="14" fill="#FFE08A" />
         <ellipse cx="232" cy="226" rx="10" ry="14" fill="#FFE08A" />
         <circle cx="171" cy="220" r="3.5" fill="#FFFFFF" />
         <circle cx="235" cy="220" r="3.5" fill="#FFFFFF" />
+        </g>
+        </g>
         <ellipse cx="200" cy="247" rx="6" ry="4" fill="#7E1A40" />
         <ellipse cx="146" cy="252" rx="14" ry="7" fill="#FFA3BE" opacity="0.5" />
         <ellipse cx="254" cy="252" rx="14" ry="7" fill="#FFA3BE" opacity="0.5" />
+        </g>
       </g>
-      <g transform="rotate(20 250 150)">
+      <g className="m-pop m-bow"><g transform="rotate(20 250 150)">
         <path d="M250 150 C232 124 210 132 220 148 C226 158 240 156 250 150 Z" fill={gold} />
         <path d="M250 150 C268 124 290 132 280 148 C274 158 260 156 250 150 Z" fill={gold} />
         <circle cx="250" cy="150" r="7" fill="#F5B843" />
-      </g>
+      </g></g>
       <rect x="96" y="258" width="208" height="116" rx="18" fill={`url(#${id('box')})`} />
       <rect x="188" y="270" width="24" height="104" fill={gold} />
       <rect x="88" y="250" width="224" height="26" rx="13" fill={`url(#${id('rim')})`} />
       <rect x="186" y="250" width="28" height="26" fill={gold} />
+      <g className="m-paws">
       <ellipse cx="148" cy="252" rx="23" ry="14" fill={body} />
       <ellipse cx="252" cy="252" rx="23" ry="14" fill={body} />
       <path d="M141 258 v-6 M150 259 v-6 M159 258 v-6 M245 258 v-6 M254 259 v-6 M263 258 v-6" stroke="#A92A58" strokeWidth="2" strokeLinecap="round" opacity="0.55" />
-      <path d="M86 112 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3 z" fill="#FFE08A" opacity="0.9" />
-      <path d="M322 136 l2 6 l6 2 l-6 2 l-2 6 l-2 -6 l-6 -2 l6 -2 z" fill="#FFFFFF" opacity="0.8" />
+      </g>
+      <path className="m-spark" d="M86 112 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3 z" fill="#FFE08A" opacity="0.9" />
+      <path className="m-spark m-spark-2" d="M322 136 l2 6 l6 2 l-6 2 l-2 6 l-2 -6 l-6 -2 l6 -2 z" fill="#FFFFFF" opacity="0.8" />
     </svg>
   );
 }

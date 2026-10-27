@@ -39,7 +39,7 @@ export default function LiveFeed({ limit = 6, compact = false }) {
         <span className="muted" style={{ fontSize: 14, lineHeight: 1.5 }}>No orders yet. The first one shows up here the moment it’s delivered.</span>
       )}
       {rows.map((o, i) => (
-        <div key={`${o.at}-${i}`} style={{ display: 'flex', alignItems: 'center', gap: 12, paddingTop: i ? 12 : 0, borderTop: i ? '1px solid var(--line)' : 'none' }}>
+        <div key={`${o.at}-${o.name}`} className="feed-row" style={{ '--i': i, display: 'flex', alignItems: 'center', gap: 12, paddingTop: i ? 12 : 0, borderTop: i ? '1px solid var(--line)' : 'none' }}>
           <CardThumb name={o.name || ''} width={40} />
           <span style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
             <span style={{ fontWeight: 500, fontSize: 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>

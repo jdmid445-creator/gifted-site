@@ -306,7 +306,7 @@ export default function Shop() {
                 <span className="muted num" style={{ fontSize: 11.5 }}>{t.amount != null ? `${fmt(t.amount)} held` : t.usdPrice ? `$${fmt(t.usdPrice)}` : 'Solana token'}</span>
               </span>
               <span className="num" style={{ textAlign: 'right', fontSize: 13 }}>
-                {est ? <><span className="dim">≈ </span>{fmt(est)}</> : ''}
+                {est ? <span key={fmt(est)} className="tick"><span className="dim">≈ </span>{fmt(est)}</span> : ''}
               </span>
             </button>
           );
@@ -330,7 +330,7 @@ export default function Shop() {
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'baseline' }}>
           <span className="muted">{phase === 'ready' && maxIn ? 'You pay at most' : 'Estimated'}</span>
           <strong className="num" style={{ fontSize: 21, fontWeight: 500 }}>
-            {phase === 'ready' && maxIn ? fmt(maxIn) : phase === 'ready' && quote?.direct ? invoice.usdcAmount : (estimate(payToken) ? `≈ ${fmt(estimate(payToken))}` : '—')} <span className="muted" style={{ fontSize: 13 }}>{payToken?.symbol}</span>
+            <span key={`${phase}-${payToken?.mint}-${faceValue}`} className="tick">{phase === 'ready' && maxIn ? fmt(maxIn) : phase === 'ready' && quote?.direct ? invoice.usdcAmount : (estimate(payToken) ? `≈ ${fmt(estimate(payToken))}` : '—')}</span> <span className="muted" style={{ fontSize: 13 }}>{payToken?.symbol}</span>
           </strong>
         </div>
         {phase !== 'ready' && <span className="muted" style={{ fontSize: 12, lineHeight: 1.5 }}>At today’s price, before swap and network fees. You see the exact amount before you sign.</span>}
