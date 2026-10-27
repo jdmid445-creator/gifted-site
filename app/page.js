@@ -27,21 +27,17 @@ export default function Home() {
   return (
     <>
       {/* Hero + shop */}
-      <section className="wrap" style={{ paddingTop: 56, paddingBottom: 0 }}>
+      <section className="wrap hero" style={{ paddingTop: 72, paddingBottom: 0 }}>
+        <div className="hero-bg" aria-hidden="true" />
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 32, marginBottom: 40 }}>
           <div style={{ flex: '999 1 560px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 20 }}>
             <h1 className="hero-title" style={{ margin: 0, font: '500 clamp(42px, 6vw, 78px)/1.02 var(--display)', letterSpacing: '-0.032em' }}>
               <span className="line"><span className="line-inner">Spend your crypto</span></span>
-              <span className="line"><span className="line-inner">on <span className="serif" style={{ color: 'var(--ribbon)', letterSpacing: '-0.01em' }}>real things.</span></span></span>
+              <span className="line"><span className="line-inner">on <span style={{ color: 'var(--ribbon)' }}>real things.</span></span></span>
             </h1>
             <p className="muted rise" style={{ '--d': '380ms', margin: 0, fontSize: 19, lineHeight: 1.5, maxWidth: 540 }}>
               Pick a gift card, pick any token, and pay. Turn on Private and the purchase isn’t tied to your wallet.
             </p>
-            <div className="num muted rise" style={{ '--d': '480ms', display: 'flex', flexWrap: 'wrap', gap: '8px 20px', fontSize: 13 }}>
-              <span><span className="dot" style={{ background: 'var(--ribbon)', marginRight: 8 }} />Hundreds of brands</span>
-              <span><span className="dot" style={{ background: '#E0A82E', marginRight: 8 }} />170+ countries</span>
-              <span><span className="dot" style={{ background: '#3B6FD8', marginRight: 8 }} />8 chains in Private</span>
-            </div>
           </div>
           <div className="hero-art rise" style={{ '--d': '200ms' }}>
             <HeroStage />
@@ -56,7 +52,6 @@ export default function Home() {
       <section id="live" className="wrap section" style={{ scrollMarginTop: 70 }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 40, alignItems: 'flex-start' }}>
           <div data-reveal style={{ flex: '1 1 340px', display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 470 }}>
-            <span className="eyebrow">Live orders</span>
             <h2 className="h2">Real crypto, <span className="dim">real cards.</span></h2>
             <p className="muted" style={{ margin: 0, lineHeight: 1.6, fontSize: 16 }}>
               Each order shows up here once Bitrefill delivers it. Standard orders link to their transaction on Solscan. Private orders show the card only.
@@ -69,7 +64,6 @@ export default function Home() {
       {/* Standard vs Private */}
       <section className="wrap section">
         <div data-reveal style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 32, maxWidth: 640 }}>
-          <span className="eyebrow">Checkout</span>
           <h2 className="h2">Fast, or <span className="dim">off the record.</span></h2>
         </div>
         <div className="card table-scroll" data-reveal style={{ padding: '22px 8px 6px' }}>
@@ -97,7 +91,6 @@ export default function Home() {
       <section className="wrap section">
         <div data-reveal style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16, marginBottom: 32 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 640 }}>
-            <span className="eyebrow">Where your money goes</span>
             <h2 className="h2">Wallet to code, <span className="dim">in one pass.</span></h2>
           </div>
           <Link href="/docs" className="btn btn-ghost">Read the docs <IconArrow width={18} height={18} /></Link>

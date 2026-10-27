@@ -7,7 +7,7 @@ export default function SpendPage() {
   return (
     <section className="wrap" style={{ paddingTop: 36, paddingBottom: 48, display: 'flex', flexDirection: 'column', gap: 28 }}>
       <h1 style={{ margin: 0, font: '500 clamp(34px, 5vw, 52px)/1 var(--display)', letterSpacing: '-0.028em' }}>
-        Any token in. <span className="serif" style={{ color: 'var(--ribbon)' }}>Gift card out.</span>
+        Any token in. <span style={{ color: 'var(--ribbon)' }}>Gift card out.</span>
       </h1>
       <Shop />
       <LiveFeed limit={4} compact />

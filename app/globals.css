@@ -24,7 +24,8 @@
   --display: 'Instrument Sans', system-ui, sans-serif;
   --serif: 'Instrument Serif', Georgia, serif;
   --body: 'Instrument Sans', system-ui, sans-serif;
-  --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  --mono: 'Instrument Sans', system-ui, sans-serif; /* no monospace in the UI */
+  --code: 'JetBrains Mono', ui-monospace, Menlo, monospace; /* addresses + gift codes only */
 }
 
 * { box-sizing: border-box; }
@@ -58,13 +59,13 @@ img { max-width: 100%; }
 
 .card { background: linear-gradient(180deg, #151517, #111113); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--hi); }
 .panel { background: var(--surface-2); border-radius: var(--radius-sm); box-shadow: var(--hi); }
-.label { font: 400 12.5px var(--mono); letter-spacing: 0; color: var(--muted); }
+.label { font: 500 13px var(--display); letter-spacing: -0.005em; color: var(--muted); }
 .eyebrow { font: 400 13px var(--mono); color: var(--muted); }
-.num { font-family: var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.num { font-variant-numeric: tabular-nums; }
 .dim { color: var(--dim); }
 .muted { color: var(--muted); }
 .h2 { font: 500 clamp(30px, 4vw, 44px)/1.08 var(--display); letter-spacing: -0.025em; margin: 0; }
-.step-num { flex: none; font: 400 13px var(--mono); color: var(--dim); }
+.step-num { flex: none; font: 500 14px var(--display); color: var(--dim); font-variant-numeric: tabular-nums; }
 
 .input {
   width: 100%; min-height: 48px; padding: 0 14px; border-radius: var(--radius-sm);
@@ -96,8 +97,8 @@ select.input { appearance: auto; }
 .notice-ok { background: rgba(63, 207, 142, .08); border: 1px solid rgba(63, 207, 142, .3); color: #8FE3BC; }
 .notice-info { background: var(--surface); border: 1px solid var(--line); color: var(--text); }
 
-.code-box {
-  font: 600 18px var(--mono); letter-spacing: .04em; padding: 16px; border-radius: 12px;
+.code-box { font-family: var(--code);
+  font: 600 18px var(--code); letter-spacing: .04em; padding: 16px; border-radius: 12px;
   background: var(--gold-soft); border: 1px dashed var(--gold); word-break: break-all;
 }
 
@@ -149,7 +150,7 @@ select.input { appearance: auto; }
 .docs-body { max-width: 760px; line-height: 1.7; font-size: 16px; }
 .docs-body h2 { font: 600 26px var(--display); letter-spacing: -0.02em; margin: 48px 0 10px; padding-top: 28px; border-top: 1px solid var(--line); scroll-margin-top: 90px; }
 .docs-body h3 { font: 600 18px var(--display); margin: 26px 0 6px; }
-.docs-body code { font: 13px var(--mono); background: var(--surface); padding: 2px 6px; border-radius: 6px; }
+.docs-body code { font: 13px var(--code); background: var(--surface); padding: 2px 6px; border-radius: 6px; }
 .docs-body table { width: 100%; border-collapse: collapse; font-size: 15px; margin: 12px 0; }
 .docs-body th, .docs-body td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
 .docs-body th { font: 400 12.5px var(--mono); color: var(--muted); }
@@ -265,7 +266,7 @@ html.motion .path[data-reveal].is-in > div { opacity: 1; transform: none; }
 .hdr-nav { display: flex; align-items: center; gap: 2px; }
 .hdr-link { display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 12px; border: 0; border-radius: 8px; background: none; color: var(--muted); font: 500 15px var(--display); text-decoration: none; cursor: pointer; transition: color .15s ease, background .15s ease; }
 .hdr-link:hover { color: var(--text); background: var(--surface-2); }
-.hdr-ca { font: 400 13px var(--mono); }
+.hdr-ca { font: 500 14px var(--display); }
 .hdr-ca:disabled { cursor: default; background: none; color: var(--muted); }
 .hdr-wallet .wallet-adapter-button { background: none !important; color: var(--text) !important; height: 38px !important; padding: 0 12px !important; border-radius: 8px !important; font: 500 15px var(--display) !important; }
 .hdr-wallet .wallet-adapter-button:not([disabled]):hover { background: var(--surface-2) !important; color: var(--text) !important; }
@@ -300,3 +301,14 @@ span.hdr-x:hover { background: none; color: var(--muted); }
 .quick-chip[aria-pressed="true"] { color: var(--text); background: var(--surface-3); border-color: var(--line-strong); }
 .console > * { min-width: 0; }
 .quick { -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent); mask-image: linear-gradient(90deg, #000 88%, transparent); padding-right: 24px; }
+
+/* Hero backdrop: our own horizon render, faded into the page */
+.hero { position: relative; isolation: isolate; }
+.hero-bg { position: absolute; z-index: -1; left: 50%; width: 100vw; transform: translateX(-50%); top: -64px; height: 900px; pointer-events: none;
+  background: url(/horizon.jpg) center 78% / cover no-repeat;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 70%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 70%, transparent 100%); opacity: .95; }
+@media (max-width: 760px) { .hero-bg { background-image: url(/horizon-m.jpg); height: 760px; background-position: center 70%; } }
+@media (prefers-reduced-motion: no-preference) { .hero-bg { animation: bg-in 1.6s ease both; } @keyframes bg-in { from { opacity: 0; transform: translateX(-50%) translateY(30px); } to { opacity: .95; transform: translateX(-50%); } } }
+body { overflow-x: hidden; }
+.hdr-link { white-space: nowrap; }
+@media (max-width: 760px) { .hdr-link.nav-link { display: none; } }

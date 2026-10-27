@@ -42,16 +42,14 @@ export default function GiftCardArt() {
               <span style={{ font: '600 18px var(--display)', letterSpacing: '-0.04em' }}>gifted</span>
             </span>
             <span style={{ position: 'absolute', left: 20, bottom: 18, display: 'flex', flexDirection: 'column', gap: 4 }}>
-              <span style={{ font: '400 11px var(--mono)', color: 'rgba(255,255,255,.55)' }}>Gift card</span>
+              <span style={{ font: '500 12px var(--display)', color: 'rgba(255,255,255,.55)' }}>Gift card</span>
               <span style={{ font: '500 26px var(--display)', letterSpacing: '-0.03em', fontVariantNumeric: 'tabular-nums' }}>$50.00</span>
             </span>
-            <span style={{ position: 'absolute', left: 140, bottom: 23, font: '400 12px var(--mono)', color: 'rgba(255,255,255,.6)', letterSpacing: '.04em' }}>•••• 7Q2M</span>
           </span>
           <span className="gc-face gc-face-back" style={{ background: 'linear-gradient(205deg, #2E2E33 0%, #161618 55%, #0F0F11 100%)', boxShadow: SHADOW }}>
             <span style={{ position: 'absolute', left: 0, right: 0, top: 26, height: 38, background: '#050506' }} />
             <span style={{ position: 'absolute', left: 20, top: 82, width: 170, height: 30, borderRadius: 6, background: 'repeating-linear-gradient(90deg, #EDEDEF 0 6px, #D9D9DE 6px 12px)', opacity: 0.9 }} />
-            <span style={{ position: 'absolute', left: 200, top: 88, font: '500 13px var(--mono)', color: 'rgba(255,255,255,.75)' }}>7Q2M</span>
-            <span style={{ position: 'absolute', left: 20, bottom: 18, font: '400 11px var(--mono)', color: 'rgba(255,255,255,.5)' }}>Paid with crypto · gifted</span>
+            <span style={{ position: 'absolute', left: 20, bottom: 18, font: '500 12px var(--display)', color: 'rgba(255,255,255,.5)' }}>Paid with crypto</span>
             <span style={{ position: 'absolute', right: 18, bottom: 14 }}><Mascot size={30} variant="icon" title="" /></span>
           </span>
         </span>

@@ -226,7 +226,7 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
                 <QrCode value={q.depositAddress} size={150} />
                 <div style={{ flex: '1 1 240px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
                   <span className="label">Send to this address ({chainInfo?.label})</span>
-                  <code style={{ wordBreak: 'break-all', font: '500 14px var(--mono)' }}>{q.depositAddress}</code>
+                  <code style={{ wordBreak: 'break-all', font: '500 14px var(--code)' }}>{q.depositAddress}</code>
                   {q.depositMemo && <span>Memo: <code>{q.depositMemo}</code></span>}
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                     <Copy value={q.depositAddress} />
