@@ -3,22 +3,41 @@
 // Make a fresh wallet in the browser, or open a wallet app to add a new account.
 // Nothing here talks to a server: keys are generated and shown on this device only.
 import { useState } from 'react';
-import { newSolanaWallet, newEvmWallet } from '@/lib/freshwallet';
+import { newSolanaWallet, newEvmWallet, newBitcoinWallet, newLitecoinWallet, newDogecoinWallet, newTronWallet } from '@/lib/freshwallet';
 import { IconCopy, IconCheck } from './Icons';
 
+const EVM_HOW = 'In MetaMask, Rabby or Coinbase Wallet: Add account → Import account, then paste the key. The same address works on every EVM chain.';
 const KINDS = {
-  sol: { label: 'Solana', make: newSolanaWallet, importHow: 'In Phantom, Solflare or Backpack: Add account → Import private key, then paste the key.' },
-  evm: { label: 'Ethereum & EVM', make: newEvmWallet, importHow: 'In MetaMask or Rabby: Add account → Import account, then paste the key. The same address works on every EVM chain.' },
+  sol: { label: 'Solana', make: newSolanaWallet, how: 'In Phantom, Solflare or Backpack: Add account → Import private key, then paste the key.' },
+  eth: { label: 'Ethereum', make: newEvmWallet, how: EVM_HOW },
+  base: { label: 'Base', make: newEvmWallet, how: EVM_HOW },
+  arb: { label: 'Arbitrum', make: newEvmWallet, how: EVM_HOW },
+  bnb: { label: 'BNB Chain', make: newEvmWallet, how: EVM_HOW },
+  polygon: { label: 'Polygon', make: newEvmWallet, how: EVM_HOW },
+  avax: { label: 'Avalanche', make: newEvmWallet, how: EVM_HOW },
+  btc: { label: 'Bitcoin', make: newBitcoinWallet, how: 'In Electrum: New wallet → Import Bitcoin addresses or private keys, then paste p2wpkh: followed by the key (no space). Sparrow and Exodus can import it too.' },
+  ltc: { label: 'Litecoin', make: newLitecoinWallet, how: 'In Electrum-LTC: New wallet → Import addresses or private keys, then paste p2wpkh: followed by the key (no space). Exodus can import it too.' },
+  doge: { label: 'Dogecoin', make: newDogecoinWallet, how: 'Import the private key in a wallet that supports it, like Exodus or Dogecoin Core.' },
+  tron: { label: 'Tron', make: newTronWallet, how: 'In TronLink: Add wallet → Import → Private key, then paste the key.' },
 };
 
 const APPS = [
   ['Phantom', 'https://phantom.com/download', 'Solana, Ethereum, Base, Bitcoin'],
   ['Solflare', 'https://www.solflare.com/download/', 'Solana'],
   ['Backpack', 'https://backpack.app/download', 'Solana, Ethereum'],
-  ['MetaMask', 'https://metamask.io/download/', 'Ethereum, Base, Arbitrum, BNB'],
-  ['Rabby', 'https://rabby.io/', 'Ethereum, Base, Arbitrum, BNB'],
+  ['MetaMask', 'https://metamask.io/download/', 'Ethereum and every EVM chain'],
+  ['Rabby', 'https://rabby.io/', 'Ethereum and every EVM chain'],
+  ['Coinbase Wallet', 'https://www.coinbase.com/wallet/downloads', 'Ethereum, Base, Solana, Bitcoin'],
+  ['OKX Wallet', 'https://www.okx.com/web3', 'Most chains'],
+  ['Rainbow', 'https://rainbow.me/download', 'Ethereum, Base, Arbitrum'],
+  ['Zerion', 'https://zerion.io/download', 'Ethereum and EVM chains, Solana'],
+  ['Trust Wallet', 'https://trustwallet.com/download', 'Bitcoin, Litecoin, Dogecoin and 100+ more'],
   ['Exodus', 'https://www.exodus.com/download/', 'Bitcoin, Litecoin, Dogecoin and more'],
-  ['Trust Wallet', 'https://trustwallet.com/download', 'Bitcoin, Litecoin, Dogecoin and more'],
+  ['Electrum', 'https://electrum.org/#download', 'Bitcoin'],
+  ['Sparrow', 'https://sparrowwallet.com/download/', 'Bitcoin'],
+  ['TronLink', 'https://www.tronlink.org/', 'Tron'],
+  ['Ledger', 'https://www.ledger.com/ledger-live', 'Hardware wallet, most chains'],
+  ['Tangem', 'https://tangem.com/', 'Hardware card, most chains'],
 ];
 
 function CopyBtn({ value, label }) {
@@ -51,12 +70,12 @@ export default function FreshWallet() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
       <div className="card" style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
         <span style={{ font: '500 19px var(--display)' }}>Make one right here</span>
-        <div className="mode-switch" role="group" aria-label="Wallet type" style={{ maxWidth: 460 }}>
+        <div role="group" aria-label="Which chain" style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
           {Object.entries(KINDS).map(([k, v]) => (
-            <button key={k} type="button" aria-pressed={kind === k} onClick={() => { setKind(k); setWallet(null); }}>{v.label}</button>
+            <button key={k} type="button" className="quick-chip" style={{ height: 36, padding: '0 14px', fontSize: 14 }} aria-pressed={kind === k} onClick={() => { setKind(k); setWallet(null); }}>{v.label}</button>
           ))}
         </div>
-        <button type="button" className="btn btn-primary" style={{ alignSelf: 'flex-start' }} onClick={make}>{wallet ? 'Make another' : `Make a ${KINDS[kind].label.split(',')[0]} wallet`}</button>
+        <button type="button" className="btn btn-primary" style={{ alignSelf: 'flex-start' }} onClick={make}>{wallet ? `Make another ${KINDS[kind].label} wallet` : `Make a ${KINDS[kind].label} wallet`}</button>
 
         {wallet && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -79,7 +98,7 @@ export default function FreshWallet() {
                 {!shown && <span className="code-cover">Tap to show your private key</span>}
               </button>
               {shown && <div style={{ display: 'flex', gap: 8 }}><CopyBtn value={wallet.secret} label="Copy private key" /></div>}
-              <span className="muted" style={{ fontSize: 13, lineHeight: 1.5 }}>{KINDS[kind].importHow}</span>
+              <span className="muted" style={{ fontSize: 13, lineHeight: 1.5 }}>{KINDS[kind].how}</span>
             </div>
             <div className="notice notice-warn">
               This key is the wallet. It only exists on this screen: gifted never sees or stores it. Save it in a wallet app before you close this tab, or any refund sent here is lost.
