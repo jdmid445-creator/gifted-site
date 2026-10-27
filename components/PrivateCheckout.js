@@ -12,6 +12,7 @@ import {
   createTransferCheckedInstruction,
 } from '@solana/spl-token';
 import QrCode from './QrCode';
+import RevealCode from './RevealCode';
 import { CHAINS, getChain, isValidAddress } from '@/lib/chains';
 import { loadCards, saveCards, statusUrl } from '@/lib/cards';
 
@@ -243,7 +244,7 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
         {phase === 'done' && result && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <div className="notice notice-ok">Your {result.name} card is ready, paid privately.</div>
-            {result.redemption.code && <div className="code-box">{result.redemption.code}</div>}
+            <RevealCode code={result.redemption.code} />
             {result.redemption.instructions && <p className="muted" style={{ margin: 0, lineHeight: 1.55 }}>{result.redemption.instructions}</p>}
           </div>
         )}

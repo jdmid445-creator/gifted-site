@@ -2,7 +2,7 @@
 
 // The shop console: 1 pick a card · 2 pick what to pay with · 3 check out.
 // Everything up to the final signature works without connecting a wallet.
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import { PublicKey, TransactionInstruction, TransactionMessage, VersionedTransaction, LAMPORTS_PER_SOL } from '@solana/web3.js';
@@ -19,7 +19,9 @@ import PrivateCheckout from './PrivateCheckout';
 import { loadCards, saveCards, statusUrl } from '@/lib/cards';
 import CardThumb from './CardThumb';
 import TokenIcon from './TokenIcon';
+import RevealCode from './RevealCode';
 import { CATEGORIES } from '@/lib/brands';
+import { COUNTRIES } from '@/lib/countries';
 import { site } from '@/lib/site';
 import { IconSearch, IconBolt, IconEyeOff, IconWallet, IconCopy, IconCheck } from './Icons';
 
@@ -87,6 +89,7 @@ export default function Shop() {
   const [mode, setMode] = useState('standard');
   const [query, setQuery] = useState('');
   const [cat, setCat] = useState('Popular');
+  const [country, setCountry] = useState('US');
   const [products, setProducts] = useState([]);
   const [demo, setDemo] = useState(false);
   const [loadingProducts, setLoadingProducts] = useState(true);
@@ -112,7 +115,7 @@ export default function Shop() {
   const search = useCallback(async (q) => {
     setLoadingProducts(true);
     try {
-      const res = await fetch(`/api/products?q=${encodeURIComponent(q)}`);
+      const res = await fetch(`/api/products?q=${encodeURIComponent(q)}&country=${countryRef.current}`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Could not load gift cards');
       setProducts(data.products || []);
@@ -123,7 +126,21 @@ export default function Shop() {
       setLoadingProducts(false);
     }
   }, []);
-  useEffect(() => { search(''); }, [search]);
+  const countryRef = useRef('US');
+  useEffect(() => {
+    let saved = 'US';
+    try { saved = localStorage.getItem('gifted.country') || 'US'; } catch {}
+    countryRef.current = saved;
+    setCountry(saved);
+    search('');
+  }, [search]);
+  function changeCountry(c) {
+    countryRef.current = c;
+    setCountry(c);
+    try { localStorage.setItem('gifted.country', c); } catch {}
+    setProduct(null);
+    search(query.trim());
+  }
   useEffect(() => {
     const q = query.trim();
     if (q.length === 1) return undefined;
@@ -299,11 +316,17 @@ export default function Shop() {
   const cardColumn = (
     <div className="card" style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 14 }}>
       <StepHead n="1" title="Pick a gift card" hint={demo ? 'Sample catalog' : null} />
-      <form role="search" onSubmit={(e) => { e.preventDefault(); search(query); }} style={{ position: 'relative' }}>
+      <div style={{ display: 'flex', gap: 8 }}>
+      <form role="search" onSubmit={(e) => { e.preventDefault(); search(query); }} style={{ position: 'relative', flex: 1, minWidth: 0 }}>
         <label htmlFor="brand-q" className="sr-only">Search brands</label>
         <span style={{ position: 'absolute', left: 14, top: 14, color: 'var(--muted)' }}><IconSearch /></span>
         <input id="brand-q" className="input" style={{ paddingLeft: 44 }} placeholder="Search Nike, DoorDash, Chipotle…" value={query} onChange={(e) => setQuery(e.target.value)} />
       </form>
+      <label htmlFor="country" className="sr-only">Country</label>
+      <select id="country" className="input" value={country} onChange={(e) => changeCountry(e.target.value)} style={{ width: 84, flex: 'none', paddingRight: 6 }} title="Where you'll use the card">
+        {COUNTRIES.map(([code, name]) => <option key={code} value={code} title={name}>{code}</option>)}
+      </select>
+      </div>
       <div className="quick" role="group" aria-label="Categories">
         {CATEGORIES.map((c) => (
           <button key={c} type="button" className="quick-chip" aria-pressed={!query.trim() && cat === c}
@@ -392,7 +415,13 @@ export default function Shop() {
           </strong>
         </div>
         {phase !== 'ready' && <span className="muted" style={{ fontSize: 12, lineHeight: 1.5 }}>At today’s price, before swap and network fees. You see the exact amount before you sign.</span>}
-        {phase === 'ready' && quote && !quote.direct && <span className="muted" style={{ fontSize: 12 }}>Price impact {fmt(Number(quote.priceImpactPct) * 100, 2)}% · includes card price and swap</span>}
+        {phase === 'ready' && invoice && !invoice.demo && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 13, paddingTop: 4, borderTop: '1px solid var(--line)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}><span className="muted">Card price</span><span className="num">{invoice.usdcAmount} USDC</span></div>
+            {quote && !quote.direct && <div style={{ display: 'flex', justifyContent: 'space-between' }}><span className="muted">Swap price impact</span><span className="num">{fmt(Number(quote.priceImpactPct) * 100, 2)}%</span></div>}
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}><span className="muted">gifted fee</span><span className="num">$0</span></div>
+          </div>
+        )}
       </div>
 
       {phase === 'idle' && !connected && (
@@ -424,12 +453,7 @@ export default function Shop() {
       {phase === 'done' && result && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           <div className="notice notice-ok">Your {result.name} card is ready.</div>
-          {result.redemption.code && <div className="code-box">{result.redemption.code}</div>}
-          {result.redemption.code && (
-            <button className="btn btn-ghost btn-sm" type="button" onClick={() => { navigator.clipboard?.writeText(result.redemption.code); setCopied(true); setTimeout(() => setCopied(false), 1400); }}>
-              {copied ? <IconCheck /> : <IconCopy />} {copied ? 'Copied' : 'Copy code'}
-            </button>
-          )}
+          <RevealCode code={result.redemption.code} />
           {result.redemption.instructions && <p className="muted" style={{ margin: 0, fontSize: 13, lineHeight: 1.55 }}>{result.redemption.instructions}</p>}
           <button className="btn btn-primary" type="button" onClick={() => { resetCheckout(); setResult(null); }}>Buy another</button>
         </div>

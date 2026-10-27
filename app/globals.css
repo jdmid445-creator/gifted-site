@@ -312,3 +312,18 @@ span.hdr-x:hover { background: none; color: var(--muted); }
 body { overflow-x: hidden; }
 .hdr-link { white-space: nowrap; }
 @media (max-width: 760px) { .hdr-link.nav-link { display: none; } }
+
+/* Hidden-until-tapped gift code */
+.code-reveal { position: relative; width: 100%; text-align: left; color: var(--text); cursor: pointer; overflow: hidden; }
+.code-reveal[data-shown="false"] .code-text { filter: blur(9px); user-select: none; }
+.code-reveal[data-shown="true"] { cursor: text; user-select: all; }
+.code-cover { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font: 500 14px var(--display); color: var(--text); }
+
+/* FAQ */
+.faq { border-top: 1px solid var(--line); }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px 2px; font: 500 17px var(--display); letter-spacing: -0.01em; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: '+'; color: var(--muted); font-size: 22px; font-weight: 400; transition: transform .2s ease; }
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq details p { margin: 0 0 20px; max-width: 720px; color: var(--muted); line-height: 1.65; }

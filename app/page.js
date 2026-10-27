@@ -23,6 +23,16 @@ const path = [
   ['Your code', 'Shown on screen and saved in this browser.'],
 ];
 
+const faqs = [
+  ['What does it cost?', 'gifted charges no fee. You pay the card price from Bitrefill, plus the swap and a small network fee. You see the exact amount before you sign anything.'],
+  ['Do I need an account or ID?', 'No. Standard checkout uses your Solana wallet. Private checkout works from any wallet on 8 chains, without connecting.'],
+  ['What does Private actually hide?', 'The shop gets paid by NEAR Intents instead of your wallet, so the purchase isn’t linked to you. Your own deposit is still visible on its blockchain.'],
+  ['Where do I get my code?', 'On screen as soon as it’s delivered, usually in under a minute. It’s also saved in this browser under My cards. Treat it like cash.'],
+  ['What if something goes wrong?', 'If the payment doesn’t go through, your money goes back to your wallet. If a card can’t be delivered, Bitrefill refunds you in USDC on Solana.'],
+  ['Can I use it outside the US?', 'Yes. Pick your country next to the search box. Gift cards are country-specific, so buy one for where you’ll use it.'],
+  ['Do I need $GIFTED to use the shop?', 'No. The shop works with any token. $GIFTED is the meme coin behind it.'],
+];
+
 export default function Home() {
   return (
     <>
@@ -104,6 +114,19 @@ export default function Home() {
                 <span className="muted" style={{ fontSize: 14, lineHeight: 1.55 }}>{text}</span>
               </span>
             </div>
+          ))}
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="wrap section" id="faq">
+        <h2 className="h2" data-reveal style={{ marginBottom: 28 }}>Questions, <span className="dim">answered.</span></h2>
+        <div className="faq" data-reveal>
+          {faqs.map(([q, a]) => (
+            <details key={q}>
+              <summary>{q}</summary>
+              <p>{a}</p>
+            </details>
           ))}
         </div>
       </section>
