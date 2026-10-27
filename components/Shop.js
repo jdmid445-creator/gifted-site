@@ -86,7 +86,7 @@ export default function Shop() {
   const { publicKey, sendTransaction, connected } = useWallet();
   const { setVisible } = useWalletModal();
 
-  const [mode, setMode] = useState('standard');
+  const [mode, setMode] = useState('private');
   const [query, setQuery] = useState('');
   const [cat, setCat] = useState('Popular');
   const [country, setCountry] = useState('US');
@@ -476,13 +476,13 @@ export default function Shop() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14, flexWrap: 'wrap' }}>
         <div className="mode-switch" role="group" aria-label="Checkout mode" style={{ width: 'min(100%, 360px)' }}>
-          <button type="button" aria-pressed={mode === 'standard'} onClick={() => { setMode('standard'); resetCheckout(); }}><IconBolt width={17} height={17} /> Standard</button>
           <button type="button" aria-pressed={mode === 'private'} onClick={() => { setMode('private'); resetCheckout(); }}><IconEyeOff width={17} height={17} /> Private</button>
+          <button type="button" aria-pressed={mode === 'standard'} onClick={() => { setMode('standard'); resetCheckout(); }}><IconBolt width={17} height={17} /> Fast</button>
         </div>
         <span className="muted" style={{ fontSize: 14, flex: '1 1 280px', textAlign: 'right' }}>
           {mode === 'standard'
-            ? 'One signature from your Solana wallet. Fastest.'
-            : 'Paid through NEAR Intents, so the purchase isn’t linked to your wallet. Pay from 8 chains.'}
+            ? 'One signature from your Solana wallet. Fastest, but the payment comes from your wallet.'
+            : 'The shop never sees your wallet. Pay from any of 8 chains, no wallet connection needed.'}
         </span>
       </div>
       <div className="console">

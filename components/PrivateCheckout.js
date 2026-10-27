@@ -72,12 +72,12 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
     fetch('/api/private/tokens').then((r) => r.json()).then((d) => setTokens(d.tokens || [])).catch(() => setError('Private checkout is unavailable right now.'));
   }, []);
 
-  // Prefill refund addresses from a connected Solana wallet (you can replace them with fresh ones).
+  // Prefill only the swap refund address. The backup address goes to the shop, so it is never
+  // prefilled from the connected wallet: that would show the shop your wallet.
   useEffect(() => {
     if (!publicKey) return;
     const a = publicKey.toBase58();
     if (chain === 'sol' && !refundTo) setRefundTo(a);
-    if (!shopRefund) setShopRefund(a);
   }, [publicKey, chain]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const chainTokens = useMemo(() => tokens.filter((t) => t.blockchain === chain).sort((a, b) => a.symbol.localeCompare(b.symbol)), [tokens, chain]);
@@ -87,7 +87,8 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
 
   const token = chainTokens.find((t) => t.assetId === assetId) || null;
   const chainInfo = getChain(chain);
-  const cardRefund = chain === 'sol' ? refundTo : shopRefund;
+  const cardRefund = shopRefund;
+  const sameWallet = cardRefund.trim() && (cardRefund.trim() === refundTo.trim() || cardRefund.trim() === publicKey?.toBase58());
   const ready = product && faceValue && token && isValidAddress(chain, refundTo) && isValidAddress('sol', cardRefund) && agree && phase === 'idle';
 
   async function start() {
@@ -191,13 +192,12 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
             {chain === 'sol' ? 'If anything goes wrong, your money comes back here.' : 'If the payment doesn’t go through, your money comes back here.'} Use your own wallet, not an exchange.
           </span>
         </label>
-        {chain !== 'sol' && (
-          <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            <span className="label">Your Solana wallet address</span>
-            <input className="input" value={shopRefund} onChange={(e) => setShopRefund(e.target.value)} placeholder="Paste a Solana address" disabled={phase !== 'idle'} spellCheck={false} />
-            <span className="muted" style={{ fontSize: 13, lineHeight: 1.45 }}>If the card can’t be delivered, you get a refund here in USDC.</span>
-          </label>
-        )}
+        <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <span className="label">Backup Solana address</span>
+          <input className="input" value={shopRefund} onChange={(e) => setShopRefund(e.target.value)} placeholder="A fresh Solana wallet" disabled={phase !== 'idle'} spellCheck={false} />
+          <span className="muted" style={{ fontSize: 13, lineHeight: 1.45 }}>Only used if the card can’t be delivered (refund in USDC). The shop sees this one, so use a fresh wallet, not the one you pay from.</span>
+          {sameWallet && <span className="notice notice-warn" style={{ fontSize: 13 }}>That’s the wallet you’re paying from. It works, but the shop would see it. A fresh wallet keeps you private.</span>}
+        </label>
       </div>
 
       <div className="card" style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>

@@ -5,7 +5,7 @@ export const metadata = { title: 'Docs', description: 'How gifted works: standar
 const toc = [
   ['overview', 'Overview'],
   ['quick-start', 'Quick start'],
-  ['standard', 'Standard checkout'],
+  ['standard', 'Fast checkout'],
   ['private', 'Private checkout'],
   ['fees', 'Fees'],
   ['supported', 'Supported tokens & chains'],
@@ -48,12 +48,12 @@ export default function Docs() {
           <ol>
             <li>Open the <Link href="/#shop">shop</Link> and pick a brand and amount.</li>
             <li>Choose a token. You’ll see a live estimate before connecting anything.</li>
-            <li>Choose <strong>Standard</strong> (connect a Solana wallet and sign once) or <strong>Private</strong> (send to a one-time deposit address from any wallet).</li>
+            <li>Choose <strong>Fast</strong> (connect a Solana wallet and sign once) or <strong>Private</strong> (send to a one-time deposit address from any wallet).</li>
             <li>Your code appears on screen when the card is delivered, and it’s saved under <Link href="/cards">My cards</Link>.</li>
           </ol>
 
-          <h2 id="standard">Standard checkout</h2>
-          <p>Standard checkout is one Solana transaction that does two things at once: swaps your token through Jupiter and sends the exact USDC amount straight to the gift card order.</p>
+          <h2 id="standard">Fast checkout</h2>
+          <p>Fast checkout is one Solana transaction that does two things at once: swaps your token through Jupiter and sends the exact USDC amount straight to the gift card order.</p>
           <ul>
             <li>Pay with any token in your wallet that Jupiter can route.</li>
             <li>The exact price, including swap costs and price impact, is shown before you sign. The quote shows the most you can pay.</li>
@@ -92,7 +92,7 @@ export default function Docs() {
           </div>
 
           <h2 id="supported">Supported tokens & chains</h2>
-          <p><strong>Standard:</strong> any Solana token with a Jupiter route, including SOL, USDC and most memecoins.</p>
+          <p><strong>Fast:</strong> any Solana token with a Jupiter route, including SOL, USDC and most memecoins.</p>
           <p><strong>Private:</strong> supported assets on Solana, Ethereum, Base, Arbitrum, BNB Chain, Bitcoin, Litecoin and Dogecoin. The list updates live from NEAR Intents.</p>
           <p><strong>Gift cards:</strong> thousands of brands. Each card shows the country it works in; check it before you buy.</p>
 
@@ -108,14 +108,14 @@ export default function Docs() {
           <p>Every card you buy is saved in your browser under <Link href="/cards">My cards</Link>, where you can reveal the code again. Codes aren’t stored on gifted’s servers, so clearing your browser data removes them. Treat codes like cash.</p>
 
           <h2 id="live">Live orders</h2>
-          <p>The live feed on the homepage lists real, delivered orders. Standard orders link to their transaction on Solscan. Private orders show only the card and a rounded time, never a wallet, token or transaction.</p>
+          <p>The live feed on the homepage lists real, delivered orders. Fast checkout orders link to their transaction on Solscan. Private orders show only the card and a rounded time, never a wallet, token or transaction.</p>
 
           <h2 id="token">The $GIFTED token</h2>
           <p>$GIFTED is the meme coin behind the shop, launched on pump.fun. It has no promised value, returns or rights, and you don’t need it to use gifted. The contract address is always in the site header.</p>
 
           <h2 id="faq">FAQ</h2>
           <h3>Do I need to connect a wallet?</h3>
-          <p>Not to browse or see prices. Standard checkout needs a Solana wallet to sign. Private checkout works from any wallet by sending to the deposit address.</p>
+          <p>Not to browse or see prices. Fast checkout needs a Solana wallet to sign. Private checkout works from any wallet by sending to the deposit address.</p>
           <h3>How long does delivery take?</h3>
           <p>Usually under a minute after your payment confirms. Private orders take a little longer while the network settles.</p>
           <h3>What if something goes wrong?</h3>

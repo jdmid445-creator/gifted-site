@@ -4,29 +4,32 @@ import Shop from '@/components/Shop';
 import LiveFeed from '@/components/LiveFeed';
 import CopyCA from '@/components/CopyCA';
 import HeroStage from '@/components/HeroStage';
-import { IconBolt, IconEyeOff, IconArrow } from '@/components/Icons';
+import { IconBolt, IconEyeOff, IconArrow, IconCheck } from '@/components/Icons';
 import { site } from '@/lib/site';
 
 const compare = [
-  ['You connect', 'Your Solana wallet', 'Nothing. You send to a one-time address'],
-  ['Pay from', 'Any token in your Solana wallet', 'Solana, Ethereum, Base, Arbitrum, BNB Chain, Bitcoin, Litecoin, Dogecoin'],
-  ['Who pays the shop', 'Your wallet, in one signed transaction', 'NEAR Intents, so the purchase isn’t tied to your wallet'],
-  ['On-chain trail', 'Public, and linked in the live feed', 'Your deposit is public on its own chain. The card purchase isn’t linked to it'],
-  ['Typical time', 'Under a minute', 'A few minutes'],
+  ['Who pays the shop', 'NEAR Intents, so the purchase isn’t tied to your wallet', 'Your wallet, in one signed transaction'],
+  ['You connect', 'Nothing. You send to a one-time address', 'Your Solana wallet'],
+  ['Pay from', 'Solana, Ethereum, Base, Arbitrum, BNB Chain, Bitcoin, Litecoin, Dogecoin', 'Any token in your Solana wallet'],
+  ['On-chain trail', 'Your deposit is public on its own chain. The card purchase isn’t linked to it', 'Public, and linked in the live feed'],
+  ['Typical time', 'A few minutes', 'Under a minute'],
 ];
 
 const path = [
-  ['Your token', 'SOL, BONK, WIF, or anything else in your wallet.'],
-  ['Jupiter', 'Swaps it into the exact USDC the card costs.'],
-  ['Bitrefill invoice', 'USDC lands on the invoice address. Never with us.'],
-  ['Delivery', 'Bitrefill issues the card, usually in under a minute.'],
-  ['Your code', 'Shown on screen and saved in this browser.'],
+  ['Pick a card', 'Hundreds of brands across 20 countries.'],
+  ['Pick any coin', 'From Solana, Ethereum, Base, Bitcoin and 4 more chains.'],
+  ['Send to a one-time address', 'No wallet connection. A fresh address for every order.'],
+  ['NEAR Intents pays the shop', 'The payment reaches the shop from the network, not from you.'],
+  ['Get your code', 'Shown on screen and saved in this browser.'],
 ];
 
+const sees = ['A paid order for a gift card', 'USDC from NEAR Intents', 'A backup refund address you choose'];
+const neverSees = ['The wallet you paid from', 'Your balances or what else you hold', 'Which coin or chain you paid from'];
+
 const faqs = [
+  ['What does Private actually hide?', 'The shop gets paid by NEAR Intents instead of your wallet, so the purchase isn’t linked to you. Your own deposit is still visible on its blockchain, and the card is tied to whatever account you redeem it on.'],
   ['What does it cost?', 'gifted charges no fee. You pay the card price from Bitrefill, plus the swap and a small network fee. You see the exact amount before you sign anything.'],
-  ['Do I need an account or ID?', 'No. Standard checkout uses your Solana wallet. Private checkout works from any wallet on 8 chains, without connecting.'],
-  ['What does Private actually hide?', 'The shop gets paid by NEAR Intents instead of your wallet, so the purchase isn’t linked to you. Your own deposit is still visible on its blockchain.'],
+  ['Do I need an account or ID?', 'No. Fast checkout uses your Solana wallet. Private checkout works from any wallet on 8 chains, without connecting.'],
   ['Where do I get my code?', 'On screen as soon as it’s delivered, usually in under a minute. It’s also saved in this browser under My cards. Treat it like cash.'],
   ['What if something goes wrong?', 'If the payment doesn’t go through, your money goes back to your wallet. If a card can’t be delivered, Bitrefill refunds you in USDC on Solana.'],
   ['Can I use it outside the US?', 'Yes. Pick your country next to the search box. Gift cards are country-specific, so buy one for where you’ll use it.'],
@@ -42,11 +45,11 @@ export default function Home() {
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 32, marginBottom: 40 }}>
           <div style={{ flex: '999 1 560px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 20 }}>
             <h1 className="hero-title" style={{ margin: 0, font: '500 clamp(42px, 6vw, 78px)/1.02 var(--display)', letterSpacing: '-0.032em' }}>
-              <span className="line"><span className="line-inner">Spend your crypto</span></span>
-              <span className="line"><span className="line-inner">on <span style={{ color: 'var(--ribbon)' }}>real things.</span></span></span>
+              <span className="line"><span className="line-inner">Spend crypto on</span></span>
+              <span className="line"><span className="line-inner">real things. <span style={{ color: 'var(--ribbon)' }}>Privately.</span></span></span>
             </h1>
             <p className="muted rise" style={{ '--d': '380ms', margin: 0, fontSize: 19, lineHeight: 1.5, maxWidth: 540 }}>
-              Pick a gift card, pick any token, and pay. Turn on Private and the purchase isn’t tied to your wallet.
+              Gift cards for hundreds of brands, paid with any token from 8 chains. The shop gets paid, but never sees your wallet.
             </p>
           </div>
           <div className="hero-art rise" style={{ '--d': '200ms' }}>
@@ -58,13 +61,40 @@ export default function Home() {
         </div>
       </section>
 
+      {/* What the shop sees */}
+      <section id="privacy" className="wrap section">
+        <div data-reveal style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 32, maxWidth: 680 }}>
+          <h2 className="h2">The shop gets paid. <span className="dim">It never sees your wallet.</span></h2>
+          <p className="muted" style={{ margin: 0, fontSize: 17, lineHeight: 1.6 }}>
+            Normally a crypto purchase draws a straight line from your wallet to the store. With private checkout, NEAR Intents pays the shop for you, so that line doesn’t exist.
+          </p>
+        </div>
+        <div className="grid-2" data-reveal>
+          <div className="card" style={{ padding: 26, display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <span style={{ font: '500 17px var(--display)' }}>What the shop sees</span>
+            {sees.map((t) => (
+              <span key={t} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 15 }}><IconCheck width={18} height={18} style={{ color: 'var(--mint)' }} />{t}</span>
+            ))}
+          </div>
+          <div className="card" style={{ padding: 26, display: 'flex', flexDirection: 'column', gap: 14, borderColor: 'rgba(240,81,122,.35)', background: 'linear-gradient(180deg, rgba(240,81,122,.07), rgba(240,81,122,0) 60%), var(--surface)' }}>
+            <span style={{ font: '500 17px var(--display)', color: 'var(--ribbon)' }}>What it never sees</span>
+            {neverSees.map((t) => (
+              <span key={t} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 15 }}><IconEyeOff width={18} height={18} style={{ color: 'var(--ribbon)' }} />{t}</span>
+            ))}
+          </div>
+        </div>
+        <p className="muted" style={{ margin: '14px 0 0', fontSize: 14, lineHeight: 1.6 }}>
+          Your own deposit is still public on its chain, like any transfer. <Link href="/docs#private">How private checkout works</Link>
+        </p>
+      </section>
+
       {/* Live orders */}
       <section id="live" className="wrap section" style={{ scrollMarginTop: 70 }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 40, alignItems: 'flex-start' }}>
           <div data-reveal style={{ flex: '1 1 340px', display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 470 }}>
             <h2 className="h2">Real crypto, <span className="dim">real cards.</span></h2>
             <p className="muted" style={{ margin: 0, lineHeight: 1.6, fontSize: 16 }}>
-              Each order shows up here once Bitrefill delivers it. Standard orders link to their transaction on Solscan. Private orders show the card only.
+              Each order shows up here once Bitrefill delivers it. Private orders show the card and a rough time, nothing else. Fast checkout orders link to their transaction.
             </p>
           </div>
           <div data-reveal style={{ '--d': '120ms', flex: '999 1 440px', minWidth: 0 }}><LiveFeed limit={6} /></div>
@@ -74,15 +104,15 @@ export default function Home() {
       {/* Standard vs Private */}
       <section className="wrap section">
         <div data-reveal style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 32, maxWidth: 640 }}>
-          <h2 className="h2">Fast, or <span className="dim">off the record.</span></h2>
+          <h2 className="h2">Private by default. <span className="dim">Fast if you want.</span></h2>
         </div>
         <div className="card table-scroll" data-reveal style={{ padding: '22px 8px 6px' }}>
           <table className="compare">
             <thead>
               <tr>
                 <th scope="col"><span className="sr-only">Detail</span></th>
-                <th scope="col"><span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}><IconBolt width={17} height={17} /> Standard</span></th>
                 <th scope="col"><span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: 'var(--ribbon)' }}><IconEyeOff width={17} height={17} /> Private</span></th>
+                <th scope="col"><span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}><IconBolt width={17} height={17} /> Fast</span></th>
               </tr>
             </thead>
             <tbody>
@@ -92,16 +122,13 @@ export default function Home() {
             </tbody>
           </table>
         </div>
-        <p className="muted" style={{ margin: '14px 0 0', fontSize: 14 }}>
-          <Link href="/docs#private">How private checkout works</Link>
-        </p>
       </section>
 
       {/* Order path */}
       <section className="wrap section">
         <div data-reveal style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16, marginBottom: 32 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 640 }}>
-            <h2 className="h2">Wallet to code, <span className="dim">in one pass.</span></h2>
+            <h2 className="h2">Private, <span className="dim">start to finish.</span></h2>
           </div>
           <Link href="/docs" className="btn btn-ghost">Read the docs <IconArrow width={18} height={18} /></Link>
         </div>
