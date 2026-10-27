@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export const metadata = { title: 'Docs', description: 'How gifted works: standard and private checkout, fees, supported tokens and safety.' };
+export const metadata = { title: 'Docs', description: 'How GiftedSwaps works: standard and private checkout, fees, supported tokens and safety.' };
 
 const toc = [
   ['overview', 'Overview'],
@@ -26,12 +26,12 @@ export default function Docs() {
         </nav>
 
         <article className="docs-body">
-          <div className="muted" style={{ fontSize: 14, marginBottom: 8 }}>Docs / gifted</div>
-          <h1 style={{ font: '500 44px/1.05 var(--display)', letterSpacing: '-0.035em', margin: '0 0 12px' }}>How gifted works</h1>
+          <div className="muted" style={{ fontSize: 14, marginBottom: 8 }}>Docs / GiftedSwaps</div>
+          <h1 style={{ font: '500 44px/1.05 var(--display)', letterSpacing: '-0.035em', margin: '0 0 12px' }}>How GiftedSwaps works</h1>
           <p className="muted" style={{ fontSize: 18, marginTop: 0 }}>Swap any token into a gift card in one step, with an optional private checkout.</p>
 
           <h2 id="overview">Overview</h2>
-          <p>gifted turns crypto into gift cards for thousands of brands. You pick a card, pick what to pay with, and approve one payment. Behind the scenes, three networks do the work:</p>
+          <p>GiftedSwaps turns crypto into gift cards for thousands of brands. You pick a card, pick what to pay with, and approve one payment. Behind the scenes, three networks do the work:</p>
           <div className="table-scroll">
             <table>
               <thead><tr><th>Piece</th><th>What it does</th></tr></thead>
@@ -42,7 +42,7 @@ export default function Docs() {
               </tbody>
             </table>
           </div>
-          <p>gifted itself is a website. It never holds your funds or your keys.</p>
+          <p>GiftedSwaps itself is a website. It never holds your funds or your keys.</p>
 
           <h2 id="quick-start">Quick start</h2>
           <ol>
@@ -74,7 +74,7 @@ export default function Docs() {
             <li>The shop receives the refund address you give it. Use a fresh wallet for more privacy.</li>
             <li>A gift card is tied to whatever account you redeem it on.</li>
           </ul>
-          <div className="callout">Private, not invisible. Private checkout protects your financial privacy; it isn’t a way around the law. NEAR Intents screens deposits, and using gifted for laundering or fraud is prohibited.</div>
+          <div className="callout">Private, not invisible. Private checkout protects your financial privacy; it isn’t a way around the law. NEAR Intents screens deposits, and using GiftedSwaps for laundering or fraud is prohibited.</div>
           <h3>Refunds</h3>
           <p>If a swap can’t complete, NEAR refunds your deposit to the refund address on the chain you paid from. If a card can’t be delivered, Bitrefill refunds to the Solana address you gave as the card refund address.</p>
 
@@ -83,7 +83,7 @@ export default function Docs() {
             <table>
               <thead><tr><th>Fee</th><th>Who charges it</th><th>Notes</th></tr></thead>
               <tbody>
-                <tr><td>gifted fee</td><td>gifted</td><td>None. gifted adds nothing.</td></tr>
+                <tr><td>GiftedSwaps fee</td><td>GiftedSwaps</td><td>None. GiftedSwaps adds nothing.</td></tr>
                 <tr><td>Card price</td><td>Bitrefill</td><td>Usually the face value, sometimes with a small spread.</td></tr>
                 <tr><td>Swap</td><td>Jupiter / NEAR solvers</td><td>Shown in your quote before you pay.</td></tr>
                 <tr><td>Network</td><td>The blockchain</td><td>A fraction of a cent on Solana.</td></tr>
@@ -98,20 +98,20 @@ export default function Docs() {
 
           <h2 id="safety">Safety & custody</h2>
           <ul>
-            <li><strong>Non-custodial.</strong> Funds go from your wallet directly to Bitrefill or NEAR. gifted never holds them.</li>
+            <li><strong>Non-custodial.</strong> Funds go from your wallet directly to Bitrefill or NEAR. GiftedSwaps never holds them.</li>
             <li><strong>Server-side pricing.</strong> Card prices come from Bitrefill’s catalog on the server, never from your browser.</li>
             <li><strong>Codes stay yours.</strong> A code is only returned to the session that paid, using a signed access token.</li>
-            <li><strong>No accounts.</strong> No sign-up, email or KYC on gifted itself.</li>
+            <li><strong>No accounts.</strong> No sign-up, email or KYC on GiftedSwaps itself.</li>
           </ul>
 
           <h2 id="cards">Your cards</h2>
-          <p>Every card you buy is saved in your browser under <Link href="/cards">My cards</Link>, where you can reveal the code again. Codes aren’t stored on gifted’s servers, so clearing your browser data removes them. Treat codes like cash.</p>
+          <p>Every card you buy is saved in your browser under <Link href="/cards">My cards</Link>, where you can reveal the code again. Codes aren’t stored on GiftedSwaps’s servers, so clearing your browser data removes them. Treat codes like cash.</p>
 
           <h2 id="live">Live orders</h2>
           <p>The live feed on the homepage lists real, delivered orders. Standard checkout orders link to their transaction on Solscan. Private orders show only the card and a rounded time, never a wallet, token or transaction.</p>
 
           <h2 id="token">The $GIFTED token</h2>
-          <p>$GIFTED is the meme coin behind the shop, launched on pump.fun. It has no promised value, returns or rights, and you don’t need it to use gifted. The contract address is always in the site header.</p>
+          <p>$GIFTED is the meme coin behind the shop, launched on pump.fun. It has no promised value, returns or rights, and you don’t need it to use GiftedSwaps. The contract address is always in the site header.</p>
 
           <h2 id="faq">FAQ</h2>
           <h3>Do I need to connect a wallet?</h3>

@@ -1,6 +1,6 @@
 'use client';
 
-// Hero object: two gifted cards built from a real photographed card (Unsplash, retouched),
+// Hero object: two GiftedSwaps cards built from a real photographed card (Unsplash, retouched),
 // with our logo and value laid on top in CSS.
 // Click the front card and it spins all the way around, then settles back.
 import { useState } from 'react';
@@ -36,7 +36,7 @@ export default function GiftCardArt() {
             <span className="gc-shine" />
             <span style={{ position: 'absolute', left: 20, top: 18, display: 'flex', alignItems: 'center', gap: 8 }}>
               <Mascot size={26} variant="icon" title="" />
-              <span style={{ font: '600 18px var(--display)', letterSpacing: '-0.04em' }}>gifted</span>
+              <span style={{ font: '600 18px var(--display)', letterSpacing: '-0.04em' }}>GiftedSwaps</span>
             </span>
             <span style={{ position: 'absolute', left: 20, bottom: 18, display: 'flex', flexDirection: 'column', gap: 4 }}>
               <span style={{ font: '500 12px var(--display)', color: 'rgba(255,255,255,.55)' }}>Gift card</span>

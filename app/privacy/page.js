@@ -7,7 +7,7 @@ export default function Privacy() {
       <p className="muted">[DRAFT: have a lawyer review before launch.]</p>
 
       <h2 style={{ font: '500 22px var(--display)', letterSpacing: '-0.02em' }}>No accounts</h2>
-      <p>gifted has no sign-up. We don’t ask for your name, email or phone number.</p>
+      <p>GiftedSwaps has no sign-up. We don’t ask for your name, email or phone number.</p>
 
       <h2 style={{ font: '500 22px var(--display)', letterSpacing: '-0.02em' }}>What we see</h2>
       <p>To create an order, your wallet’s public address is sent to the gift card provider (Bitrefill) as the refund address, along with the card you picked. Swap quotes are requested from Jupiter. Public blockchain data is, by nature, public.</p>
@@ -16,7 +16,7 @@ export default function Privacy() {
       <p>In private checkout, the gift card is paid by the NEAR Intents network instead of your wallet, using its confidential mode. That removes the on-chain link between your wallet and the shop’s payment. It does not make you invisible: your deposit into the network is public on your chain, amount and timing can sometimes be correlated, the shop receives the refund address you give it, and a card is tied to the account you redeem it on. NEAR Intents screens deposits under its own policies.</p>
 
       <h2 style={{ font: '500 22px var(--display)', letterSpacing: '-0.02em' }}>What we keep</h2>
-      <p>gifted does not store your orders on its servers. Your gift card codes are saved only in your own browser so you can find them again. Clearing your browser data removes them.</p>
+      <p>GiftedSwaps does not store your orders on its servers. Your gift card codes are saved only in your own browser so you can find them again. Clearing your browser data removes them.</p>
 
       <h2 style={{ font: '500 22px var(--display)', letterSpacing: '-0.02em' }}>Third parties</h2>
       <p>Bitrefill, Jupiter and your Solana RPC provider each handle data under their own privacy policies.</p>

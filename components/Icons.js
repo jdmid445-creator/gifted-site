@@ -1,4 +1,4 @@
-// gifted's own icon set: 24px grid, 1.75 stroke, rounded joins. Decorative by default.
+// GiftedSwaps's own icon set: 24px grid, 1.75 stroke, rounded joins. Decorative by default.
 const base = { width: 20, height: 20, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.75, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true };
 
 export const IconGift = (p) => (

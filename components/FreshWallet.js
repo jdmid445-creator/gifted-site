@@ -142,7 +142,7 @@ export default function FreshWallet() {
                 </button>
                 {shown && <div style={{ display: 'flex', gap: 8 }}><CopyBtn value={wallet.secret} label="Copy private key" /></div>}
                 <p className="muted" style={{ margin: 0, fontSize: 14, lineHeight: 1.55 }}>{k.how}</p>
-                <p className="fw-note"><IconShield width={16} height={16} /> Made on this device. gifted never sees or stores it, so if you close the tab without saving it, it’s gone.</p>
+                <p className="fw-note"><IconShield width={16} height={16} /> Made on this device. GiftedSwaps never sees or stores it, so if you close the tab without saving it, it’s gone.</p>
                 <label className="fw-check">
                   <input type="checkbox" checked={saved} onChange={(e) => setSaved(e.target.checked)} />
                   <span>I saved it in a wallet app</span>

@@ -7,10 +7,10 @@ import { site } from '@/lib/site';
 
 export const metadata = {
   metadataBase: new URL(site.url),
-  title: { default: 'gifted', template: '%s · gifted' },
+  title: { default: 'GiftedSwaps', template: '%s · GiftedSwaps' },
   description: site.description,
-  openGraph: { title: `gifted: ${site.tagline}`, description: site.description, url: site.url, siteName: 'gifted', images: [{ url: '/og.jpg', width: 1200, height: 630, alt: 'gifted: spend your crypto on real things' }], type: 'website' },
-  twitter: { card: 'summary_large_image', title: `gifted: ${site.tagline}`, description: site.description, images: ['/og.jpg'] },
+  openGraph: { title: `GiftedSwaps: ${site.tagline}`, description: site.description, url: site.url, siteName: 'GiftedSwaps', images: [{ url: '/og.jpg', width: 1200, height: 630, alt: 'GiftedSwaps: spend your crypto on real things' }], type: 'website' },
+  twitter: { card: 'summary_large_image', title: `GiftedSwaps: ${site.tagline}`, description: site.description, images: ['/og.jpg'] },
   alternates: { canonical: '/' },
 };
 

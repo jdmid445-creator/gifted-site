@@ -22,11 +22,11 @@ export default function Footer() {
         <div style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: 14, maxWidth: 440 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <Mascot size={30} variant="icon" title="" />
-            <span style={{ font: '600 20px var(--display)', letterSpacing: '-0.04em' }}>gifted</span>
+            <span style={{ font: '600 20px var(--display)', letterSpacing: '-0.04em' }}>GiftedSwaps</span>
           </div>
           <p className="muted" style={{ margin: 0, fontSize: 13, lineHeight: 1.65 }}>
-            gifted lets you buy gift cards with crypto without tying the purchase to your wallet. $GIFTED is a meme coin with no promised value or returns. The shop is free to use, and holding $GIFTED isn’t required.
-            Gift cards are fulfilled through Bitrefill. gifted never holds your funds: you approve every payment from your own wallet.
+            GiftedSwaps lets you buy gift cards with crypto without tying the purchase to your wallet. $GIFTED is a meme coin with no promised value or returns. The shop is free to use, and holding $GIFTED isn’t required.
+            Gift cards are fulfilled through Bitrefill. GiftedSwaps never holds your funds: you approve every payment from your own wallet.
           </p>
           <p className="muted" style={{ margin: 0, fontSize: 12 }}>Card photo by <a href="https://unsplash.com/photos/black-business-credit-card-ahjzVINkuCs" target="_blank" rel="noopener noreferrer">Unsplash</a>, retouched.</p>
         </div>

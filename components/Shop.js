@@ -428,7 +428,7 @@ export default function Shop() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 13, paddingTop: 4, borderTop: '1px solid var(--line)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}><span className="muted">Card price</span><span className="num">{invoice.usdcAmount} USDC</span></div>
             {quote && !quote.direct && <div style={{ display: 'flex', justifyContent: 'space-between' }}><span className="muted">Swap price impact</span><span className="num">{fmt(Number(quote.priceImpactPct) * 100, 2)}%</span></div>}
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}><span className="muted">gifted fee</span><span className="num">$0</span></div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}><span className="muted">GiftedSwaps fee</span><span className="num">$0</span></div>
           </div>
         )}
       </div>
@@ -453,7 +453,7 @@ export default function Shop() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <button className="btn btn-primary" type="button" onClick={pay}>Sign and pay</button>
           <button className="btn btn-ghost btn-sm" type="button" onClick={resetCheckout}>Cancel</button>
-          <span className="muted" style={{ fontSize: 12, lineHeight: 1.5 }}>One transaction swaps your {payToken?.symbol} and pays the card directly. gifted never holds your funds.</span>
+          <span className="muted" style={{ fontSize: 12, lineHeight: 1.5 }}>One transaction swaps your {payToken?.symbol} and pays the card directly. GiftedSwaps never holds your funds.</span>
         </div>
       )}
       {phase === 'signing' && <button className="btn btn-primary" type="button" disabled>Approve in your wallet…</button>}

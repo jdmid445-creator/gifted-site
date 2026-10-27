@@ -69,7 +69,7 @@ export default function HeroStage() {
         type="button"
         className={`stage-mascot${ready ? ' is-ready' : ''}${ducking ? ' is-ducking' : ''}`}
         onClick={poke}
-        aria-label="Poke the gifted creature"
+        aria-label="Poke the GiftedSwaps creature"
       >
         <Mascot size={180} title="" />
       </button>
