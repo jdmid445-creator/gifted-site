@@ -91,6 +91,15 @@ select.input { appearance: auto; }
   background: transparent; color: var(--text); font: 500 14px var(--mono); font-variant-numeric: tabular-nums; cursor: pointer;
 }
 .chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--ink-text); }
+.amt-more {
+  appearance: none; -webkit-appearance: none; padding-right: 34px;
+  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none' stroke='%238E8E96' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1l4 4 4-4'/%3E%3C/svg%3E") no-repeat right 14px center;
+}
+.amt-more option { background: #141416; color: var(--text); }
+.amt-more.is-picked {
+  background-color: var(--ink); border-color: var(--ink); color: var(--ink-text);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none' stroke='%230B0B0C' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1l4 4 4-4'/%3E%3C/svg%3E");
+}
 
 .notice { padding: 12px 14px; border-radius: 12px; font-size: 14px; line-height: 1.5; }
 .notice-warn { background: rgba(240, 120, 80, .08); border: 1px solid rgba(240, 120, 80, .3); color: #F5B49C; }

@@ -44,7 +44,7 @@ const BASE = [
 const POPULAR = BASE;
 
 // Start on a sensible amount (around $25-50), not the biggest one.
-const defaultPkg = (p) => (p.packages.find((k) => k.value >= 25) || p.packages[0])?.id || null;
+const defaultPkg = (p) => (p.packages.slice(0, 5).find((k) => k.value >= 25) || p.packages[0])?.id || null;
 const cleanName = (n = '') => n.replace(/\s*\(.*\)$/, '');
 
 const short = (s) => (s ? `${s.slice(0, 4)}…${s.slice(-4)}` : '');
@@ -361,10 +361,27 @@ export default function Shop() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <span className="label">Amount · {product.currency}</span>
           {product.packages.length > 0 ? (
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              {product.packages.map((k) => (
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+              {product.packages.slice(0, 5).map((k) => (
                 <button key={k.id} type="button" className="chip" aria-pressed={pkgId === k.id} onClick={() => { setPkgId(k.id); resetCheckout(); }}>{product.currency === 'USD' ? '$' : ''}{k.value.toLocaleString()}</button>
               ))}
+              {product.packages.length > 5 && (() => {
+                const more = product.packages.slice(5);
+                const picked = more.some((k) => k.id === pkgId);
+                return (
+                  <select
+                    aria-label="More amounts"
+                    className={`chip amt-more${picked ? ' is-picked' : ''}`}
+                    value={picked ? pkgId : ''}
+                    onChange={(e) => { if (e.target.value) { setPkgId(e.target.value); resetCheckout(); } }}
+                  >
+                    <option value="" disabled>More amounts</option>
+                    {more.map((k) => (
+                      <option key={k.id} value={k.id}>{product.currency === 'USD' ? '$' : ''}{k.value.toLocaleString()}</option>
+                    ))}
+                  </select>
+                );
+              })()}
             </div>
           ) : product.range ? (
             <>
