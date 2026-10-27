@@ -35,7 +35,7 @@ export default function GiftCardArt() {
           <span className="gc-face" style={{ background: 'url(/cards/front.png) center / cover', boxShadow: SHADOW }}>
             <span className="gc-shine" />
             <span style={{ position: 'absolute', left: 20, top: 18, display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ display: 'block', transform: 'translateY(-4px)' }}><Mascot size={26} variant="icon" title="" /></span>
+              <span style={{ display: 'block', transform: 'translateY(-3.5px)' }}><Mascot size={26} variant="icon" title="" /></span>
               <span style={{ font: '600 18px var(--display)', letterSpacing: '-0.04em' }}>GiftedSwaps</span>
             </span>
             <span style={{ position: 'absolute', left: 20, bottom: 18, display: 'flex', flexDirection: 'column', gap: 4 }}>
