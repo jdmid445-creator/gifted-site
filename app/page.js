@@ -38,7 +38,7 @@ export default function Home() {
               Pick a gift card, pick any token, and pay. Turn on Private and the purchase isn’t tied to your wallet.
             </p>
             <div className="num muted rise" style={{ '--d': '480ms', display: 'flex', flexWrap: 'wrap', gap: '8px 20px', fontSize: 13 }}>
-              <span><span className="dot" style={{ background: 'var(--ribbon)', marginRight: 8 }} />Thousands of brands</span>
+              <span><span className="dot" style={{ background: 'var(--ribbon)', marginRight: 8 }} />Hundreds of brands</span>
               <span><span className="dot" style={{ background: '#E0A82E', marginRight: 8 }} />170+ countries</span>
               <span><span className="dot" style={{ background: '#3B6FD8', marginRight: 8 }} />8 chains in Private</span>
             </div>
