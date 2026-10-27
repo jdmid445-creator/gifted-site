@@ -29,7 +29,7 @@ const neverSees = ['The wallet you paid from', 'Your balances or what else you h
 const faqs = [
   ['What does Private actually hide?', 'The shop gets paid by NEAR Intents instead of your wallet, so the purchase isn’t linked to you. Your own deposit is still visible on its blockchain, and the card is tied to whatever account you redeem it on.'],
   ['What does it cost?', 'gifted charges no fee. You pay the card price from Bitrefill, plus the swap and a small network fee. You see the exact amount before you sign anything.'],
-  ['Do I need an account or ID?', 'No. Fast checkout uses your Solana wallet. Private checkout works from any wallet on 8 chains, without connecting.'],
+  ['Do I need an account or ID?', 'No. Standard checkout uses your Solana wallet. Private checkout works from any wallet on 8 chains, without connecting.'],
   ['Where do I get my code?', 'On screen as soon as it’s delivered, usually in under a minute. It’s also saved in this browser under My cards. Treat it like cash.'],
   ['What if something goes wrong?', 'If the payment doesn’t go through, your money goes back to your wallet. If a card can’t be delivered, Bitrefill refunds you in USDC on Solana.'],
   ['Can I use it outside the US?', 'Yes. Pick your country next to the search box. Gift cards are country-specific, so buy one for where you’ll use it.'],
@@ -94,7 +94,7 @@ export default function Home() {
           <div data-reveal style={{ flex: '1 1 340px', display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 470 }}>
             <h2 className="h2">Real crypto, <span className="dim">real cards.</span></h2>
             <p className="muted" style={{ margin: 0, lineHeight: 1.6, fontSize: 16 }}>
-              Each order shows up here once Bitrefill delivers it. Private orders show the card and a rough time, nothing else. Fast checkout orders link to their transaction.
+              Each order shows up here once Bitrefill delivers it. Private orders show the card and a rough time, nothing else. Standard checkout orders link to their transaction.
             </p>
           </div>
           <div data-reveal style={{ '--d': '120ms', flex: '999 1 440px', minWidth: 0 }}><LiveFeed limit={6} /></div>
@@ -104,7 +104,7 @@ export default function Home() {
       {/* Standard vs Private */}
       <section className="wrap section">
         <div data-reveal style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 32, maxWidth: 640 }}>
-          <h2 className="h2">Private by default. <span className="dim">Fast if you want.</span></h2>
+          <h2 className="h2">Private by default. <span className="dim">Standard if you want speed.</span></h2>
         </div>
         <div className="card table-scroll" data-reveal style={{ padding: '22px 8px 6px' }}>
           <table className="compare">
@@ -112,7 +112,7 @@ export default function Home() {
               <tr>
                 <th scope="col"><span className="sr-only">Detail</span></th>
                 <th scope="col"><span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: 'var(--ribbon)' }}><IconEyeOff width={17} height={17} /> Private</span></th>
-                <th scope="col"><span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}><IconBolt width={17} height={17} /> Fast</span></th>
+                <th scope="col"><span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}><IconBolt width={17} height={17} /> Standard</span></th>
               </tr>
             </thead>
             <tbody>

@@ -477,7 +477,7 @@ export default function Shop() {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14, flexWrap: 'wrap' }}>
         <div className="mode-switch" role="group" aria-label="Checkout mode" style={{ width: 'min(100%, 360px)' }}>
           <button type="button" aria-pressed={mode === 'private'} onClick={() => { setMode('private'); resetCheckout(); }}><IconEyeOff width={17} height={17} /> Private</button>
-          <button type="button" aria-pressed={mode === 'standard'} onClick={() => { setMode('standard'); resetCheckout(); }}><IconBolt width={17} height={17} /> Fast</button>
+          <button type="button" aria-pressed={mode === 'standard'} onClick={() => { setMode('standard'); resetCheckout(); }}><IconBolt width={17} height={17} /> Standard</button>
         </div>
         <span className="muted" style={{ fontSize: 14, flex: '1 1 280px', textAlign: 'right' }}>
           {mode === 'standard'
