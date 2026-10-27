@@ -7,7 +7,7 @@ import { IconCopy, IconCheck } from './Icons';
 // The wallet button only renders in the browser (it reads installed wallets).
 const WalletMultiButton = dynamic(
   () => import('@solana/wallet-adapter-react-ui').then((m) => m.WalletMultiButton),
-  { ssr: false, loading: () => <span style={{ width: 128, height: 40, display: 'inline-block' }} /> }
+  { ssr: false, loading: () => <span className="hdr-link" style={{ display: 'inline-block', width: 64 }} /> }
 );
 
 export function WalletButton() {
@@ -21,11 +21,10 @@ export function CaPill({ ca }) {
   return (
     <button
       type="button"
-      className="hide-sm"
+      className="hide-sm hdr-link hdr-ca"
       disabled={!ca}
       onClick={() => { navigator.clipboard?.writeText(ca); setCopied(true); setTimeout(() => setCopied(false), 1400); }}
       aria-label={ca ? `Copy contract address ${ca}` : 'Contract address coming soon'}
-      style={{ display: 'inline-flex', alignItems: 'center', gap: 6, height: 40, padding: '0 12px', borderRadius: 10, border: '1px solid var(--line)', background: 'var(--surface)', color: 'var(--text)', font: '500 13px var(--mono)', cursor: ca ? 'pointer' : 'default' }}
     >
       <span className="muted">CA:</span> {short}
       {ca ? (copied ? <IconCheck width={15} height={15} /> : <IconCopy width={15} height={15} />) : null}

@@ -9,13 +9,15 @@ import Mascot from './Mascot';
 export default function HeroStage() {
   const stage = useRef(null);
   const [ducking, setDucking] = useState(false);
-  const [hint, setHint] = useState(false);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const el = stage.current;
     if (!el) return undefined;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduce) return undefined;
+    // The entrance (pop out of the box) runs once; after that only the idle bob plays.
+    const readyTimer = setTimeout(() => setReady(true), reduce ? 0 : 1700);
+    if (reduce) return () => clearTimeout(readyTimer);
 
     let raf = 0;
     let target = { x: 0, y: 0 };
@@ -46,20 +48,16 @@ export default function HeroStage() {
     };
 
     window.addEventListener('pointermove', onMove, { passive: true });
-    const hintTimer = setTimeout(() => setHint(true), 2600);
-    const hintOff = setTimeout(() => setHint(false), 7600);
     return () => {
       window.removeEventListener('pointermove', onMove);
       cancelAnimationFrame(raf);
       clearTimeout(idle);
-      clearTimeout(hintTimer);
-      clearTimeout(hintOff);
+      clearTimeout(readyTimer);
     };
   }, []);
 
   function poke() {
-    if (ducking) return;
-    setHint(false);
+    if (ducking || !ready) return;
     setDucking(true);
     setTimeout(() => setDucking(false), 1500);
   }
@@ -69,13 +67,12 @@ export default function HeroStage() {
       <div className="stage-cards"><GiftCardArt /></div>
       <button
         type="button"
-        className={`stage-mascot${ducking ? ' is-ducking' : ''}`}
+        className={`stage-mascot${ready ? ' is-ready' : ''}${ducking ? ' is-ducking' : ''}`}
         onClick={poke}
         aria-label="Poke the gifted creature"
       >
         <Mascot size={180} title="" />
       </button>
-      <span className={`stage-hint${hint ? ' is-on' : ''}`} aria-hidden="true">psst, poke me</span>
     </div>
   );
 }

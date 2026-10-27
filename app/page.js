@@ -30,9 +30,9 @@ export default function Home() {
       <section className="wrap" style={{ paddingTop: 56, paddingBottom: 0 }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 32, marginBottom: 40 }}>
           <div style={{ flex: '999 1 560px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 20 }}>
-            <h1 className="hero-title" style={{ margin: 0, font: '500 clamp(42px, 6vw, 78px)/1 var(--display)', letterSpacing: '-0.05em' }}>
+            <h1 className="hero-title" style={{ margin: 0, font: '500 clamp(42px, 6vw, 78px)/1.02 var(--display)', letterSpacing: '-0.032em' }}>
               <span className="line"><span className="line-inner">Spend your crypto</span></span>
-              <span className="line"><span className="line-inner">on <span className="serif" style={{ color: 'var(--ribbon)', letterSpacing: '-0.02em' }}>real things.</span></span></span>
+              <span className="line"><span className="line-inner">on <span className="serif" style={{ color: 'var(--ribbon)', letterSpacing: '-0.01em' }}>real things.</span></span></span>
             </h1>
             <p className="muted rise" style={{ '--d': '380ms', margin: 0, fontSize: 19, lineHeight: 1.5, maxWidth: 540 }}>
               Pick a gift card, pick any token, and pay. Turn on Private and the purchase isn’t tied to your wallet.

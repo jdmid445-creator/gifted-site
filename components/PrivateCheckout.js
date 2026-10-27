@@ -86,7 +86,8 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
 
   const token = chainTokens.find((t) => t.assetId === assetId) || null;
   const chainInfo = getChain(chain);
-  const ready = product && faceValue && token && isValidAddress(chain, refundTo) && isValidAddress('sol', shopRefund) && agree && phase === 'idle';
+  const cardRefund = chain === 'sol' ? refundTo : shopRefund;
+  const ready = product && faceValue && token && isValidAddress(chain, refundTo) && isValidAddress('sol', cardRefund) && agree && phase === 'idle';
 
   async function start() {
     setError('');
@@ -96,7 +97,7 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
         productId: product.id,
         packageId: pkgId || null,
         value: pkgId ? null : Number(customValue),
-        wallet: shopRefund.trim(),
+        wallet: cardRefund.trim(),
       });
       if (invoice.demo) throw new Error(invoice.message);
       const quote = await postJson('/api/private/quote', { invoiceId: invoice.id, token: invoice.accessToken, originAsset: token.assetId, refundTo: refundTo.trim() });
@@ -170,46 +171,50 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10 }}>
           <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            <span className="label">Pay from chain</span>
+            <span className="label">Paying from</span>
             <select className="input" value={chain} onChange={(e) => { setChain(e.target.value); setRefundTo(''); }} disabled={phase !== 'idle'}>
               {CHAINS.map((c) => <option key={c.key} value={c.key}>{c.label}</option>)}
             </select>
           </label>
           <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            <span className="label">Pay with</span>
+            <span className="label">Coin</span>
             <select className="input" value={assetId} onChange={(e) => setAssetId(e.target.value)} disabled={phase !== 'idle' || !chainTokens.length}>
               {chainTokens.length ? chainTokens.map((t) => <option key={t.assetId} value={t.assetId}>{t.symbol}</option>) : <option>Loading…</option>}
             </select>
           </label>
         </div>
         <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <span className="label">Refund address on {chainInfo?.label}</span>
-          <input className="input" value={refundTo} onChange={(e) => setRefundTo(e.target.value)} placeholder={`Your ${chainInfo?.label} address`} disabled={phase !== 'idle'} spellCheck={false} />
-          <span className="muted" style={{ fontSize: 13 }}>Only used if the swap fails. Use a wallet you control, not an exchange.</span>
+          <span className="label">Your {chainInfo?.label} wallet address</span>
+          <input className="input" value={refundTo} onChange={(e) => setRefundTo(e.target.value)} placeholder="Paste your address" disabled={phase !== 'idle'} spellCheck={false} />
+          <span className="muted" style={{ fontSize: 13, lineHeight: 1.45 }}>
+            {chain === 'sol' ? 'If anything goes wrong, your money comes back here.' : 'If the payment doesn’t go through, your money comes back here.'} Use your own wallet, not an exchange.
+          </span>
         </label>
-        <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <span className="label">Card refund address (Solana)</span>
-          <input className="input" value={shopRefund} onChange={(e) => setShopRefund(e.target.value)} placeholder="A Solana address" disabled={phase !== 'idle'} spellCheck={false} />
-          <span className="muted" style={{ fontSize: 13 }}>The shop refunds here if a card can’t be delivered. For more privacy, use a fresh wallet instead of your main one.</span>
-        </label>
+        {chain !== 'sol' && (
+          <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <span className="label">Your Solana wallet address</span>
+            <input className="input" value={shopRefund} onChange={(e) => setShopRefund(e.target.value)} placeholder="Paste a Solana address" disabled={phase !== 'idle'} spellCheck={false} />
+            <span className="muted" style={{ fontSize: 13, lineHeight: 1.45 }}>If the card can’t be delivered, you get a refund here in USDC.</span>
+          </label>
+        )}
       </div>
 
       <div className="card" style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
           <span style={{ display: 'flex', alignItems: 'baseline', gap: 10, font: '500 17px var(--display)', letterSpacing: '-0.015em' }}><span className="step-num">03</span>Deposit address</span>
-          <span className="label">No wallet</span>
+          <span className="label">No connecting</span>
         </div>
 
         {phase === 'idle' && (
           <>
             <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 14, lineHeight: 1.5, cursor: 'pointer' }}>
               <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} style={{ marginTop: 3, width: 18, height: 18 }} />
-              <span>I understand private checkout hides the link between my wallet and the shop’s payment. My deposit into the network is still public, and the card is tied to the account I redeem it on.</span>
+              <span>Got it: the shop never sees my wallet. My deposit itself is still visible on the blockchain.</span>
             </label>
-            <button className="btn btn-primary" type="button" disabled={!ready} onClick={start}>Get private deposit address</button>
+            <button className="btn btn-primary" type="button" disabled={!ready} onClick={start}>Get my deposit address</button>
           </>
         )}
-        {phase === 'quoting' && <span className="muted" role="status">Creating your order and a private route…</span>}
+        {phase === 'quoting' && <span className="muted" role="status">Setting up your private order…</span>}
 
         {q && ['deposit', 'sending', 'tracking'].includes(phase) && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -220,7 +225,7 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'center', padding: 16, borderRadius: 14, background: 'var(--bg)', border: '1px solid var(--line)' }}>
                 <QrCode value={q.depositAddress} size={150} />
                 <div style={{ flex: '1 1 240px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  <span className="label">One-time deposit address on {chainInfo?.label}</span>
+                  <span className="label">Send to this address ({chainInfo?.label})</span>
                   <code style={{ wordBreak: 'break-all', font: '500 14px var(--mono)' }}>{q.depositAddress}</code>
                   {q.depositMemo && <span>Memo: <code>{q.depositMemo}</code></span>}
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>

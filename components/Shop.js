@@ -17,21 +17,32 @@ import { Buffer } from 'buffer';
 import Link from 'next/link';
 import PrivateCheckout from './PrivateCheckout';
 import { loadCards, saveCards, statusUrl } from '@/lib/cards';
-import CardThumb, { toneFor } from './CardThumb';
+import CardThumb from './CardThumb';
+import TokenIcon from './TokenIcon';
+import { QUICK_PICKS } from '@/lib/brands';
+import { site } from '@/lib/site';
 import { IconSearch, IconBolt, IconEyeOff, IconWallet, IconCopy, IconCheck } from './Icons';
 
 const USDC = 'EPjFWdd5AufqSSqeM2qy1xbybapC8G4wEGGkZwyTDt1v';
 const SOL = 'So11111111111111111111111111111111111111112';
 
-// Shown before a wallet is connected, so anyone can see what a card would cost.
-const POPULAR = [
-  { mint: SOL, symbol: 'SOL' },
-  { mint: USDC, symbol: 'USDC' },
+const USDT = 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB';
+
+// Always at the top of the list. The rest comes live from what's trading on Jupiter.
+const BASE = [
+  ...(site.ca ? [{ mint: site.ca, symbol: 'GIFTED' }] : []),
+  { mint: SOL, symbol: 'SOL', decimals: 9 },
+  { mint: USDC, symbol: 'USDC', decimals: 6, usdPrice: 1 },
+  { mint: USDT, symbol: 'USDT', decimals: 6, usdPrice: 1 },
+  { mint: 'JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN', symbol: 'JUP' },
   { mint: 'DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263', symbol: 'BONK' },
   { mint: 'EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm', symbol: 'WIF' },
-  { mint: 'JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN', symbol: 'JUP' },
-  { mint: '2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv', symbol: 'PENGU' },
 ];
+const POPULAR = BASE;
+
+// Start on a sensible amount (around $25-50), not the biggest one.
+const defaultPkg = (p) => (p.packages.find((k) => k.value >= 25) || p.packages[0])?.id || null;
+const cleanName = (n = '') => n.replace(/\s*\(.*\)$/, '');
 
 const short = (s) => (s ? `${s.slice(0, 4)}…${s.slice(-4)}` : '');
 function fmt(n, d) {
@@ -67,13 +78,6 @@ function StepHead({ n, title, hint }) {
 }
 
 
-function TokenDot({ icon, symbol }) {
-  return icon ? (
-    <img src={icon} alt="" width="32" height="32" style={{ borderRadius: 16, flex: 'none' }} />
-  ) : (
-    <span aria-hidden="true" style={{ width: 32, height: 32, borderRadius: 16, flex: 'none', background: toneFor(symbol), color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', font: '500 13px var(--mono)' }}>{(symbol || '?').slice(0, 1)}</span>
-  );
-}
 
 export default function Shop() {
   const { connection } = useConnection();
@@ -92,6 +96,9 @@ export default function Shop() {
   const [popular, setPopular] = useState(POPULAR);
   const [holdings, setHoldings] = useState([]);
   const [payMint, setPayMint] = useState(SOL);
+  const [tokenQuery, setTokenQuery] = useState('');
+  const [tokenResults, setTokenResults] = useState(null);
+  const [picked, setPicked] = useState(null); // a token chosen from search
 
   const [invoice, setInvoice] = useState(null);
   const [quote, setQuote] = useState(null);
@@ -117,19 +124,46 @@ export default function Shop() {
   }, []);
   useEffect(() => { search(''); }, [search]);
   useEffect(() => {
+    const q = query.trim();
+    if (q.length === 1) return undefined;
+    const t = setTimeout(() => search(q), 450);
+    return () => clearTimeout(t);
+  }, [query]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
     if (!product && products.length) {
       setProduct(products[0]);
-      setPkgId(products[0].packages[0]?.id || null);
+      setPkgId(defaultPkg(products[0]));
     }
   }, [products]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Live prices for the popular list (no wallet needed)
   useEffect(() => {
-    fetch(`/api/tokens?mints=${POPULAR.map((p) => p.mint).join(',')}`)
-      .then((r) => r.json())
-      .then((d) => setPopular(POPULAR.map((p) => ({ ...p, icon: d.tokens?.[p.mint]?.icon || null, usdPrice: d.tokens?.[p.mint]?.usdPrice ?? (p.mint === USDC ? 1 : null), decimals: p.mint === SOL ? 9 : undefined }))))
-      .catch(() => {});
+    Promise.all([
+      fetch(`/api/tokens?mints=${BASE.map((p) => p.mint).join(',')}`).then((r) => r.json()).catch(() => ({})),
+      fetch('/api/tokens?list=top').then((r) => r.json()).catch(() => ({})),
+    ]).then(([base, top]) => {
+      const info = base.tokens || {};
+      const head = BASE.map((p) => ({ ...p, ...(info[p.mint] || {}), symbol: p.symbol, mint: p.mint, decimals: info[p.mint]?.decimals ?? p.decimals, usdPrice: info[p.mint]?.usdPrice ?? p.usdPrice ?? null }));
+      const seen = new Set(head.map((t) => t.mint));
+      const rest = (top.tokens || []).filter((t) => !seen.has(t.mint)).slice(0, 40);
+      setPopular([...head, ...rest]);
+    });
   }, []);
+
+  // Token search (by name, ticker or contract address)
+  useEffect(() => {
+    const q = tokenQuery.trim();
+    if (!q) { setTokenResults(null); return undefined; }
+    if (connected && holdings.length) {
+      const n = q.toLowerCase();
+      setTokenResults(holdings.filter((t) => t.symbol.toLowerCase().includes(n) || t.mint === q));
+      return undefined;
+    }
+    const t = setTimeout(() => {
+      fetch(`/api/tokens?q=${encodeURIComponent(q)}`).then((r) => r.json()).then((d) => setTokenResults(d.tokens || [])).catch(() => setTokenResults([]));
+    }, 280);
+    return () => clearTimeout(t);
+  }, [tokenQuery, connected, holdings]);
 
   // Wallet holdings once connected
   useEffect(() => {
@@ -166,8 +200,9 @@ export default function Shop() {
     return () => { cancelled = true; };
   }, [publicKey, connection]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const tokens = connected && holdings.length ? holdings : popular;
-  const payToken = tokens.find((t) => t.mint === payMint) || tokens[0] || null;
+  const baseList = connected && holdings.length ? holdings : popular;
+  const tokens = tokenResults ?? baseList;
+  const payToken = [picked, ...baseList, ...(tokenResults || [])].find((t) => t && t.mint === payMint) || baseList[0] || null;
 
   const faceValue = useMemo(() => {
     if (!product) return null;
@@ -256,17 +291,25 @@ export default function Shop() {
       <form role="search" onSubmit={(e) => { e.preventDefault(); search(query); }} style={{ position: 'relative' }}>
         <label htmlFor="brand-q" className="sr-only">Search brands</label>
         <span style={{ position: 'absolute', left: 14, top: 14, color: 'var(--muted)' }}><IconSearch /></span>
-        <input id="brand-q" className="input" style={{ paddingLeft: 44 }} placeholder="Search Amazon, Steam, Uber Eats…" value={query} onChange={(e) => setQuery(e.target.value)} />
+        <input id="brand-q" className="input" style={{ paddingLeft: 44 }} placeholder="Search Nike, DoorDash, Chipotle…" value={query} onChange={(e) => setQuery(e.target.value)} />
       </form>
+      <div className="quick" role="group" aria-label="Popular brands">
+        {['Popular', ...QUICK_PICKS].map((b) => {
+          const on = b === 'Popular' ? !query.trim() : query.trim().toLowerCase() === b.toLowerCase();
+          return (
+            <button key={b} type="button" className="quick-chip" aria-pressed={on} onClick={() => { const q = b === 'Popular' ? '' : b; setQuery(q); search(q); }}>{b}</button>
+          );
+        })}
+      </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 8, maxHeight: 248, overflowY: 'auto', paddingBottom: 3 }}>
         {loadingProducts && <span className="muted" style={{ fontSize: 14 }}>Loading cards…</span>}
         {!loadingProducts && products.length === 0 && <span className="muted" style={{ fontSize: 14 }}>No cards found. Try another brand.</span>}
         {products.map((p) => (
           <button key={p.id} type="button" className="pick" aria-pressed={product?.id === p.id} style={{ minHeight: 54 }}
-            onClick={() => { setProduct(p); setPkgId(p.packages[0]?.id || null); setCustomValue(''); resetCheckout(); }}>
-            <CardThumb name={p.name} image={p.image} width={38} />
+            onClick={() => { setProduct(p); setPkgId(defaultPkg(p)); setCustomValue(''); resetCheckout(); }}>
+            <CardThumb key={p.id} name={p.name} image={p.image} domain={p.domain} width={44} />
             <span style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-              <span style={{ fontWeight: 500, fontSize: 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name.replace(/\s*\(.*\)$/, '')}</span>
+              <span style={{ fontWeight: 500, fontSize: 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{cleanName(p.name)}</span>
               <span className="muted num" style={{ fontSize: 11.5 }}>{p.country || 'Global'}</span>
             </span>
           </button>
@@ -278,7 +321,7 @@ export default function Shop() {
           {product.packages.length > 0 ? (
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
               {product.packages.map((k) => (
-                <button key={k.id} type="button" className="chip" aria-pressed={pkgId === k.id} onClick={() => { setPkgId(k.id); resetCheckout(); }}>{k.value}</button>
+                <button key={k.id} type="button" className="chip" aria-pressed={pkgId === k.id} onClick={() => { setPkgId(k.id); resetCheckout(); }}>{product.currency === 'USD' ? '$' : ''}{k.value.toLocaleString()}</button>
               ))}
             </div>
           ) : product.range ? (
@@ -295,12 +338,18 @@ export default function Shop() {
   const payColumn = (
     <div className="card" style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 14 }}>
       <StepHead n="2" title="Pay with" hint={connected ? 'Your wallet' : 'Live prices'} />
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxHeight: 316, overflowY: 'auto', paddingBottom: 3 }}>
+      <div style={{ position: 'relative' }}>
+        <label htmlFor="tok-q" className="sr-only">Search coins</label>
+        <span style={{ position: 'absolute', left: 14, top: 14, color: 'var(--muted)' }}><IconSearch /></span>
+        <input id="tok-q" className="input" style={{ paddingLeft: 44 }} placeholder={connected ? 'Search your coins' : 'Search any coin or paste a contract'} value={tokenQuery} onChange={(e) => setTokenQuery(e.target.value)} spellCheck={false} autoComplete="off" />
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxHeight: 340, overflowY: 'auto', paddingBottom: 3 }}>
+        {tokenResults && tokenResults.length === 0 && <span className="muted" style={{ fontSize: 14 }}>No coins found{connected ? ' in your wallet' : ''}.</span>}
         {tokens.map((t) => {
           const est = estimate(t);
           return (
-            <button key={t.mint} type="button" className="pick" aria-pressed={payToken?.mint === t.mint} onClick={() => { setPayMint(t.mint); resetCheckout(); }}>
-              <TokenDot icon={t.icon} symbol={t.symbol} />
+            <button key={t.mint} type="button" className="pick" aria-pressed={payToken?.mint === t.mint} onClick={() => { setPicked(t); setPayMint(t.mint); resetCheckout(); }}>
+              <TokenIcon mint={t.mint} icon={t.icon} symbol={t.symbol} />
               <span style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
                 <span style={{ fontWeight: 500 }}>{t.symbol}</span>
                 <span className="muted num" style={{ fontSize: 11.5 }}>{t.amount != null ? `${fmt(t.amount)} held` : t.usdPrice ? `$${fmt(t.usdPrice)}` : 'Solana token'}</span>
@@ -314,7 +363,7 @@ export default function Shop() {
       </div>
       {!connected && (
         <p className="muted" style={{ margin: 0, fontSize: 13, lineHeight: 1.5 }}>
-          Holding something else? Connect and every token in your wallet shows up here.
+          Connect your wallet to see exactly what you hold.
         </p>
       )}
     </div>

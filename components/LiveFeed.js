@@ -3,6 +3,7 @@
 // Real orders only: every row is a gift card Bitrefill actually delivered.
 import { useEffect, useState } from 'react';
 import CardThumb from './CardThumb';
+import { domainFor } from '@/lib/brands';
 
 function ago(ts, isPrivate) {
   const s = Math.max(0, (Date.now() - ts) / 1000);
@@ -40,7 +41,7 @@ export default function LiveFeed({ limit = 6, compact = false }) {
       )}
       {rows.map((o, i) => (
         <div key={`${o.at}-${o.name}`} className="feed-row" style={{ '--i': i, display: 'flex', alignItems: 'center', gap: 12, paddingTop: i ? 12 : 0, borderTop: i ? '1px solid var(--line)' : 'none' }}>
-          <CardThumb name={o.name || ''} width={40} />
+          <CardThumb name={o.name || ''} domain={domainFor(o.name)} width={40} />
           <span style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
             <span style={{ fontWeight: 500, fontSize: 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {o.name}{o.value ? <span className="num muted" style={{ fontSize: 13 }}> · {o.value} {o.currency}</span> : null}

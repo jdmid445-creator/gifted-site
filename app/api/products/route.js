@@ -7,7 +7,9 @@ export async function GET(req) {
   const country = (searchParams.get('country') || '').slice(0, 2);
   try {
     const products = await searchProducts(q, country);
-    return NextResponse.json({ demo: !bitrefillConfigured(), products });
+    const res = NextResponse.json({ demo: !bitrefillConfigured(), products });
+    res.headers.set('Cache-Control', q ? 'public, s-maxage=300, stale-while-revalidate=600' : 'public, s-maxage=3600, stale-while-revalidate=86400');
+    return res;
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 502 });
   }
