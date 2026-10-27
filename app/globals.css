@@ -327,3 +327,12 @@ body { overflow-x: hidden; }
 .faq summary::after { content: '+'; color: var(--muted); font-size: 22px; font-weight: 400; transition: transform .2s ease; }
 .faq details[open] summary::after { transform: rotate(45deg); }
 .faq details p { margin: 0 0 20px; max-width: 720px; color: var(--muted); line-height: 1.65; }
+
+/* Header: CA + Connect as pills, X in a circle */
+.hdr-x { width: 36px; height: 36px; padding: 0 !important; justify-content: center; border-radius: 50% !important; border: 1px solid var(--line-strong) !important; margin: 0 4px 0 8px; color: var(--text) !important; }
+a.hdr-x:hover { background: var(--surface-2); border-color: #4A4A52 !important; }
+span.hdr-x { opacity: 1; color: var(--muted) !important; }
+.hdr-ca { height: 36px; padding: 0 14px !important; border-radius: 999px !important; border: 1px solid var(--line-strong) !important; background: var(--surface) !important; color: var(--text) !important; margin-right: 6px; }
+.hdr-ca:disabled { color: var(--muted) !important; }
+.hdr-wallet .wallet-adapter-button, .hdr-wallet .wallet-adapter-button-trigger { height: 36px !important; padding: 0 16px !important; border-radius: 999px !important; background: var(--ink) !important; color: var(--ink-text) !important; }
+.hdr-wallet .wallet-adapter-button:not([disabled]):hover { background: #fff !important; color: var(--ink-text) !important; }

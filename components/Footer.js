@@ -28,6 +28,7 @@ export default function Footer() {
             $GIFTED is a meme coin with no promised value or returns. The shop is free to use, and holding $GIFTED isn’t required.
             Gift cards are fulfilled through Bitrefill. gifted never holds your funds: you approve every payment from your own wallet.
           </p>
+          <p className="muted" style={{ margin: 0, fontSize: 12 }}>Card photo by <a href="https://unsplash.com/photos/black-business-credit-card-ahjzVINkuCs" target="_blank" rel="noopener noreferrer">Unsplash</a>, retouched.</p>
         </div>
         <nav aria-label="Footer" style={{ display: 'flex', gap: 48, flexWrap: 'wrap', fontSize: 14 }}>
           {cols.map(([title, links]) => (
