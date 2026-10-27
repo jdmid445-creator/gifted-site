@@ -2,6 +2,7 @@
 
 // Real orders only: every row is a gift card Bitrefill actually delivered.
 import { useEffect, useState } from 'react';
+import CardThumb from './CardThumb';
 
 function ago(ts, isPrivate) {
   const s = Math.max(0, (Date.now() - ts) / 1000);
@@ -28,10 +29,10 @@ export default function LiveFeed({ limit = 6, compact = false }) {
   return (
     <div className="card" style={{ padding: compact ? 16 : 22, display: 'flex', flexDirection: 'column', gap: 12 }} aria-live="polite">
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-        <span style={{ display: 'flex', alignItems: 'center', gap: 8, font: '600 16px var(--display)' }}>
-          <span className="live-dot" aria-hidden="true" /> Live orders
+        <span style={{ display: 'flex', alignItems: 'center', gap: 8, font: '500 16px var(--display)' }}>
+          <span className="live-dot" aria-hidden="true" /> Latest deliveries
         </span>
-        <span className="muted" style={{ fontSize: 12 }}>Real purchases, updated live</span>
+        <span className="label">Refreshes every 15s</span>
       </div>
       {orders === null && <span className="muted" style={{ fontSize: 14 }}>Loading…</span>}
       {orders && rows.length === 0 && (
@@ -39,20 +40,18 @@ export default function LiveFeed({ limit = 6, compact = false }) {
       )}
       {rows.map((o, i) => (
         <div key={`${o.at}-${i}`} style={{ display: 'flex', alignItems: 'center', gap: 12, paddingTop: i ? 12 : 0, borderTop: i ? '1px solid var(--line)' : 'none' }}>
-          <span style={{ width: 34, height: 34, borderRadius: 10, flex: 'none', background: 'var(--surface-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', font: '600 14px var(--display)', color: 'var(--gold)' }} aria-hidden="true">
-            {(o.name || '?').slice(0, 1)}
-          </span>
+          <CardThumb name={o.name || ''} width={40} />
           <span style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
-            <span style={{ fontWeight: 600, fontSize: 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-              {o.value ? `${o.value} ${o.currency} ` : ''}{o.name}
+            <span style={{ fontWeight: 500, fontSize: 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {o.name}{o.value ? <span className="num muted" style={{ fontSize: 13 }}> · {o.value} {o.currency}</span> : null}
             </span>
             <span className="muted" style={{ fontSize: 13 }}>
               {o.mode === 'private' ? 'Private checkout' : `Paid with ${o.symbol || 'a Solana token'}`} · {ago(o.at, o.mode === 'private')}
             </span>
           </span>
           {o.tx && (
-            <a href={`https://solscan.io/tx/${o.tx}`} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, whiteSpace: 'nowrap' }}>
-              Verify
+            <a href={`https://solscan.io/tx/${o.tx}`} target="_blank" rel="noopener noreferrer" className="num" style={{ fontSize: 12.5, whiteSpace: 'nowrap' }}>
+              {o.tx.slice(0, 4)}…{o.tx.slice(-4)} ↗
             </a>
           )}
         </div>

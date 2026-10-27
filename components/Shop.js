@@ -17,6 +17,7 @@ import { Buffer } from 'buffer';
 import Link from 'next/link';
 import PrivateCheckout from './PrivateCheckout';
 import { loadCards, saveCards, statusUrl } from '@/lib/cards';
+import CardThumb, { toneFor } from './CardThumb';
 import { IconSearch, IconBolt, IconEyeOff, IconWallet, IconCopy, IconCheck } from './Icons';
 
 const USDC = 'EPjFWdd5AufqSSqeM2qy1xbybapC8G4wEGGkZwyTDt1v';
@@ -57,30 +58,20 @@ async function postJson(url, body) {
 function StepHead({ n, title, hint }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-      <span style={{ display: 'flex', alignItems: 'center', gap: 10, font: '600 17px var(--display)', letterSpacing: '-0.01em' }}>
-        <span className="step-num">{n}</span>{title}
+      <span style={{ display: 'flex', alignItems: 'baseline', gap: 10, font: '500 17px var(--display)', letterSpacing: '-0.015em' }}>
+        <span className="step-num">{String(n).padStart(2, '0')}</span>{title}
       </span>
-      {hint && <span className="muted" style={{ fontSize: 13 }}>{hint}</span>}
+      {hint && <span className="label">{hint}</span>}
     </div>
   );
 }
 
-function BrandMark({ product, size = 36 }) {
-  if (product.image) {
-    return <img src={product.image} alt="" width={size} height={size} style={{ borderRadius: 10, objectFit: 'cover', flex: 'none', background: 'var(--surface)' }} />;
-  }
-  return (
-    <span aria-hidden="true" style={{ width: size, height: size, borderRadius: 10, flex: 'none', background: 'var(--surface-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', font: '600 15px var(--display)' }}>
-      {product.name.slice(0, 1)}
-    </span>
-  );
-}
 
 function TokenDot({ icon, symbol }) {
   return icon ? (
     <img src={icon} alt="" width="32" height="32" style={{ borderRadius: 16, flex: 'none' }} />
   ) : (
-    <span aria-hidden="true" style={{ width: 32, height: 32, borderRadius: 16, flex: 'none', background: 'var(--surface-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', font: '600 11px var(--display)' }}>{(symbol || '?').slice(0, 3)}</span>
+    <span aria-hidden="true" style={{ width: 32, height: 32, borderRadius: 16, flex: 'none', background: toneFor(symbol), color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', font: '500 13px var(--mono)' }}>{(symbol || '?').slice(0, 1)}</span>
   );
 }
 
@@ -273,10 +264,10 @@ export default function Shop() {
         {products.map((p) => (
           <button key={p.id} type="button" className="pick" aria-pressed={product?.id === p.id} style={{ minHeight: 54 }}
             onClick={() => { setProduct(p); setPkgId(p.packages[0]?.id || null); setCustomValue(''); resetCheckout(); }}>
-            <BrandMark product={p} size={30} />
+            <CardThumb name={p.name} image={p.image} width={38} />
             <span style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-              <span style={{ fontWeight: 600, fontSize: 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name.replace(/\s*\(.*\)$/, '')}</span>
-              <span className="muted" style={{ fontSize: 12 }}>{p.country || 'Global'}</span>
+              <span style={{ fontWeight: 500, fontSize: 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name.replace(/\s*\(.*\)$/, '')}</span>
+              <span className="muted num" style={{ fontSize: 11.5 }}>{p.country || 'Global'}</span>
             </span>
           </button>
         ))}
@@ -311,11 +302,11 @@ export default function Shop() {
             <button key={t.mint} type="button" className="pick" aria-pressed={payToken?.mint === t.mint} onClick={() => { setPayMint(t.mint); resetCheckout(); }}>
               <TokenDot icon={t.icon} symbol={t.symbol} />
               <span style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
-                <span style={{ fontWeight: 600 }}>{t.symbol}</span>
-                <span className="muted" style={{ fontSize: 12 }}>{t.amount != null ? `${fmt(t.amount)} held` : t.usdPrice ? `$${fmt(t.usdPrice)}` : 'Solana token'}</span>
+                <span style={{ fontWeight: 500 }}>{t.symbol}</span>
+                <span className="muted num" style={{ fontSize: 11.5 }}>{t.amount != null ? `${fmt(t.amount)} held` : t.usdPrice ? `$${fmt(t.usdPrice)}` : 'Solana token'}</span>
               </span>
-              <span style={{ textAlign: 'right', fontSize: 13 }}>
-                {est ? <><span className="muted">≈ </span><strong>{fmt(est)}</strong></> : ''}
+              <span className="num" style={{ textAlign: 'right', fontSize: 13 }}>
+                {est ? <><span className="dim">≈ </span>{fmt(est)}</> : ''}
               </span>
             </button>
           );
@@ -333,16 +324,16 @@ export default function Shop() {
     <div className="card" style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 14 }}>
       <StepHead n="3" title="Check out" />
       <div className="panel" style={{ padding: 14, display: 'flex', flexDirection: 'column', gap: 10, fontSize: 14 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}><span className="muted">Card</span><strong style={{ textAlign: 'right' }}>{product ? `${product.name.replace(/\s*\(.*\)$/, '')} · ${faceValue ?? '—'} ${product.currency}` : '—'}</strong></div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}><span className="muted">Pay with</span><strong>{payToken?.symbol || '—'}</strong></div>
-        <div style={{ height: 1.5, background: 'var(--line)' }} />
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}><span className="muted">Card</span><strong style={{ textAlign: 'right', fontWeight: 500 }}>{product ? `${product.name.replace(/\s*\(.*\)$/, '')} · ${faceValue ?? '—'} ${product.currency}` : '—'}</strong></div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}><span className="muted">Pay with</span><strong style={{ fontWeight: 500 }}>{payToken?.symbol || '—'}</strong></div>
+        <div style={{ height: 1, background: 'var(--line-strong)' }} />
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'baseline' }}>
           <span className="muted">{phase === 'ready' && maxIn ? 'You pay at most' : 'Estimated'}</span>
-          <strong style={{ font: '600 22px var(--display)', letterSpacing: '-0.02em' }}>
-            {phase === 'ready' && maxIn ? fmt(maxIn) : phase === 'ready' && quote?.direct ? invoice.usdcAmount : (estimate(payToken) ? `≈ ${fmt(estimate(payToken))}` : '—')} <span style={{ fontSize: 14 }}>{payToken?.symbol}</span>
+          <strong className="num" style={{ fontSize: 21, fontWeight: 500 }}>
+            {phase === 'ready' && maxIn ? fmt(maxIn) : phase === 'ready' && quote?.direct ? invoice.usdcAmount : (estimate(payToken) ? `≈ ${fmt(estimate(payToken))}` : '—')} <span className="muted" style={{ fontSize: 13 }}>{payToken?.symbol}</span>
           </strong>
         </div>
-        {phase !== 'ready' && <span className="muted" style={{ fontSize: 12 }}>At today’s price, before swap and network fees. Exact price shown before you sign.</span>}
+        {phase !== 'ready' && <span className="muted" style={{ fontSize: 12, lineHeight: 1.5 }}>At today’s price, before swap and network fees. You see the exact amount before you sign.</span>}
         {phase === 'ready' && quote && !quote.direct && <span className="muted" style={{ fontSize: 12 }}>Price impact {fmt(Number(quote.priceImpactPct) * 100, 2)}% · includes card price and swap</span>}
       </div>
 

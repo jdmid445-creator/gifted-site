@@ -41,7 +41,7 @@ export default function MyCards() {
           <div key={c.id} className="card" style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <span style={{ font: '600 18px var(--display)' }}>{c.name}</span>
+                <span style={{ font: '500 18px var(--display)' }}>{c.name}</span>
                 <span className="muted" style={{ fontSize: 14 }}>{c.value} {c.currency} · {new Date(c.at).toLocaleDateString()}</span>
               </div>
               <button type="button" className="btn btn-ghost" onClick={() => reveal(c)} disabled={s.loading}>

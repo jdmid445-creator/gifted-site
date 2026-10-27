@@ -12,7 +12,7 @@ const nav = [
 
 export default function Header() {
   return (
-    <header style={{ position: 'sticky', top: 0, zIndex: 30, background: 'rgba(255,255,255,.88)', backdropFilter: 'saturate(1.4) blur(12px)', borderBottom: '1.5px solid var(--line)' }}>
+    <header style={{ position: 'sticky', top: 0, zIndex: 30, background: 'rgba(255,255,255,.88)', backdropFilter: 'saturate(1.4) blur(12px)', borderBottom: '1px solid var(--line)' }}>
       <div className="wrap" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, minHeight: 68 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
           <Link href="/" aria-label="gifted home" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>

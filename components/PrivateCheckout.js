@@ -165,8 +165,8 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
     <>
       <div className="card" style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 14 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 10, font: '600 17px var(--display)', letterSpacing: '-0.01em' }}><span className="step-num">2</span>Pay privately</span>
-          <span className="muted" style={{ fontSize: 13 }}>Any of 8 chains</span>
+          <span style={{ display: 'flex', alignItems: 'baseline', gap: 10, font: '500 17px var(--display)', letterSpacing: '-0.015em' }}><span className="step-num">02</span>Pay privately</span>
+          <span className="label">8 chains</span>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10 }}>
           <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -196,8 +196,8 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
 
       <div className="card" style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 10, font: '600 17px var(--display)', letterSpacing: '-0.01em' }}><span className="step-num">3</span>Get your deposit address</span>
-          <span className="muted" style={{ fontSize: 13 }}>No wallet needed</span>
+          <span style={{ display: 'flex', alignItems: 'baseline', gap: 10, font: '500 17px var(--display)', letterSpacing: '-0.015em' }}><span className="step-num">03</span>Deposit address</span>
+          <span className="label">No wallet</span>
         </div>
 
         {phase === 'idle' && (
@@ -221,7 +221,7 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
                 <QrCode value={q.depositAddress} size={150} />
                 <div style={{ flex: '1 1 240px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
                   <span className="label">One-time deposit address on {chainInfo?.label}</span>
-                  <code style={{ wordBreak: 'break-all', font: '600 14px ui-monospace, monospace' }}>{q.depositAddress}</code>
+                  <code style={{ wordBreak: 'break-all', font: '500 14px var(--mono)' }}>{q.depositAddress}</code>
                   {q.depositMemo && <span>Memo: <code>{q.depositMemo}</code></span>}
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                     <Copy value={q.depositAddress} />

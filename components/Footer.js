@@ -17,7 +17,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer style={{ borderTop: '1.5px solid var(--line)', background: 'var(--surface)', marginTop: 40 }}>
+    <footer style={{ borderTop: '1px solid var(--line)', background: 'var(--surface)', marginTop: 40 }}>
       <div className="wrap" style={{ padding: '48px 20px 36px', display: 'flex', flexWrap: 'wrap', gap: 40, justifyContent: 'space-between' }}>
         <div style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: 14, maxWidth: 440 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>

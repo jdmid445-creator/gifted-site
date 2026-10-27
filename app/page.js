@@ -3,50 +3,47 @@ import Mascot from '@/components/Mascot';
 import Shop from '@/components/Shop';
 import LiveFeed from '@/components/LiveFeed';
 import CopyCA from '@/components/CopyCA';
-import { IconBolt, IconEyeOff, IconCheck, IconGift, IconSwap, IconShield, IconChain, IconArrow } from '@/components/Icons';
+import GiftCardArt from '@/components/GiftCardArt';
+import { IconBolt, IconEyeOff, IconArrow } from '@/components/Icons';
 import { site } from '@/lib/site';
 
-const modes = [
-  {
-    icon: IconBolt,
-    name: 'Standard',
-    line: 'For speed.',
-    points: ['Pay with any token in your Solana wallet', 'One signature, swap and payment together', 'Every order verifiable on Solscan'],
-  },
-  {
-    icon: IconEyeOff,
-    name: 'Private',
-    line: 'For privacy.',
-    points: ['The shop is paid by NEAR Intents, not your wallet', 'Pay from Solana, Ethereum, Base, Bitcoin and 4 more', 'No wallet connection needed: send to a one-time address'],
-  },
+const compare = [
+  ['You connect', 'Your Solana wallet', 'Nothing. You send to a one-time address'],
+  ['Pay from', 'Any token in your Solana wallet', 'Solana, Ethereum, Base, Arbitrum, BNB Chain, Bitcoin, Litecoin, Dogecoin'],
+  ['Who pays the shop', 'Your wallet, in one signed transaction', 'NEAR Intents, so the purchase isn’t tied to your wallet'],
+  ['On-chain trail', 'Public, and linked in the live feed', 'Your deposit is public on its own chain. The card purchase isn’t linked to it'],
+  ['Typical time', 'Under a minute', 'A few minutes'],
 ];
 
-const stack = [
-  { icon: IconGift, name: 'Bitrefill', role: 'Delivers the gift card. Thousands of brands across 170+ countries.' },
-  { icon: IconSwap, name: 'Jupiter', role: 'Swaps your token into the exact amount the card costs.' },
-  { icon: IconShield, name: 'NEAR Intents', role: 'Pays the shop for private orders on its confidential network.' },
-  { icon: IconChain, name: 'Solana', role: 'Settles standard orders in seconds, for a fraction of a cent.' },
+const path = [
+  ['Your token', 'SOL, BONK, WIF, or anything else in your wallet.'],
+  ['Jupiter', 'Swaps it into the exact USDC the card costs.'],
+  ['Bitrefill invoice', 'USDC lands on the invoice address. Never with us.'],
+  ['Delivery', 'Bitrefill issues the card, usually in under a minute.'],
+  ['Your code', 'Shown on screen and saved in this browser.'],
 ];
 
 export default function Home() {
   return (
     <>
       {/* Hero + shop */}
-      <section className="wrap" style={{ paddingTop: 44, paddingBottom: 24 }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: 24, marginBottom: 28 }}>
-          <div style={{ flex: '999 1 560px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 18 }}>
-            <a href="#live" style={{ display: 'inline-flex', alignSelf: 'flex-start', alignItems: 'center', gap: 8, padding: '6px 12px 6px 10px', borderRadius: 999, border: '1.5px solid var(--line)', fontSize: 13, fontWeight: 500, textDecoration: 'none' }}>
-              <span className="live-dot" aria-hidden="true" /> Orders deliver live. See them below
-            </a>
-            <h1 style={{ margin: 0, font: '600 clamp(44px, 7.6vw, 96px)/0.96 var(--display)', letterSpacing: '-0.05em' }}>
+      <section className="wrap" style={{ paddingTop: 56, paddingBottom: 0 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 32, marginBottom: 40 }}>
+          <div style={{ flex: '999 1 560px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <h1 style={{ margin: 0, font: '500 clamp(44px, 7.2vw, 92px)/0.98 var(--display)', letterSpacing: '-0.05em' }}>
               Spend your bags<br />on <span className="serif" style={{ color: 'var(--ribbon)', letterSpacing: '-0.02em' }}>real things.</span>
             </h1>
-            <p className="muted" style={{ margin: 0, fontSize: 19, lineHeight: 1.55, maxWidth: 560 }}>
+            <p className="muted" style={{ margin: 0, fontSize: 19, lineHeight: 1.5, maxWidth: 540 }}>
               Pick a gift card, pick any token, and pay. Turn on Private and the purchase isn’t tied to your wallet.
             </p>
+            <div className="num muted" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 20px', fontSize: 13 }}>
+              <span><span className="dot" style={{ background: 'var(--ribbon)', marginRight: 8 }} />Thousands of brands</span>
+              <span><span className="dot" style={{ background: '#E0A82E', marginRight: 8 }} />170+ countries</span>
+              <span><span className="dot" style={{ background: '#3B6FD8', marginRight: 8 }} />8 chains in Private</span>
+            </div>
           </div>
-          <div style={{ flex: '1 1 200px', display: 'flex', justifyContent: 'flex-end' }} className="hide-sm">
-            <Mascot size={230} title="The gifted creature peeking out of a gift box" />
+          <div className="hero-art">
+            <GiftCardArt />
           </div>
         </div>
         <div id="shop" style={{ scrollMarginTop: 90 }}>
@@ -56,77 +53,74 @@ export default function Home() {
 
       {/* Live orders */}
       <section id="live" className="wrap section" style={{ scrollMarginTop: 70 }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 36, alignItems: 'flex-start' }}>
-          <div style={{ flex: '1 1 320px', display: 'flex', flexDirection: 'column', gap: 14, maxWidth: 440 }}>
-            <span className="eyebrow">Happening now</span>
-            <h2 className="h2">Real bags.<br /><span className="serif">Real cards.</span></h2>
-            <p className="muted" style={{ margin: 0, lineHeight: 1.6, fontSize: 17 }}>
-              Every delivered order lands here the moment it’s done. Standard orders link to the transaction so you can check it yourself. Private orders stay private.
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 40, alignItems: 'flex-start' }}>
+          <div style={{ flex: '1 1 340px', display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 470 }}>
+            <span className="eyebrow">Live orders</span>
+            <h2 className="h2">Real bags, <span className="dim">real cards.</span></h2>
+            <p className="muted" style={{ margin: 0, lineHeight: 1.6, fontSize: 16 }}>
+              Each order shows up here once Bitrefill delivers it. Standard orders link to their transaction on Solscan. Private orders show the card only.
             </p>
           </div>
           <div style={{ flex: '999 1 440px', minWidth: 0 }}><LiveFeed limit={6} /></div>
         </div>
       </section>
 
-      {/* Two ways to pay */}
-      <section className="wrap section" style={{ paddingTop: 0 }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 28 }}>
-          <span className="eyebrow">Two ways to pay</span>
-          <h2 className="h2">Fast, or <span className="serif">off the record.</span></h2>
+      {/* Standard vs Private */}
+      <section className="wrap section">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 32, maxWidth: 640 }}>
+          <span className="eyebrow">Checkout</span>
+          <h2 className="h2">Fast, or <span className="dim">off the record.</span></h2>
         </div>
-        <div className="grid-2">
-          {modes.map(({ icon: Icon, name, line, points }) => (
-            <div key={name} className="card" style={{ padding: 28, display: 'flex', flexDirection: 'column', gap: 18 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <span style={{ width: 44, height: 44, borderRadius: 12, background: name === 'Private' ? 'var(--ribbon-soft)' : 'var(--surface-2)', color: name === 'Private' ? 'var(--ribbon)' : 'var(--text)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Icon width={22} height={22} /></span>
-                <div>
-                  <div style={{ font: '600 22px var(--display)', letterSpacing: '-0.02em' }}>{name}</div>
-                  <div className="muted" style={{ fontSize: 14 }}>{line}</div>
-                </div>
-              </div>
-              <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {points.map((pt) => (
-                  <li key={pt} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', lineHeight: 1.5 }}>
-                    <span style={{ color: 'var(--mint)', marginTop: 1 }}><IconCheck width={18} height={18} /></span>{pt}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+        <div className="card table-scroll" style={{ padding: '22px 8px 6px' }}>
+          <table className="compare">
+            <thead>
+              <tr>
+                <th scope="col"><span className="sr-only">Detail</span></th>
+                <th scope="col"><span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}><IconBolt width={17} height={17} /> Standard</span></th>
+                <th scope="col"><span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: 'var(--ribbon)' }}><IconEyeOff width={17} height={17} /> Private</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              {compare.map(([k, a, b]) => (
+                <tr key={k}><th scope="row">{k}</th><td>{a}</td><td>{b}</td></tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        <p className="muted" style={{ margin: '16px 0 0', fontSize: 14 }}>
-          Private hides the link between your wallet and the purchase. Your deposit is still public on its own chain. <Link href="/docs#private">How private checkout works</Link>
+        <p className="muted" style={{ margin: '14px 0 0', fontSize: 14 }}>
+          <Link href="/docs#private">How private checkout works</Link>
         </p>
       </section>
 
-      {/* Under the hood */}
-      <section className="wrap section" style={{ paddingTop: 0 }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16, marginBottom: 28 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            <span className="eyebrow">Under the hood</span>
-            <h2 className="h2">Built on rails <span className="serif">you already trust.</span></h2>
+      {/* Order path */}
+      <section className="wrap section">
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16, marginBottom: 32 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 640 }}>
+            <span className="eyebrow">Where your money goes</span>
+            <h2 className="h2">Wallet to code, <span className="dim">in one pass.</span></h2>
           </div>
           <Link href="/docs" className="btn btn-ghost">Read the docs <IconArrow width={18} height={18} /></Link>
         </div>
-        <div className="grid-4">
-          {stack.map(({ icon: Icon, name, role }) => (
-            <div key={name} className="panel" style={{ padding: 22, display: 'flex', flexDirection: 'column', gap: 10 }}>
-              <Icon width={24} height={24} />
-              <div style={{ font: '600 18px var(--display)' }}>{name}</div>
-              <p className="muted" style={{ margin: 0, fontSize: 14, lineHeight: 1.55 }}>{role}</p>
+        <div className="path">
+          {path.map(([name, text], i) => (
+            <div key={name}>
+              <span className="step-num">{String(i + 1).padStart(2, '0')}</span>
+              <span style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <span style={{ font: '500 17px var(--display)', letterSpacing: '-0.01em' }}>{name}</span>
+                <span className="muted" style={{ fontSize: 14, lineHeight: 1.55 }}>{text}</span>
+              </span>
             </div>
           ))}
         </div>
-        <p className="muted" style={{ margin: '16px 0 0', fontSize: 14 }}>gifted never holds your money. Every payment goes from your wallet straight to these networks.</p>
       </section>
 
       {/* Token */}
-      <section id="token" className="wrap" style={{ paddingBottom: 48 }}>
+      <section id="token" className="wrap section" style={{ paddingBottom: 56 }}>
         <div className="card" style={{ padding: 24, display: 'flex', flexWrap: 'wrap', gap: 20, alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, flex: '1 1 300px' }}>
             <Mascot size={56} variant="icon" title="" />
             <div>
-              <div style={{ font: '600 20px var(--display)' }}>$GIFTED</div>
+              <div style={{ font: '500 20px var(--display)', letterSpacing: '-0.02em' }}>$GIFTED</div>
               <div className="muted" style={{ fontSize: 14 }}>The meme coin behind the shop. Not required to use it.</div>
             </div>
           </div>

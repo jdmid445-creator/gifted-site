@@ -25,7 +25,7 @@ export function CaPill({ ca }) {
       disabled={!ca}
       onClick={() => { navigator.clipboard?.writeText(ca); setCopied(true); setTimeout(() => setCopied(false), 1400); }}
       aria-label={ca ? `Copy contract address ${ca}` : 'Contract address coming soon'}
-      style={{ display: 'inline-flex', alignItems: 'center', gap: 6, height: 40, padding: '0 12px', borderRadius: 10, border: '1.5px solid var(--line)', background: 'var(--surface)', color: 'var(--text)', font: '500 13px var(--mono)', cursor: ca ? 'pointer' : 'default' }}
+      style={{ display: 'inline-flex', alignItems: 'center', gap: 6, height: 40, padding: '0 12px', borderRadius: 10, border: '1px solid var(--line)', background: 'var(--surface)', color: 'var(--text)', font: '500 13px var(--mono)', cursor: ca ? 'pointer' : 'default' }}
     >
       <span className="muted">CA:</span> {short}
       {ca ? (copied ? <IconCheck width={15} height={15} /> : <IconCopy width={15} height={15} />) : null}

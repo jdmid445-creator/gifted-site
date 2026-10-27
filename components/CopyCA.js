@@ -10,7 +10,7 @@ export default function CopyCA({ ca }) {
     <button
       type="button"
       onClick={() => { navigator.clipboard?.writeText(ca); setCopied(true); setTimeout(() => setCopied(false), 1500); }}
-      style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'space-between', width: '100%', minHeight: 46, padding: '0 14px', borderRadius: 12, border: '1.5px solid var(--line)', background: 'var(--surface)', color: 'var(--text)', cursor: 'pointer', textAlign: 'left' }}
+      style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'space-between', width: '100%', minHeight: 46, padding: '0 14px', borderRadius: 12, border: '1px solid var(--line)', background: 'var(--surface)', color: 'var(--text)', cursor: 'pointer', textAlign: 'left' }}
       aria-label={`Copy contract address ${ca}`}
     >
       <span style={{ font: '500 14px var(--mono)', wordBreak: 'break-all' }}>{ca}</span>

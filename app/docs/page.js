@@ -27,7 +27,7 @@ export default function Docs() {
 
         <article className="docs-body">
           <div className="muted" style={{ fontSize: 14, marginBottom: 8 }}>Docs / gifted</div>
-          <h1 style={{ font: '600 44px/1.05 var(--display)', letterSpacing: '-0.035em', margin: '0 0 12px' }}>How gifted works</h1>
+          <h1 style={{ font: '500 44px/1.05 var(--display)', letterSpacing: '-0.035em', margin: '0 0 12px' }}>How gifted works</h1>
           <p className="muted" style={{ fontSize: 18, marginTop: 0 }}>Swap any token into a gift card in one step, with an optional private checkout.</p>
 
           <h2 id="overview">Overview</h2>
