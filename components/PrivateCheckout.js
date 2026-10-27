@@ -87,6 +87,14 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
 
   const token = chainTokens.find((t) => t.assetId === assetId) || null;
   const chainInfo = getChain(chain);
+  // Pick up a fresh address made in the /fresh-wallet tab.
+  useEffect(() => {
+    const take = (raw) => { try { const v = JSON.parse(raw || 'null'); if (v?.address && Date.now() - v.at < 3600_000) setShopRefund(v.address); } catch {} };
+    const onStorage = (e) => { if (e.key === 'gifted.freshSol') take(e.newValue); };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+
   const cardRefund = shopRefund;
   const sameWallet = cardRefund.trim() && (cardRefund.trim() === refundTo.trim() || cardRefund.trim() === publicKey?.toBase58());
   const ready = product && faceValue && token && isValidAddress(chain, refundTo) && isValidAddress('sol', cardRefund) && agree && phase === 'idle';
@@ -196,6 +204,7 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
           <span className="label">Backup Solana address</span>
           <input className="input" value={shopRefund} onChange={(e) => setShopRefund(e.target.value)} placeholder="A fresh Solana wallet" disabled={phase !== 'idle'} spellCheck={false} />
           <span className="muted" style={{ fontSize: 13, lineHeight: 1.45 }}>Only used if the card can’t be delivered (refund in USDC). The shop sees this one, so use a fresh wallet, not the one you pay from.</span>
+          <a href="/fresh-wallet" target="_blank" rel="noopener" style={{ fontSize: 13, alignSelf: 'flex-start' }}>Need a fresh wallet? Make one here ↗</a>
           {sameWallet && <span className="notice notice-warn" style={{ fontSize: 13 }}>That’s the wallet you’re paying from. It works, but the shop would see it. A fresh wallet keeps you private.</span>}
         </label>
       </div>
