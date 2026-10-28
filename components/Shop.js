@@ -507,27 +507,19 @@ export default function Shop() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14, flexWrap: 'wrap' }}>
-        <div className="mode-switch mode-3" role="group" aria-label="Checkout mode" style={{ width: 'min(100%, 480px)' }}>
+        <div className="mode-switch" role="group" aria-label="Checkout mode" style={{ width: 'min(100%, 360px)' }}>
           <button type="button" disabled={locked} aria-pressed={mode === 'private'} onClick={() => { setMode('private'); resetCheckout(); }}><IconEyeOff width={17} height={17} /> Private</button>
           <button type="button" disabled={locked} aria-pressed={mode === 'max'} onClick={() => { setMode('max'); resetCheckout(); }}><IconShield width={17} height={17} /> Max privacy</button>
-          <button type="button" disabled={locked} aria-pressed={mode === 'standard'} onClick={() => { setMode('standard'); resetCheckout(); }}><IconBolt width={17} height={17} /> Standard</button>
         </div>
         <span className="muted" style={{ fontSize: 14, flex: '1 1 280px', textAlign: 'right' }}>
-          {mode === 'standard'
-            ? 'One signature from your Solana wallet. Fastest, but the payment comes from your wallet.'
-            : mode === 'max'
+          {mode === 'max'
               ? 'Routed through Monero first, so nothing on-chain links your coins to the card. Takes 15–45 minutes.'
               : 'The shop never sees your wallet. Pay from any of 8 chains, no wallet connection needed.'}
         </span>
       </div>
       <div className="console">
         {cardColumn}
-        {mode === 'standard' ? (
-          <>
-            {payColumn}
-            {checkoutColumn}
-          </>
-        ) : mode === 'max' ? (
+        {mode === 'max' ? (
           <MaxPrivacy product={product} pkgId={pkgId} customValue={customValue} faceValue={faceValue} onLock={setLocked} />
         ) : (
           <PrivateCheckout product={product} pkgId={pkgId} customValue={customValue} faceValue={faceValue} onLock={setLocked} />

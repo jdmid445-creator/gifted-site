@@ -4,15 +4,15 @@ import Shop from '@/components/Shop';
 import LiveFeed from '@/components/LiveFeed';
 import CopyCA from '@/components/CopyCA';
 import HeroStage from '@/components/HeroStage';
-import { IconBolt, IconEyeOff, IconArrow, IconCheck } from '@/components/Icons';
+import { IconShield, IconEyeOff, IconArrow, IconCheck } from '@/components/Icons';
 import { site } from '@/lib/site';
 
 const compare = [
-  ['Who pays the shop', 'NEAR Intents, so the purchase isn’t tied to your wallet', 'Your wallet, in one signed transaction'],
-  ['You connect', 'Nothing. You send to a one-time address', 'Your Solana wallet'],
-  ['Pay from', 'Solana, Ethereum, Base, Arbitrum, BNB Chain, Bitcoin, Litecoin, Dogecoin', 'Any token in your Solana wallet'],
-  ['On-chain trail', 'Your deposit is public on its own chain. The card purchase isn’t linked to it', 'Public, and linked in the live feed'],
-  ['Typical time', 'A few minutes', 'Under a minute'],
+  ['Who pays the shop', 'The NEAR Intents network, never your wallet', 'A one-time wallet funded through Monero'],
+  ['You connect', 'Nothing. You send to a one-time address', 'Nothing. You send to a one-time address'],
+  ['Pay from', 'Solana, Ethereum, Base, Arbitrum, BNB Chain, Bitcoin, Litecoin, Dogecoin', 'BTC, ETH, SOL, XMR, LTC, DOGE and more'],
+  ['On-chain trail', 'Your deposit is public on its own chain. The card purchase isn’t linked to it', 'The trail ends at Monero. Nothing links the card to your coins'],
+  ['Typical time', 'About a minute', '15 to 45 minutes'],
 ];
 
 const path = [
@@ -29,7 +29,7 @@ const neverSees = ['The wallet you paid from', 'Your balances or what else you h
 const faqs = [
   ['What does Private actually hide?', 'The shop gets paid by NEAR Intents instead of your wallet, so the purchase isn’t linked to you. Your own deposit is still visible on its blockchain, and the card is tied to whatever account you redeem it on.'],
   ['What does it cost?', 'GiftedSwaps charges no fee. You pay the card price from Bitrefill, plus the swap and a small network fee. You see the exact amount before you sign anything.'],
-  ['Do I need an account or ID?', 'No. Standard checkout uses your Solana wallet. Private checkout works from any wallet on 8 chains, without connecting.'],
+  ['Do I need an account or ID?', 'No account, no ID and no wallet connection. You send from any wallet to a one-time address.'],
   ['What is Max privacy?', 'The most private way to pay. Your coins go through Monero via Houdini Swap and arrive as SOL in a one-time wallet made in your browser, which then buys the card. Nothing on-chain connects what you sent to the card. It takes 15–45 minutes and costs a little more.'],
   ['Where do I get my code?', 'On screen as soon as it’s delivered, usually in under a minute. It’s also saved in this browser under My cards. Treat it like cash.'],
   ['What if something goes wrong?', 'If the payment doesn’t go through, your money goes back to your wallet. If a card can’t be delivered, Bitrefill refunds you in USDC on Solana.'],
@@ -101,10 +101,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Standard vs Private */}
+      {/* Private vs Max privacy */}
       <section className="wrap section">
         <div data-reveal style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 32, maxWidth: 640 }}>
-          <h2 className="h2">Private by default. <span className="dim">Standard if you want speed.</span></h2>
+          <h2 className="h2">Never connect a wallet. <span className="dim">Pick how private.</span></h2>
         </div>
         <div className="card table-scroll" data-reveal style={{ padding: '22px 8px 6px' }}>
           <table className="compare">
@@ -112,7 +112,7 @@ export default function Home() {
               <tr>
                 <th scope="col"><span className="sr-only">Detail</span></th>
                 <th scope="col"><span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: 'var(--ribbon)' }}><IconEyeOff width={17} height={17} /> Private</span></th>
-                <th scope="col"><span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}><IconBolt width={17} height={17} /> Standard</span></th>
+                <th scope="col"><span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}><IconShield width={17} height={17} /> Max privacy</span></th>
               </tr>
             </thead>
             <tbody>

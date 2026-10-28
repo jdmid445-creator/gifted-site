@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Logo from './Logo';
-import { CaPill, WalletButton } from './HeaderClient';
+import { CaPill } from './HeaderClient';
 import { IconX } from './Icons';
 import { site } from '@/lib/site';
 
@@ -29,7 +29,6 @@ export default function Header() {
             <span className="hdr-link hdr-x" title="X account coming soon" aria-label="X account coming soon" role="img"><IconX /></span>
           )}
           <CaPill ca={site.ca} />
-          <span className="hdr-wallet"><WalletButton /></span>
         </nav>
       </div>
     </header>

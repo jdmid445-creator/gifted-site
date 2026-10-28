@@ -84,13 +84,6 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
     fetch('/api/private/tokens').then((r) => r.json()).then((d) => setTokens(d.tokens || [])).catch(() => setError('Private checkout is unavailable right now.'));
   }, []);
 
-  // Prefill only the swap refund address. The backup address goes to the shop, so it is never
-  // prefilled from the connected wallet: that would show the shop your wallet.
-  useEffect(() => {
-    if (!publicKey) return;
-    const a = publicKey.toBase58();
-    if (chain === 'sol' && !refundTo) setRefundTo(a);
-  }, [publicKey, chain]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Each chain opens on its own coin, then stablecoins, then the rest A to Z (ignoring a leading $).
   const chainTokens = useMemo(() => {
@@ -287,7 +280,6 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                     <Copy value={q.depositAddress} label="Copy address" />
                     <Copy value={sendAmount} label="Copy amount" />
-                    {chain === 'sol' && connected && <button type="button" className="btn btn-primary" style={{ minHeight: 40 }} onClick={payWithWallet}>Pay with wallet</button>}
                   </div>
                 </div>
               </div>
