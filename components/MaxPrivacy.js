@@ -11,9 +11,9 @@ import { Buffer } from 'buffer';
 import bs58 from 'bs58';
 import QrCode from './QrCode';
 import OrderSummary from './OrderSummary';
+import CoinLogo from './CoinLogo';
 import CopyAmount from './CopyAmount';
 import RevealCode from './RevealCode';
-import { relay } from './TokenIcon';
 import { loadCards, saveCards, statusUrl } from '@/lib/cards';
 import { IconCopy, IconCheck, IconSearch, IconShield, IconEyeOff } from './Icons';
 
@@ -57,9 +57,7 @@ function Copy({ value, label = 'Copy' }) {
 }
 
 function CoinIcon({ coin, size = 22 }) {
-  const [ok, setOk] = useState(Boolean(coin?.icon));
-  if (!ok) return <span aria-hidden="true" style={{ width: size, height: size, borderRadius: '50%', background: 'var(--surface-3)', flex: 'none' }} />;
-  return <img src={relay(coin.icon)} alt="" width={size} height={size} onError={() => setOk(false)} style={{ width: size, height: size, borderRadius: '50%', flex: 'none', background: '#1E1E21' }} />;
+  return <CoinLogo symbol={coin?.symbol} icon={coin?.icon} size={size} />;
 }
 
 export default function MaxPrivacy({ product, pkgId, customValue, faceValue, onLock }) {
