@@ -1,6 +1,5 @@
 'use client';
 
-import RedeemSteps from './RedeemSteps';
 
 // Private checkout: the gift card invoice is paid by NEAR Intents' solvers, so the payment that
 // reaches the shop comes from the network instead of your wallet. You send to a one-time
@@ -286,6 +285,7 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
                 </div>
               </div>
             )}
+            {phase !== 'deposit' && <DepositProgress status={status} />}
             <div className="deposit-status" role="status">
               <span className="live-dot" aria-hidden="true" />
               <span>{phase === 'sending' ? 'Approve the deposit in your wallet…' : STATUS_TEXT[status] || 'Waiting for your deposit'}</span>
@@ -295,15 +295,40 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
         )}
 
         {phase === 'done' && result && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div className="notice notice-ok">Your {result.name} card is ready, paid privately.</div>
-            <RevealCode code={result.redemption.code} />
-            {result.redemption.instructions && <RedeemSteps text={result.redemption.instructions} size={14} />}
+            {result.redemption.code && <RevealCode code={result.redemption.code} />}
+            {result.redemption.link && <a href={result.redemption.link} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">Open your card ↗</a>}
+            <a href="/cards" className="btn btn-primary">Go to My cards</a>
           </div>
         )}
 
         {error && <div className="notice notice-warn" role="alert">{error}</div>}
       </div>
     </>
+  );
+}
+
+// Shown once the deposit is on its way, so the panel says what is happening instead of sitting empty.
+const PROGRESS = [
+  ['Deposit sent', 'Watching the network for it.'],
+  ['Deposit confirmed', 'Your coins reached the one-time address.'],
+  ['Paying the shop privately', 'Routed so the shop never sees your wallet.'],
+  ['Card ready', 'Your code appears here and in My cards.'],
+];
+function DepositProgress({ status }) {
+  const at = { PENDING_DEPOSIT: 0, KNOWN_DEPOSIT_TX: 1, PROCESSING: 2, SUCCESS: 3 }[status] ?? 0;
+  return (
+    <div className="progress-box">
+      <ol className="progress-steps">
+        {PROGRESS.map(([title, sub], i) => (
+          <li key={title} className={i < at ? 'is-done' : i === at ? 'is-now' : ''}>
+            <b>{title}</b>
+            {i === at && <span>{sub}</span>}
+          </li>
+        ))}
+      </ol>
+      <p className="progress-note">You can close this page. Your card is saved in <a href="/cards">My cards</a> either way.</p>
+    </div>
   );
 }

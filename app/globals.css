@@ -466,3 +466,17 @@ html.motion .fw-apps[data-reveal].is-in .fw-app:hover { transform: translateY(-2
 
 .deposit-box .btn { font-size: 14px; }
 .deposit-box .label, .deposit-status .link-btn { font-size: 13px; }
+
+/* deposit in flight */
+.progress-box { display: flex; flex-direction: column; gap: 18px; padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-2); }
+.progress-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 16px; }
+.progress-steps li { position: relative; padding-left: 34px; font-size: 14px; line-height: 1.45; color: var(--muted); }
+.progress-steps li b { display: block; font: 500 14px var(--display); color: var(--muted); }
+.progress-steps li span { display: block; margin-top: 2px; }
+.progress-steps li::before { content: ''; position: absolute; left: 0; top: 0; width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--line-strong); box-sizing: border-box; }
+.progress-steps li:not(:last-child)::after { content: ''; position: absolute; left: 9.5px; top: 24px; bottom: -14px; width: 1px; background: var(--line-strong); }
+.progress-steps li.is-done b, .progress-steps li.is-now b { color: var(--text); }
+.progress-steps li.is-done::before { background: #F0517A url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 10.5l3 3 6-6.5' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 100% no-repeat; border-color: transparent; }
+.progress-steps li.is-now::before { border-color: #F0517A; border-top-color: transparent; animation: gs-spin 1s linear infinite; }
+@keyframes gs-spin { to { transform: rotate(360deg); } }
+.progress-note { margin: 0; padding-top: 14px; border-top: 1px solid var(--line); font-size: 13px; line-height: 1.5; color: var(--muted); }

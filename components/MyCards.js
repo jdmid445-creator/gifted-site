@@ -1,7 +1,5 @@
 'use client';
 
-import RedeemSteps from './RedeemSteps';
-
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { loadCards, saveCards, fetchCardStatus } from '@/lib/cards';
@@ -123,8 +121,7 @@ export default function MyCards() {
               </div>
             )}
             {open && s.redemption?.pin && <div className="code-box">PIN: {s.redemption.pin}</div>}
-            {open && s.redemption?.link && <a href={s.redemption.link} target="_blank" rel="noopener noreferrer">Open your card ↗</a>}
-            {open && s.redemption?.instructions && <RedeemSteps text={s.redemption.instructions} />}
+            {open && s.redemption?.link && <a href={s.redemption.link} target="_blank" rel="noopener noreferrer" className="btn btn-ghost" style={{ alignSelf: 'flex-start' }}>Open your card ↗</a>}
             {!ready && s.status && LABEL[s.status] && <p className="muted" style={{ margin: 0 }}>{LABEL[s.status]}</p>}
             {s.error && <div className="notice notice-warn">{s.error}</div>}
           </div>

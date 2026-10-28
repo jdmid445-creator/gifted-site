@@ -1,6 +1,5 @@
 'use client';
 
-import RedeemSteps from './RedeemSteps';
 
 // The shop console: 1 pick a card · 2 pick what to pay with · 3 check out.
 // Everything up to the final signature works without connecting a wallet.
@@ -514,9 +513,10 @@ export default function Shop() {
       {phase === 'done' && result && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           <div className="notice notice-ok">Your {result.name} card is ready.</div>
-          <RevealCode code={result.redemption.code} />
-          {result.redemption.instructions && <RedeemSteps text={result.redemption.instructions} size={13} />}
-          <button className="btn btn-primary" type="button" onClick={() => { resetCheckout(); setResult(null); }}>Buy another</button>
+          {result.redemption.code && <RevealCode code={result.redemption.code} />}
+          {result.redemption.link && <a href={result.redemption.link} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">Open your card ↗</a>}
+            <a href="/cards" className="btn btn-primary">Go to My cards</a>
+          <button className="btn btn-ghost" type="button" onClick={() => { resetCheckout(); setResult(null); }}>Buy another</button>
         </div>
       )}
       {error && <div className="notice notice-warn" role="alert">{error}</div>}
