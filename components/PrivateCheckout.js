@@ -12,6 +12,7 @@ import {
   createTransferCheckedInstruction,
 } from '@solana/spl-token';
 import QrCode from './QrCode';
+import OrderSummary from './OrderSummary';
 import RevealCode from './RevealCode';
 import { CHAINS, getChain, isValidAddress } from '@/lib/chains';
 import { loadCards, saveCards, statusUrl } from '@/lib/cards';
@@ -207,6 +208,18 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
           <a href="/fresh-wallet" target="_blank" rel="noopener" style={{ fontSize: 13, alignSelf: 'flex-start' }}>Need a fresh wallet? Make one here ↗</a>
           {sameWallet && <span className="notice notice-warn" style={{ fontSize: 13 }}>That’s the wallet you’re paying from. It works, but the shop would see it. A fresh wallet keeps you private.</span>}
         </label>
+        <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 8, paddingTop: 14, borderTop: '1px solid var(--line)' }}>
+          <span className="label">Pay from any of these</span>
+          <div className="chain-grid">
+            {CHAINS.map((c) => (
+              <button key={c.key} type="button" className="chain-tile" aria-pressed={chain === c.key} disabled={phase !== 'idle'}
+                onClick={() => { if (c.key !== chain) { setChain(c.key); setRefundTo(''); } }}>
+                <img src={`/chains/${c.key}.svg`} alt="" width={22} height={22} />
+                <span>{c.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="card" style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -217,11 +230,24 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
 
         {phase === 'idle' && (
           <>
+            <OrderSummary product={product} faceValue={faceValue} rows={[['Paying with', token ? `${token.symbol} on ${chainInfo?.label}` : '—'], ['GiftedSwaps fee', '$0'], ['Usually takes', 'About a minute']]} />
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <span className="label">What happens next</span>
+              <ol className="next-steps">
+                <li><b>You get a one-time address.</b> Send the exact amount from any wallet.</li>
+                <li><b>The network pays the shop.</b> Your wallet is never part of that payment.</li>
+                <li><b>Your code shows up here.</b> It’s also saved under My cards.</li>
+              </ol>
+            </div>
+
+            <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 12, paddingTop: 14, borderTop: '1px solid var(--line)' }}>
             <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 14, lineHeight: 1.5, cursor: 'pointer' }}>
               <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} style={{ marginTop: 3, width: 18, height: 18 }} />
               <span>Got it: the shop never sees my wallet. My deposit itself is still visible on the blockchain.</span>
             </label>
             <button className="btn btn-primary" type="button" disabled={!ready} onClick={start}>Get my deposit address</button>
+            </div>
           </>
         )}
         {phase === 'quoting' && <span className="muted" role="status">Setting up your private order…</span>}

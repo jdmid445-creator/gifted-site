@@ -124,7 +124,7 @@ select.input { appearance: auto; }
 @media (max-width: 680px) { .grid-2, .grid-4 { grid-template-columns: 1fr; } }
 
 /* Shop console: card | pay | checkout */
-.console { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 14px; align-items: start; }
+.console { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 14px; align-items: stretch; }
 @media (max-width: 1020px) { .console { grid-template-columns: 1fr 1fr; } .console > :first-child { grid-column: 1 / -1; } }
 @media (max-width: 680px) { .console { grid-template-columns: 1fr; } }
 
@@ -406,3 +406,17 @@ html.motion .fw-apps[data-reveal].is-in .fw-app:hover { transform: translateY(-2
 .mx-step[data-state="done"] .mx-dot { background: var(--mint); border-color: var(--mint); }
 .mx-step[data-state="now"] .mx-dot { background: var(--ribbon); border-color: var(--ribbon); }
 @media (prefers-reduced-motion: no-preference) { .mx-step[data-state="now"] .mx-dot { animation: mxpulse 1.6s ease-out infinite; } @keyframes mxpulse { 0% { box-shadow: 0 0 0 0 rgba(240,81,122,.5); } 100% { box-shadow: 0 0 0 9px rgba(240,81,122,0); } } }
+
+/* checkout columns: same height, filled */
+.chain-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.chain-tile { display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 12px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: transparent; color: var(--muted); font: 500 14px var(--display); cursor: pointer; text-align: left; transition: border-color .15s, background .15s, color .15s; }
+.chain-tile img { width: 22px; height: 22px; border-radius: 50%; flex: none; }
+.chain-tile span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chain-tile:hover:not(:disabled) { border-color: var(--line-strong); color: var(--text); }
+.chain-tile[aria-pressed="true"] { border-color: #4A4A52; background: var(--surface-3); color: var(--text); }
+.chain-tile:disabled { cursor: default; opacity: .6; }
+.next-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; counter-reset: ns; }
+.next-steps li { position: relative; padding-left: 40px; font-size: 14px; line-height: 1.5; color: var(--muted); counter-increment: ns; }
+.next-steps li::before { content: counter(ns); position: absolute; left: 0; top: -1px; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-3); color: var(--text); font: 500 13px var(--display); }
+.next-steps li:not(:last-child)::after { content: ''; position: absolute; left: 12.5px; top: 30px; bottom: -12px; width: 1px; background: var(--line-strong); }
+.next-steps b { display: block; color: var(--text); font-weight: 500; }

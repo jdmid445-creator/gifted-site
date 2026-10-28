@@ -10,6 +10,7 @@ import { getAssociatedTokenAddressSync, createAssociatedTokenAccountIdempotentIn
 import { Buffer } from 'buffer';
 import bs58 from 'bs58';
 import QrCode from './QrCode';
+import OrderSummary from './OrderSummary';
 import RevealCode from './RevealCode';
 import { relay } from './TokenIcon';
 import { loadCards, saveCards, statusUrl } from '@/lib/cards';
@@ -256,6 +257,14 @@ export default function MaxPrivacy({ product, pkgId, customValue, faceValue }) {
                 <span className="muted" style={{ fontSize: 13, lineHeight: 1.45 }}>Only used if the private route can’t finish. Use your own wallet, not an exchange.</span>
               </label>
             )}
+            <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 10, paddingTop: 14, borderTop: '1px solid var(--line)' }}>
+              <span className="label">How the route works</span>
+              <ol className="next-steps">
+                <li><b>You send {coin?.symbol || 'your coin'} to a one-time address.</b> From any wallet, on its own chain.</li>
+                <li><b>It’s swapped through Monero.</b> Monero hides amounts and addresses, so the trail stops there.</li>
+                <li><b>SOL lands in your new wallet and buys the card.</b> Nothing on-chain ties it back to you.</li>
+              </ol>
+            </div>
           </>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -280,6 +289,7 @@ export default function MaxPrivacy({ product, pkgId, customValue, faceValue }) {
 
         {(phase === 'idle' || phase === 'starting') && kp && (
           <>
+            <OrderSummary product={product} faceValue={faceValue} rows={[['Paying with', coin ? `${coin.symbol} on ${coin.chainName}` : '—'], ['GiftedSwaps fee', '$0'], ['Usually takes', '15–45 minutes']]} />
             <p className="muted" style={{ margin: 0, fontSize: 13.5, lineHeight: 1.55 }}>Your coins come out of Monero as SOL in this brand-new wallet, then it pays for the card on its own. Leftover SOL stays yours.</p>
             <div className="key-line" style={{ padding: '10px 12px' }}><code style={{ fontSize: 12.5 }}>{address}</code></div>
             <button type="button" className="key-line key-secret" data-shown={showKey} onClick={() => setShowKey(true)} style={{ padding: '10px 12px' }} aria-label={showKey ? 'Private key' : 'Show private key'}>
@@ -287,9 +297,11 @@ export default function MaxPrivacy({ product, pkgId, customValue, faceValue }) {
               {!showKey && <span className="code-cover"><IconEyeOff width={15} height={15} /> Show backup key</span>}
             </button>
             {showKey && <div><Copy value={secret} label="Copy backup key" /></div>}
-            <label className="fw-check"><input type="checkbox" checked={saved} onChange={(e) => setSaved(e.target.checked)} /><span>I saved the backup key</span></label>
-            <button type="button" className="btn btn-primary" disabled={!ready} onClick={start}>{phase === 'starting' ? 'Finding a private route…' : 'Get my deposit address'}</button>
-            <p className="fw-note" style={{ fontSize: 12.5 }}><IconShield width={15} height={15} /> Houdini needs your IP, browser and timezone for its own screening. We pass them along and keep nothing.</p>
+            <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 12, paddingTop: 14, borderTop: '1px solid var(--line)' }}>
+              <label className="fw-check"><input type="checkbox" checked={saved} onChange={(e) => setSaved(e.target.checked)} /><span>I saved the backup key</span></label>
+              <button type="button" className="btn btn-primary" disabled={!ready} onClick={start}>{phase === 'starting' ? 'Finding a private route…' : 'Get my deposit address'}</button>
+              <p className="fw-note" style={{ fontSize: 12.5 }}><IconShield width={15} height={15} /> Houdini needs your IP, browser and timezone for its own screening. We pass them along and keep nothing.</p>
+            </div>
           </>
         )}
 

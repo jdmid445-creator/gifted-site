@@ -402,7 +402,7 @@ export default function Shop() {
         <span style={{ position: 'absolute', left: 14, top: 14, color: 'var(--muted)' }}><IconSearch /></span>
         <input id="tok-q" className="input" style={{ paddingLeft: 44 }} placeholder={connected ? 'Search your coins' : 'Search any coin or paste a contract'} value={tokenQuery} onChange={(e) => setTokenQuery(e.target.value)} spellCheck={false} autoComplete="off" />
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxHeight: 340, overflowY: 'auto', paddingBottom: 3 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flex: '1 1 0', minHeight: 300, overflowY: 'auto', paddingBottom: 3 }}>
         {tokenResults && tokenResults.length === 0 && <span className="muted" style={{ fontSize: 14 }}>No coins found{connected ? ' in your wallet' : ''}.</span>}
         {tokens.map((t) => {
           const est = estimate(t);
@@ -451,6 +451,17 @@ export default function Shop() {
         )}
       </div>
 
+      {phase === 'idle' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <span className="label">What happens next</span>
+          <ol className="next-steps">
+            <li><b>You get the exact price.</b> Locked in before you sign anything.</li>
+            <li><b>You sign once.</b> One transaction swaps your {payToken?.symbol || 'coin'} and pays the shop.</li>
+            <li><b>Your code shows up here.</b> It’s also saved under My cards.</li>
+          </ol>
+        </div>
+      )}
+      <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 12, paddingTop: 14, borderTop: '1px solid var(--line)' }}>
       {phase === 'idle' && !connected && (
         <button className="btn btn-primary" type="button" onClick={() => setVisible(true)} disabled={!faceValue}>
           <IconWallet /> Connect wallet to buy
@@ -487,6 +498,7 @@ export default function Shop() {
       )}
       {error && <div className="notice notice-warn" role="alert">{error}</div>}
       <Link href="/cards" className="muted" style={{ fontSize: 13, textAlign: 'center' }}>My cards</Link>
+      </div>
     </div>
   );
 
