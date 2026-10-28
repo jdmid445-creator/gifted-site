@@ -44,7 +44,7 @@ export async function POST(req) {
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 502 });
   }
-  if (!inv.payTo || !inv.price || /complete|delivered/i.test(String(inv.status || ''))) {
+  if (!inv.payTo || !inv.price || /^(complete|all_delivered|partial_delivery|delivered)$/i.test(String(inv.status || ''))) {
     return NextResponse.json({ error: 'This order can’t take a payment anymore. Start a new one.' }, { status: 409 });
   }
 
