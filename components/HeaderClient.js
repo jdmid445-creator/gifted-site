@@ -15,13 +15,13 @@ export function WalletButton() {
 }
 
 // Small, always-visible CA chip: easy to find, never the hero.
-export function CaPill({ ca }) {
+export function CaPill({ ca, compact = false }) {
   const [copied, setCopied] = useState(false);
   const short = ca ? `${ca.slice(0, 4)}…${ca.slice(-4)}` : 'soon';
   return (
     <button
       type="button"
-      className="hide-sm hdr-link hdr-ca"
+      className={compact ? "hdr-sub-link hdr-ca hdr-ca-sm" : "hide-sm hdr-link hdr-ca"}
       disabled={!ca}
       onClick={() => { navigator.clipboard?.writeText(ca); setCopied(true); setTimeout(() => setCopied(false), 1400); }}
       aria-label={ca ? `Copy contract address ${ca}` : 'Contract address coming soon'}

@@ -484,3 +484,15 @@ html.motion .fw-apps[data-reveal].is-in .fw-app:hover { transform: translateY(-2
 /* keep the footer on the bottom edge on short pages */
 body { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
 #main { flex: 1 0 auto; }
+
+/* phone header row */
+.hdr-sub { display: none; }
+@media (max-width: 760px) {
+  .hdr .hdr-ca { display: none; }
+  .hdr-sub { display: flex; align-items: center; gap: 0; padding: 0 8px 8px; overflow-x: auto; scrollbar-width: none; }
+  .hdr-sub::-webkit-scrollbar { display: none; }
+  .hdr-sub-link { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 8px; border: 0; border-radius: 8px; background: none; color: var(--muted); font: 500 13.5px var(--display); text-decoration: none; white-space: nowrap; cursor: pointer; }
+  .hdr-sub-link:hover { color: var(--text); background: var(--surface-2); }
+  .hdr-ca-sm { margin-left: auto; flex: none; padding: 0 10px; gap: 5px; }
+  .hdr-ca-sm:disabled { cursor: default; }
+}

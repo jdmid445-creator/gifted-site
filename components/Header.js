@@ -31,6 +31,13 @@ export default function Header() {
           <CaPill ca={site.ca} />
         </nav>
       </div>
+      {/* phones: the nav links and CA get their own slim row */}
+      <nav aria-label="Main" className="hdr-sub">
+        {nav.filter(([l]) => l === 'Docs' || l === 'My cards').map(([label, href]) => (
+          <Link key={href} href={href} className="hdr-sub-link">{label}</Link>
+        ))}
+        <CaPill ca={site.ca} compact />
+      </nav>
     </header>
   );
 }
