@@ -34,7 +34,7 @@ const faqs = [
   ['Where do I get my code?', 'On screen as soon as it’s delivered, usually in under a minute. It’s also saved in this browser under My cards. Treat it like cash.'],
   ['What if something goes wrong?', 'If the payment doesn’t go through, your money goes back to your wallet. If a card can’t be delivered, Bitrefill refunds you in USDC on Solana.'],
   ['Can I use it outside the US?', 'Yes. Pick your country next to the search box. Gift cards are country-specific, so buy one for where you’ll use it.'],
-  ['Do I need $GIFTED to use the shop?', 'No. The shop works with any token. $GIFTED is the meme coin behind it.'],
+  ['Do I need $GSWAP to use the shop?', 'No. The shop works with any token. $GSWAP is the meme coin behind it.'],
 ];
 
 export default function Home() {
@@ -165,7 +165,7 @@ export default function Home() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, flex: '1 1 300px' }}>
             <span style={{ width: 56, height: 56, borderRadius: 14, background: 'var(--surface-3)', display: 'grid', placeItems: 'center', flex: 'none', color: 'var(--text)' }}><Logo size={36} title="" /></span>
             <div>
-              <div style={{ font: '500 20px var(--display)', letterSpacing: '-0.02em' }}>$GIFTED</div>
+              <div style={{ font: '500 20px var(--display)', letterSpacing: '-0.02em' }}>$GSWAP</div>
               <div className="muted" style={{ fontSize: 14 }}>The meme coin behind the shop. Not required to use it.</div>
             </div>
           </div>

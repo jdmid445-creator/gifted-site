@@ -21,8 +21,8 @@ export default function Terms() {
       <h2 style={{ font: '500 22px var(--display)', letterSpacing: '-0.02em' }}>Your gift card code</h2>
       <p>Your code is shown on this site after payment confirms and saved in this browser. Treat it like cash: anyone with the code can spend it.</p>
 
-      <h2 style={{ font: '500 22px var(--display)', letterSpacing: '-0.02em' }}>The $GIFTED token</h2>
-      <p>$GIFTED is a meme coin. It has no promised value, returns, rights, or utility beyond being a community token. Holding $GIFTED is not required to use the shop.</p>
+      <h2 style={{ font: '500 22px var(--display)', letterSpacing: '-0.02em' }}>The $GSWAP token</h2>
+      <p>$GSWAP is a meme coin. It has no promised value, returns, rights, or utility beyond being a community token. Holding $GSWAP is not required to use the shop.</p>
     </section>
   );
 }

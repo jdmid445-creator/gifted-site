@@ -13,7 +13,7 @@ const toc = [
   ['safety', 'Safety & custody'],
   ['cards', 'Your cards'],
   ['live', 'Live orders'],
-  ['token', 'The $GIFTED token'],
+  ['token', 'The $GSWAP token'],
   ['faq', 'FAQ'],
 ];
 
@@ -122,8 +122,8 @@ export default function Docs() {
           <h2 id="live">Live orders</h2>
           <p>The live feed on the homepage lists real, delivered orders. Standard checkout orders link to their transaction on Solscan. Private orders show only the card and a rounded time, never a wallet, token or transaction.</p>
 
-          <h2 id="token">The $GIFTED token</h2>
-          <p>$GIFTED is the meme coin behind the shop, launched on pump.fun. It has no promised value, returns or rights, and you don’t need it to use GiftedSwaps. The contract address is always in the site header.</p>
+          <h2 id="token">The $GSWAP token</h2>
+          <p>$GSWAP is the meme coin behind the shop, launched on pump.fun. It has no promised value, returns or rights, and you don’t need it to use GiftedSwaps. The contract address is always in the site header.</p>
 
           <h2 id="faq">FAQ</h2>
           <h3>Do I need to connect a wallet?</h3>

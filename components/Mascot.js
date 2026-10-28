@@ -1,9 +1,9 @@
-// The $GIFTED creature peeking out of its gift box.
+// The $GSWAP creature peeking out of its gift box.
 // `variant="full"` is the hero illustration; `variant="icon"` is the head-and-rim mark
 // used in the header, favicon and token icon.
 import { useId } from 'react';
 
-export default function Mascot({ size = 320, variant = 'full', title = 'The $GIFTED creature peeking out of a gift box' }) {
+export default function Mascot({ size = 320, variant = 'full', title = 'The $GSWAP creature peeking out of a gift box' }) {
   const raw = useId().replace(/:/g, '');
   const id = (k) => `${raw}${k}`;
   const label = title ? { role: 'img', 'aria-label': title } : { 'aria-hidden': true };

@@ -33,7 +33,7 @@ const USDT = 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB';
 
 // Always at the top of the list. The rest comes live from what's trading on Jupiter.
 const BASE = [
-  ...(site.ca ? [{ mint: site.ca, symbol: 'GIFTED' }] : []),
+  ...(site.ca ? [{ mint: site.ca, symbol: 'GSWAP' }] : []),
   { mint: SOL, symbol: 'SOL', decimals: 9 },
   { mint: USDC, symbol: 'USDC', decimals: 6, usdPrice: 1 },
   { mint: USDT, symbol: 'USDT', decimals: 6, usdPrice: 1 },
