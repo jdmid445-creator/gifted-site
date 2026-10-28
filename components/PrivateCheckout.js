@@ -91,7 +91,13 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
     if (chain === 'sol' && !refundTo) setRefundTo(a);
   }, [publicKey, chain]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const chainTokens = useMemo(() => tokens.filter((t) => t.blockchain === chain).sort((a, b) => a.symbol.localeCompare(b.symbol)), [tokens, chain]);
+  // Each chain opens on its own coin, then stablecoins, then the rest A to Z (ignoring a leading $).
+  const chainTokens = useMemo(() => {
+    const NATIVE = { sol: 'SOL', eth: 'ETH', base: 'ETH', arb: 'ETH', bsc: 'BNB', btc: 'BTC', ltc: 'LTC', doge: 'DOGE' };
+    const rank = (t) => (t.symbol === NATIVE[chain] || (!t.contractAddress && !NATIVE[chain]) ? 0 : ['USDC', 'USDT'].includes(t.symbol) ? 1 : 2);
+    const name = (t) => t.symbol.replace(/^\$/, '').toUpperCase();
+    return tokens.filter((t) => t.blockchain === chain).sort((a, b) => rank(a) - rank(b) || name(a).localeCompare(name(b)));
+  }, [tokens, chain]);
   useEffect(() => {
     if (!chainTokens.find((t) => t.assetId === assetId)) setAssetId(chainTokens[0]?.assetId || '');
   }, [chainTokens]); // eslint-disable-line react-hooks/exhaustive-deps
