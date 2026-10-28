@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Mascot from '@/components/Mascot';
+import Logo from '@/components/Logo';
 import Shop from '@/components/Shop';
 import LiveFeed from '@/components/LiveFeed';
 import CopyCA from '@/components/CopyCA';
@@ -163,7 +163,7 @@ export default function Home() {
       <section id="token" className="wrap section" style={{ paddingBottom: 56 }}>
         <div className="card" data-reveal style={{ padding: 24, display: 'flex', flexWrap: 'wrap', gap: 20, alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, flex: '1 1 300px' }}>
-            <Mascot size={56} variant="icon" title="" />
+            <span style={{ width: 56, height: 56, borderRadius: 14, background: 'var(--surface-3)', display: 'grid', placeItems: 'center', flex: 'none', color: 'var(--text)' }}><Logo size={36} title="" /></span>
             <div>
               <div style={{ font: '500 20px var(--display)', letterSpacing: '-0.02em' }}>$GIFTED</div>
               <div className="muted" style={{ fontSize: 14 }}>The meme coin behind the shop. Not required to use it.</div>

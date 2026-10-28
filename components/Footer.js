@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Mascot from './Mascot';
+import Logo from './Logo';
 import { site } from '@/lib/site';
 
 export default function Footer() {
@@ -21,7 +21,7 @@ export default function Footer() {
       <div className="wrap" style={{ padding: '48px 20px 36px', display: 'flex', flexWrap: 'wrap', gap: 40, justifyContent: 'space-between' }}>
         <div style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: 14, maxWidth: 440 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ display: 'block', transform: 'translateY(-3px)' }}><Mascot size={30} variant="icon" title="" /></span>
+            <Logo size={28} title="" />
             <span style={{ font: '600 20px var(--display)', letterSpacing: '-0.04em' }}>GiftedSwaps</span>
           </div>
           <p className="muted" style={{ margin: 0, fontSize: 13, lineHeight: 1.65 }}>
