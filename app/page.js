@@ -95,8 +95,7 @@ export default function Home() {
           <div data-reveal style={{ flex: '1 1 340px', display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 470 }}>
             <h2 className="h2">Real crypto, <span className="dim">real cards.</span></h2>
             <p className="muted" style={{ margin: 0, lineHeight: 1.6, fontSize: 16 }}>
-              Each order shows up here once Bitrefill delivers it. Private orders show the card and a rough time, nothing else. Standard checkout orders link to their transaction.
-            </p>
+              Every paid order shows up here: the card, the amount and roughly when. Wallets stay hidden.</p>
           </div>
           <div data-reveal style={{ '--d': '120ms', flex: '999 1 440px', minWidth: 0 }}><LiveFeed limit={6} /></div>
         </div>

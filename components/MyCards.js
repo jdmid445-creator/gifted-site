@@ -19,8 +19,7 @@ export default function MyCards() {
 
   useEffect(() => {
     const list = loadCards();
-    setCards(list);
-    if (!list.length) return;
+    if (!list.length) { setCards([]); return; }
     let alive = true;
     (async () => {
       const results = await Promise.all(list.map((c) => fetchCardStatus(c).then((d) => [c.id, d]).catch((e) => [c.id, { error: e.message }])));
@@ -35,7 +34,8 @@ export default function MyCards() {
         return true;
       });
       if (keep.length !== list.length) saveCards(keep);
-      setCards(keep);
+      // Only paid orders are shown: an address you never sent to isn't a card.
+      setCards(keep.filter((c) => ['complete', 'processing'].includes(map[c.id]?.status)));
       setStatus(map);
     })();
     return () => { alive = false; };
