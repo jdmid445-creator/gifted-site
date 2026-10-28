@@ -327,6 +327,7 @@ export default function Shop() {
 
   const maxIn = quote && !quote.direct && payToken?.decimals != null ? Number(quote.otherAmountThreshold || quote.inAmount) / 10 ** payToken.decimals : null;
 
+  const pkgs = product ? product.packages.filter((k) => !tooSmall(k)) : [];
   // What the card grid shows: search results, or the shelf filtered by category.
   const shown = products;
 
@@ -363,7 +364,7 @@ export default function Shop() {
         {!loadingProducts && !loadError && shown.length === 0 && <span className="muted" style={{ fontSize: 14, gridColumn: '1 / -1' }}>No cards found. Try another brand or country.</span>}
         {!loadingProducts && shown.map((p) => (
           <button key={p.id} type="button" className="pick" aria-pressed={product?.id === p.id} style={{ minHeight: 54 }}
-            onClick={() => { setProduct(p); setPkgId(defaultPkg(p)); setCustomValue(''); resetCheckout(); }}>
+            onClick={() => { setProduct(p); setPkgId(mode === 'max' && p.currency === 'USD' ? (p.packages.find((k) => k.value >= MAX_MIN_USD) || p.packages[0])?.id || null : defaultPkg(p)); setCustomValue(''); resetCheckout(); }}>
             <CardThumb key={p.id} name={p.name} image={p.image} domain={p.domain} width={44} />
             <span style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
               <span style={{ fontWeight: 500, fontSize: 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{cleanName(p.name)}</span>
@@ -375,13 +376,14 @@ export default function Shop() {
       {product && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <span className="label">Amount · {product.currency}</span>
-          {product.packages.length > 0 ? (
+          {/* Max privacy only lists amounts its route can carry; Private lists them all. */}
+          {pkgs.length > 0 ? (
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-              {product.packages.slice(0, 5).map((k) => (
-                <button key={k.id} type="button" className="chip" aria-pressed={pkgId === k.id} disabled={tooSmall(k)} title={tooSmall(k) ? `Max privacy starts at $${MAX_MIN_USD}` : undefined} onClick={() => { setPkgId(k.id); resetCheckout(); }}>{product.currency === 'USD' ? '$' : ''}{k.value.toLocaleString()}</button>
+              {pkgs.slice(0, 5).map((k) => (
+                <button key={k.id} type="button" className="chip" aria-pressed={pkgId === k.id} onClick={() => { setPkgId(k.id); resetCheckout(); }}>{product.currency === 'USD' ? '$' : ''}{k.value.toLocaleString()}</button>
               ))}
-              {product.packages.length > 5 && (() => {
-                const more = product.packages.slice(5);
+              {pkgs.length > 5 && (() => {
+                const more = pkgs.slice(5);
                 const picked = more.some((k) => k.id === pkgId);
                 return (
                   <select
@@ -392,7 +394,7 @@ export default function Shop() {
                   >
                     <option value="" disabled>More amounts</option>
                     {more.map((k) => (
-                      <option key={k.id} value={k.id} disabled={tooSmall(k)}>{product.currency === 'USD' ? '$' : ''}{k.value.toLocaleString()}</option>
+                      <option key={k.id} value={k.id}>{product.currency === 'USD' ? '$' : ''}{k.value.toLocaleString()}</option>
                     ))}
                   </select>
                 );
@@ -400,7 +402,7 @@ export default function Shop() {
             </div>
           ) : null}
           {mode === 'max' && product.currency === 'USD' && product.packages.some(tooSmall) && (
-            <span className="muted" style={{ fontSize: 13, lineHeight: 1.5 }}>Max privacy starts at ${MAX_MIN_USD}, the smallest amount Houdini Swap’s private route accepts. Private checkout works for any amount.</span>
+            <span className="muted" style={{ fontSize: 13, lineHeight: 1.5 }}>Max privacy starts at ${MAX_MIN_USD}. For smaller cards, use Private checkout.</span>
           )}
           {product.packages.length > 0 ? null : product.range ? (
             <>
