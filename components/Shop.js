@@ -26,7 +26,7 @@ import { COUNTRIES } from '@/lib/countries';
 import { site } from '@/lib/site';
 import { IconSearch, IconBolt, IconEyeOff, IconShield, IconWallet, IconCopy, IconCheck } from './Icons';
 
-const USDC = 'EPjFWdd5AufqSSqeM2qy1xbybapC8G4wEGGkZwyTDt1v';
+const USDC = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
 const SOL = 'So11111111111111111111111111111111111111112';
 
 const USDT = 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB';

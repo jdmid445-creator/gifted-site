@@ -7,7 +7,7 @@ import { toneFor } from './CardThumb';
 const TL = 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet';
 const FALLBACK = {
   So11111111111111111111111111111111111111112: `${TL}/So11111111111111111111111111111111111111112/logo.png`,
-  EPjFWdd5AufqSSqeM2qy1xbybapC8G4wEGGkZwyTDt1v: `${TL}/EPjFWdd5AufqSSqeM2qy1xbybapC8G4wEGGkZwyTDt1v/logo.png`,
+  EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v: `${TL}/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/logo.png`,
   Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB: `${TL}/Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB/logo.svg`,
 };
 

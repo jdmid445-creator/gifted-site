@@ -17,7 +17,7 @@ import { loadCards, saveCards, statusUrl } from '@/lib/cards';
 import { IconCopy, IconCheck, IconSearch, IconShield, IconEyeOff } from './Icons';
 
 const SOL = 'So11111111111111111111111111111111111111112';
-const USDC = 'EPjFWdd5AufqSSqeM2qy1xbybapC8G4wEGGkZwyTDt1v';
+const USDC = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
 const SESSION = 'gs.max.v1';
 
 const STEPS = [
