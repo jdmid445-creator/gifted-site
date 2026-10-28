@@ -425,3 +425,7 @@ html.motion .fw-apps[data-reveal].is-in .fw-app:hover { transform: translateY(-2
 .next-steps li::before { content: counter(ns); position: absolute; left: 0; top: -1px; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-3); color: var(--text); font: 500 13px var(--display); }
 .next-steps li:not(:last-child)::after { content: ''; position: absolute; left: 12.5px; top: 30px; bottom: -12px; width: 1px; background: var(--line-strong); }
 .next-steps b { display: block; color: var(--text); font-weight: 500; }
+
+/* an order in progress fixes the card and amount */
+.is-locked .pick, .is-locked .chip, .is-locked .quick-chip, .is-locked .input { pointer-events: none; opacity: .45; }
+.mode-switch button:disabled { cursor: not-allowed; opacity: .5; }

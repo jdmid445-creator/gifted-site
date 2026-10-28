@@ -61,7 +61,7 @@ function CoinIcon({ coin, size = 22 }) {
   return <img src={relay(coin.icon)} alt="" width={size} height={size} onError={() => setOk(false)} style={{ width: size, height: size, borderRadius: '50%', flex: 'none', background: '#1E1E21' }} />;
 }
 
-export default function MaxPrivacy({ product, pkgId, customValue, faceValue }) {
+export default function MaxPrivacy({ product, pkgId, customValue, faceValue, onLock }) {
   const { connection } = useConnection();
   const [enabled, setEnabled] = useState(null);
   const [coins, setCoins] = useState([]);
@@ -73,6 +73,9 @@ export default function MaxPrivacy({ product, pkgId, customValue, faceValue }) {
   const [showKey, setShowKey] = useState(false);
   const [saved, setSaved] = useState(false);
   const [phase, setPhase] = useState('idle'); // idle | starting | deposit | arriving | buying | done
+  // Once an order exists its card and amount are fixed, so the card picker is locked until it finishes.
+  useEffect(() => { onLock?.(['starting', 'deposit', 'arriving', 'buying'].includes(phase)); }, [phase, onLock]);
+  useEffect(() => () => onLock?.(false), [onLock]);
   const [order, setOrder] = useState(null);
   const [label, setLabel] = useState('WAITING');
   const [error, setError] = useState('');
@@ -319,6 +322,12 @@ export default function MaxPrivacy({ product, pkgId, customValue, faceValue }) {
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}><Copy value={order.depositAddress} label="Copy address" /><Copy value={String(order.inAmount)} label="Copy amount" /></div>
                 </div>
               </div>
+            )}
+            {phase === 'deposit' && label === 'WAITING' && (
+              <button type="button" className="btn btn-ghost btn-sm" onClick={reset}>Change card or start over</button>
+            )}
+            {phase === 'deposit' && label === 'WAITING' && (
+              <span className="muted" style={{ fontSize: 12.5 }}>Only start over if you haven’t sent anything yet.</span>
             )}
             {phase === 'deposit' && order.expires && <span className="muted" style={{ fontSize: 12.5 }}>Send within {Math.max(0, Math.round((new Date(order.expires) - Date.now()) / 60000))} minutes. {order.exact ? 'The SOL that arrives is locked in.' : 'Rate isn’t locked, so we added a little headroom.'}</span>}
             {phase === 'arriving' && !held && <div className="notice notice-info" role="status">SOL is arriving in your private wallet. Buying the card as soon as it lands…</div>}

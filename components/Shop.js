@@ -88,6 +88,7 @@ export default function Shop() {
   const { setVisible } = useWalletModal();
 
   const [mode, setMode] = useState('private');
+  const [locked, setLocked] = useState(false);
   const [query, setQuery] = useState('');
   const [cat, setCat] = useState('Popular');
   const [country, setCountry] = useState('US');
@@ -318,8 +319,9 @@ export default function Shop() {
 
   // ---------- render ----------
   const cardColumn = (
-    <div className="card" style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 14 }}>
+    <div className={`card${locked ? ' is-locked' : ''}`} style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 14 }}>
       <StepHead n="1" title="Pick a gift card" hint={demo ? 'Sample catalog' : null} />
+      {locked && <div className="notice notice-info" style={{ fontSize: 13 }}>This order is set. To change the card or amount, use Change card or start over in step 3.</div>}
       <div style={{ display: 'flex', gap: 8 }}>
       <form role="search" onSubmit={(e) => { e.preventDefault(); search(query); }} style={{ position: 'relative', flex: 1, minWidth: 0 }}>
         <label htmlFor="brand-q" className="sr-only">Search brands</label>
@@ -506,9 +508,9 @@ export default function Shop() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14, flexWrap: 'wrap' }}>
         <div className="mode-switch mode-3" role="group" aria-label="Checkout mode" style={{ width: 'min(100%, 480px)' }}>
-          <button type="button" aria-pressed={mode === 'private'} onClick={() => { setMode('private'); resetCheckout(); }}><IconEyeOff width={17} height={17} /> Private</button>
-          <button type="button" aria-pressed={mode === 'max'} onClick={() => { setMode('max'); resetCheckout(); }}><IconShield width={17} height={17} /> Max privacy</button>
-          <button type="button" aria-pressed={mode === 'standard'} onClick={() => { setMode('standard'); resetCheckout(); }}><IconBolt width={17} height={17} /> Standard</button>
+          <button type="button" disabled={locked} aria-pressed={mode === 'private'} onClick={() => { setMode('private'); resetCheckout(); }}><IconEyeOff width={17} height={17} /> Private</button>
+          <button type="button" disabled={locked} aria-pressed={mode === 'max'} onClick={() => { setMode('max'); resetCheckout(); }}><IconShield width={17} height={17} /> Max privacy</button>
+          <button type="button" disabled={locked} aria-pressed={mode === 'standard'} onClick={() => { setMode('standard'); resetCheckout(); }}><IconBolt width={17} height={17} /> Standard</button>
         </div>
         <span className="muted" style={{ fontSize: 14, flex: '1 1 280px', textAlign: 'right' }}>
           {mode === 'standard'
@@ -526,9 +528,9 @@ export default function Shop() {
             {checkoutColumn}
           </>
         ) : mode === 'max' ? (
-          <MaxPrivacy product={product} pkgId={pkgId} customValue={customValue} faceValue={faceValue} />
+          <MaxPrivacy product={product} pkgId={pkgId} customValue={customValue} faceValue={faceValue} onLock={setLocked} />
         ) : (
-          <PrivateCheckout product={product} pkgId={pkgId} customValue={customValue} faceValue={faceValue} />
+          <PrivateCheckout product={product} pkgId={pkgId} customValue={customValue} faceValue={faceValue} onLock={setLocked} />
         )}
       </div>
     </div>

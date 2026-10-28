@@ -3,7 +3,7 @@
 // Private checkout: the gift card invoice is paid by NEAR Intents' solvers, so the payment that
 // reaches the shop comes from the network instead of your wallet. You send to a one-time
 // deposit address (one tap with a Solana wallet, or from any wallet on any listed chain).
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
 import {
@@ -52,7 +52,7 @@ function Copy({ value }) {
   );
 }
 
-export default function PrivateCheckout({ product, pkgId, customValue, faceValue }) {
+export default function PrivateCheckout({ product, pkgId, customValue, faceValue, onLock }) {
   const { connection } = useConnection();
   const { publicKey, sendTransaction, connected } = useWallet();
 
@@ -68,6 +68,16 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
   const [phase, setPhase] = useState('idle'); // idle | quoting | deposit | sending | tracking | done
   const [error, setError] = useState('');
   const [result, setResult] = useState(null);
+  const trackId = useRef(0);
+
+  // While a deposit address is out, the order is fixed: lock the card picker so the amount can't drift.
+  useEffect(() => { onLock?.(['quoting', 'deposit', 'sending', 'tracking'].includes(phase)); }, [phase, onLock]);
+  useEffect(() => () => onLock?.(false), [onLock]);
+
+  function startOver() {
+    trackId.current += 1; // stops the status loop for the old order (it stays saved under My cards)
+    setOrder(null); setStatus(null); setError(''); setPhase('idle');
+  }
 
   useEffect(() => {
     fetch('/api/private/tokens').then((r) => r.json()).then((d) => setTokens(d.tokens || [])).catch(() => setError('Private checkout is unavailable right now.'));
@@ -154,7 +164,9 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
   }
 
   async function track(entry, depositAddress) {
+    const me = ++trackId.current;
     for (let i = 0; i < 360; i++) {
+      if (trackId.current !== me) return;
       try {
         const s = await fetch(`/api/private/status?depositAddress=${encodeURIComponent(depositAddress)}`).then((r) => r.json());
         if (s.status) setStatus(s.status);
@@ -254,7 +266,7 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
 
         {q && ['deposit', 'sending', 'tracking'].includes(phase) && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}><span className="muted">Gift card</span><span>{product.name} · {faceValue} {order.invoice.currency}</span></div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}><span className="muted">Gift card</span><span>{order.entry.name} · {order.entry.value} {order.invoice.currency}</span></div>
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}><span className="muted">Send exactly</span><strong>{sendAmount} {q.symbol}</strong></div>
             {q.timeEstimate ? <div style={{ display: 'flex', justifyContent: 'space-between' }}><span className="muted">Usually takes</span><span>~{q.timeEstimate}s after your deposit lands</span></div> : null}
             {phase === 'deposit' && (
@@ -273,6 +285,9 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
             )}
             {phase === 'sending' && <span className="muted" role="status">Approve the deposit in your wallet…</span>}
             <div className="notice notice-info" role="status">Status: {STATUS_TEXT[status] || 'Waiting for your deposit'}</div>
+            {phase === 'deposit' && (
+              <button type="button" className="btn btn-ghost btn-sm" onClick={startOver}>Change card or start over</button>
+            )}
           </div>
         )}
 
