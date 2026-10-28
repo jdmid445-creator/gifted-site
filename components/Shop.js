@@ -530,7 +530,7 @@ export default function Shop() {
         </div>
         <span className="muted" style={{ fontSize: 14, flex: '1 1 280px', textAlign: 'right' }}>
           {mode === 'max'
-              ? 'Routed through Monero first, so nothing on-chain links your coins to the card. Takes 15–45 minutes.'
+              ? 'Routed through Monero first, so nothing on-chain links your coins to the card. Takes 15–45 minutes. $25 minimum.'
               : 'The shop never sees your wallet. Pay from any of 8 chains, no wallet connection needed.'}
         </span>
       </div>

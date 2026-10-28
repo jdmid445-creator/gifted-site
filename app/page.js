@@ -13,6 +13,7 @@ const compare = [
   ['Pay from', 'Solana, Ethereum, Base, Arbitrum, BNB Chain, Bitcoin, Litecoin, Dogecoin', 'BTC, ETH, SOL, XMR, LTC, DOGE and more'],
   ['On-chain trail', 'Your deposit is public on its own chain. The card purchase isn’t linked to it', 'The trail ends at Monero. Nothing links the card to your coins'],
   ['Typical time', 'About a minute', '15 to 45 minutes'],
+  ['Minimum', 'Any card amount', '$25'],
 ];
 
 const path = [
@@ -30,7 +31,7 @@ const faqs = [
   ['What does Private actually hide?', 'The shop gets paid by NEAR Intents instead of your wallet, so the purchase isn’t linked to you. Your own deposit is still visible on its blockchain, and the card is tied to whatever account you redeem it on.'],
   ['What does it cost?', 'GiftedSwaps charges no fee. You pay the card price from Bitrefill, plus the swap and a small network fee. You see the exact amount before you sign anything.'],
   ['Do I need an account or ID?', 'No account, no ID and no wallet connection. You send from any wallet to a one-time address.'],
-  ['What is Max privacy?', 'The most private way to pay. Your coins go through Monero via Houdini Swap and arrive as SOL in a one-time wallet made in your browser, which then buys the card. Nothing on-chain connects what you sent to the card. It takes 15–45 minutes and costs a little more.'],
+  ['What is Max privacy?', 'The most private way to pay. Your coins go through Monero via Houdini Swap and arrive as SOL in a one-time wallet made in your browser, which then buys the card. Nothing on-chain connects what you sent to the card. It takes 15–45 minutes, costs a little more, and starts at $25.'],
   ['Where do I get my code?', 'On screen as soon as it’s delivered, usually in under a minute. It’s also saved in this browser under My cards. Treat it like cash.'],
   ['What if something goes wrong?', 'If the payment doesn’t go through, your money goes back to your wallet. If a card can’t be delivered, Bitrefill refunds you in USDC on Solana.'],
   ['Can I use it outside the US?', 'Yes. Pick your country next to the search box. Gift cards are country-specific, so buy one for where you’ll use it.'],
