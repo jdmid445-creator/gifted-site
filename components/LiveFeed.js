@@ -40,7 +40,7 @@ export default function LiveFeed({ limit = 6, compact = false }) {
       )}
       {rows.map((o, i) => (
         <div key={`${o.id}-${o.at}`} className="feed-row" style={{ '--i': i, display: 'flex', alignItems: 'center', gap: 12, paddingTop: i ? 12 : 0, borderTop: i ? '1px solid var(--line)' : 'none' }}>
-          <CardThumb name={o.name || ''} domain={domainFor(o.name)} width={40} />
+          <CardThumb name={o.name || ''} image={o.image} domain={domainFor(o.name)} width={40} />
           <span style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
             <span style={{ fontWeight: 500, fontSize: 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {o.name}{o.value ? <span className="muted" style={{ fontSize: 13 }}> · ${o.value}{o.currency && o.currency !== 'USD' ? ` ${o.currency}` : ''}</span> : null}
