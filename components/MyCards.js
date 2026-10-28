@@ -20,6 +20,12 @@ export default function MyCards() {
   const [status, setStatus] = useState({}); // id -> { status, redemption } | { error }
   const [shown, setShown] = useState({}); // id -> true once the person taps Show code
   const [copied, setCopied] = useState(null);
+  // Mark a card as used. Saved with the card in this browser; tap again to undo.
+  function toggleRedeemed(id) {
+    const all = loadCards().map((c) => (c.id === id ? { ...c, redeemed: !c.redeemed } : c));
+    saveCards(all);
+    setCards((list) => list.map((c) => (c.id === id ? { ...c, redeemed: !c.redeemed } : c)));
+  }
   const [masked, setMasked] = useState({}); // id -> true while the code shows as stars
   function copy(id, value) {
     navigator.clipboard?.writeText(String(value));
@@ -76,20 +82,28 @@ export default function MyCards() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      {cards.map((c) => {
+      {[...cards].sort((a, b) => Number(Boolean(a.redeemed)) - Number(Boolean(b.redeemed))).map((c) => {
         const s = status[c.id] || {};
         const ready = s.status === 'complete' && s.redemption;
         const open = Boolean(ready && shown[c.id]);
         const code = open ? s.redemption?.code : null;
         return (
-          <div key={c.id} className="card" style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div key={c.id} className={`card${c.redeemed ? ' is-redeemed' : ''}`} style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <span style={{ font: '500 18px var(--display)' }}>{c.name}</span>
+                <span style={{ font: '500 18px var(--display)', display: 'flex', alignItems: 'center', gap: 10 }}>
+                  {c.name}
+                  {c.redeemed && <span className="redeemed-tag"><IconCheck width={13} height={13} /> Redeemed</span>}
+                </span>
                 <span className="muted" style={{ fontSize: 14 }}>{c.value} {c.currency} · {new Date(c.at).toLocaleDateString()}</span>
               </div>
               {ready ? (
-                <button type="button" className="btn btn-ghost" onClick={() => setShown((v) => ({ ...v, [c.id]: !v[c.id] }))}>{open ? 'Close' : 'Show code'}</button>
+                <span style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                  <button type="button" className={`btn btn-ghost redeem-btn${c.redeemed ? ' is-on' : ''}`} onClick={() => toggleRedeemed(c.id)} aria-pressed={Boolean(c.redeemed)}>
+                    <IconCheck width={16} height={16} /> {c.redeemed ? 'Redeemed' : 'Mark as redeemed'}
+                  </button>
+                  <button type="button" className="btn btn-ghost" onClick={() => setShown((v) => ({ ...v, [c.id]: !v[c.id] }))}>{open ? 'Close' : 'Show code'}</button>
+                </span>
               ) : (
                 <button type="button" className="btn btn-ghost" onClick={() => refresh(c)} disabled={s.loading || !status[c.id]}>{s.loading || !status[c.id] ? 'Checking…' : 'Check again'}</button>
               )}

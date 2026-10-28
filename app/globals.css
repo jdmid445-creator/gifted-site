@@ -447,3 +447,8 @@ html.motion .fw-apps[data-reveal].is-in .fw-app:hover { transform: translateY(-2
 .code-actions { display: inline-flex; align-items: center; gap: 6px; flex: none; }
 .code-eye { width: 38px; height: 38px; display: grid; place-items: center; border-radius: var(--radius-sm); border: 1px solid var(--line-strong); background: transparent; color: var(--muted); cursor: pointer; }
 .code-eye:hover { color: var(--text); background: var(--surface-2); }
+
+.redeemed-tag { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px; font: 500 12.5px var(--display); color: #8FE3A8; background: rgba(120,220,150,.12); border: 1px solid rgba(120,220,150,.3); }
+.redeem-btn.is-on { color: #8FE3A8; border-color: rgba(120,220,150,.35); background: rgba(120,220,150,.08); }
+.card.is-redeemed { opacity: .62; }
+.card.is-redeemed:hover { opacity: 1; }
