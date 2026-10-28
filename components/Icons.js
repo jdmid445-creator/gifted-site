@@ -10,6 +10,9 @@ export const IconSwap = (p) => (
 export const IconShield = (p) => (
   <svg {...base} {...p}><path d="M12 3.5 5 6v5.5c0 4.3 3 7.6 7 9 4-1.4 7-4.7 7-9V6z" /><path d="M9 12l2 2 4-4" /></svg>
 );
+export const IconEye = (p) => (
+  <svg {...base} {...p}><path d="M3 12c.5-1.5 4-6 9-6s8.5 4.5 9 6c-.5 1.5-4 6-9 6s-8.5-4.5-9-6z" /><circle cx="12" cy="12" r="3" /></svg>
+);
 export const IconEyeOff = (p) => (
   <svg {...base} {...p}><path d="M3 3l18 18" /><path d="M10.6 6.1A9.8 9.8 0 0 1 12 6c5 0 8.5 4.5 9 6-.3.8-1.2 2.3-2.7 3.6M6.6 7.6C4.6 8.9 3.4 10.9 3 12c.5 1.5 4 6 9 6 1.5 0 2.9-.4 4.1-1" /><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" /></svg>
 );

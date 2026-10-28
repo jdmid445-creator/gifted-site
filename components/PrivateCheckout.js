@@ -1,5 +1,7 @@
 'use client';
 
+import RedeemSteps from './RedeemSteps';
+
 // Private checkout: the gift card invoice is paid by NEAR Intents' solvers, so the payment that
 // reaches the shop comes from the network instead of your wallet. You send to a one-time
 // deposit address (one tap with a Solana wallet, or from any wallet on any listed chain).
@@ -296,7 +298,7 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <div className="notice notice-ok">Your {result.name} card is ready, paid privately.</div>
             <RevealCode code={result.redemption.code} />
-            {result.redemption.instructions && <p className="muted" style={{ margin: 0, lineHeight: 1.55 }}>{result.redemption.instructions}</p>}
+            {result.redemption.instructions && <RedeemSteps text={result.redemption.instructions} size={14} />}
           </div>
         )}
 

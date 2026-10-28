@@ -1,8 +1,11 @@
 'use client';
 
+import RedeemSteps from './RedeemSteps';
+
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { loadCards, saveCards, fetchCardStatus } from '@/lib/cards';
+import { IconCopy, IconCheck, IconEye, IconEyeOff } from './Icons';
 
 // An order that was never paid is dropped once its payment window has passed.
 const UNPAID_GRACE_MS = 45 * 60 * 1000;
@@ -16,6 +19,13 @@ export default function MyCards() {
   const [cards, setCards] = useState(null);
   const [status, setStatus] = useState({}); // id -> { status, redemption } | { error }
   const [shown, setShown] = useState({}); // id -> true once the person taps Show code
+  const [copied, setCopied] = useState(null);
+  const [masked, setMasked] = useState({}); // id -> true while the code shows as stars
+  function copy(id, value) {
+    navigator.clipboard?.writeText(String(value));
+    setCopied(id);
+    setTimeout(() => setCopied((v) => (v === id ? null : v)), 1400);
+  }
 
   useEffect(() => {
     const list = loadCards();
@@ -79,15 +89,28 @@ export default function MyCards() {
                 <span className="muted" style={{ fontSize: 14 }}>{c.value} {c.currency} · {new Date(c.at).toLocaleDateString()}</span>
               </div>
               {ready ? (
-                <button type="button" className="btn btn-ghost" onClick={() => setShown((v) => ({ ...v, [c.id]: !v[c.id] }))}>{open ? 'Hide code' : 'Show code'}</button>
+                <button type="button" className="btn btn-ghost" onClick={() => setShown((v) => ({ ...v, [c.id]: !v[c.id] }))}>{open ? 'Close' : 'Show code'}</button>
               ) : (
                 <button type="button" className="btn btn-ghost" onClick={() => refresh(c)} disabled={s.loading || !status[c.id]}>{s.loading || !status[c.id] ? 'Checking…' : 'Check again'}</button>
               )}
             </div>
-            {code && <div className="code-box">{code}</div>}
+            {code && (
+              <div className="code-box code-row">
+                <span className="code-value">{masked[c.id] ? '✱'.repeat(Math.min(String(code).length, 16)) : code}</span>
+                <span className="code-actions">
+                  <button type="button" className="btn btn-ghost btn-sm" onClick={() => copy(c.id, code)}>
+                    {copied === c.id ? <><IconCheck width={15} height={15} /> Copied</> : <><IconCopy width={15} height={15} /> Copy</>}
+                  </button>
+                  <button type="button" className="code-eye" onClick={() => setMasked((m) => ({ ...m, [c.id]: !m[c.id] }))}
+                    aria-label={masked[c.id] ? 'Show code' : 'Hide code'} title={masked[c.id] ? 'Show code' : 'Hide code'}>
+                    {masked[c.id] ? <IconEye width={18} height={18} /> : <IconEyeOff width={18} height={18} />}
+                  </button>
+                </span>
+              </div>
+            )}
             {open && s.redemption?.pin && <div className="code-box">PIN: {s.redemption.pin}</div>}
             {open && s.redemption?.link && <a href={s.redemption.link} target="_blank" rel="noopener noreferrer">Open your card ↗</a>}
-            {open && s.redemption?.instructions && <p className="muted" style={{ margin: 0, lineHeight: 1.6 }}>{s.redemption.instructions}</p>}
+            {open && s.redemption?.instructions && <RedeemSteps text={s.redemption.instructions} />}
             {!ready && s.status && LABEL[s.status] && <p className="muted" style={{ margin: 0 }}>{LABEL[s.status]}</p>}
             {s.error && <div className="notice notice-warn">{s.error}</div>}
           </div>

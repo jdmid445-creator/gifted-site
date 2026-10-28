@@ -1,5 +1,7 @@
 'use client';
 
+import RedeemSteps from './RedeemSteps';
+
 // The shop console: 1 pick a card · 2 pick what to pay with · 3 check out.
 // Everything up to the final signature works without connecting a wallet.
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -513,7 +515,7 @@ export default function Shop() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           <div className="notice notice-ok">Your {result.name} card is ready.</div>
           <RevealCode code={result.redemption.code} />
-          {result.redemption.instructions && <p className="muted" style={{ margin: 0, fontSize: 13, lineHeight: 1.55 }}>{result.redemption.instructions}</p>}
+          {result.redemption.instructions && <RedeemSteps text={result.redemption.instructions} size={13} />}
           <button className="btn btn-primary" type="button" onClick={() => { resetCheckout(); setResult(null); }}>Buy another</button>
         </div>
       )}

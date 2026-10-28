@@ -1,5 +1,7 @@
 'use client';
 
+import RedeemSteps from './RedeemSteps';
+
 // Max privacy: send any coin to Houdini, which routes it through Monero and delivers SOL to a
 // one-time wallet made in this tab. When the SOL lands, this tab buys the card from that wallet
 // (swap + pay in one transaction). Nothing links the coin you sent to the card you got.
@@ -343,7 +345,7 @@ export default function MaxPrivacy({ product, pkgId, customValue, faceValue, onL
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <div className="notice notice-ok">Your {result.name} card is ready. Paid with Max privacy.</div>
             <RevealCode code={result.redemption.code} />
-            {result.redemption.instructions && <p className="muted" style={{ margin: 0, fontSize: 13, lineHeight: 1.55 }}>{result.redemption.instructions}</p>}
+            {result.redemption.instructions && <RedeemSteps text={result.redemption.instructions} size={13} />}
             <button type="button" className="btn btn-ghost btn-sm" onClick={reset}>Start a new order</button>
           </div>
         )}
