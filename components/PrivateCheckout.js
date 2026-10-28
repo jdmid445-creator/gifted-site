@@ -268,29 +268,29 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
         {phase === 'quoting' && <span className="muted" role="status">Setting up your private order…</span>}
 
         {q && ['deposit', 'sending', 'tracking'].includes(phase) && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}><span className="muted">Gift card</span><span>{order.entry.name} · {order.entry.value} {order.invoice.currency}</span></div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}><span className="muted">Send exactly</span><CopyAmount amount={sendAmount} symbol={q.symbol} /></div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}><span className="muted">Usually takes</span><span>About a minute once your deposit lands</span></div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14, flex: 1 }}>
+            <OrderSummary product={product} faceValue={order.entry.value} rows={[
+              ['Send exactly', <CopyAmount key="amt" amount={sendAmount} symbol={q.symbol} size={14} weight={500} />],
+              ['Network', chainInfo?.label],
+              ['Usually takes', 'About a minute'],
+            ]} />
             {phase === 'deposit' && (
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'center', padding: 16, borderRadius: 14, background: 'var(--bg)', border: '1px solid var(--line)' }}>
-                <QrCode value={q.depositAddress} size={150} />
-                <div style={{ flex: '1 1 240px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  <span className="label">Send to this address ({chainInfo?.label})</span>
-                  <code style={{ wordBreak: 'break-all', font: '500 14px var(--code)' }}>{q.depositAddress}</code>
-                  {q.depositMemo && <span>Memo: <code>{q.depositMemo}</code></span>}
-                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                    <Copy value={q.depositAddress} label="Copy address" />
-                    <Copy value={sendAmount} label="Copy amount" />
-                  </div>
+              <div className="deposit-box">
+                <QrCode value={q.depositAddress} size={168} label="" />
+                <span className="label">Send to this {chainInfo?.label} address</span>
+                <code className="deposit-addr">{q.depositAddress}</code>
+                {q.depositMemo && <span style={{ fontSize: 14 }}>Memo (required): {q.depositMemo}</span>}
+                <div className="deposit-actions">
+                  <Copy value={q.depositAddress} label="Copy address" />
+                  <Copy value={sendAmount} label="Copy amount" />
                 </div>
               </div>
             )}
-            {phase === 'sending' && <span className="muted" role="status">Approve the deposit in your wallet…</span>}
-            <div className="notice notice-info" role="status">Status: {STATUS_TEXT[status] || 'Waiting for your deposit'}</div>
-            {phase === 'deposit' && (
-              <button type="button" className="btn btn-ghost btn-sm" onClick={startOver}>Change card or start over</button>
-            )}
+            <div className="deposit-status" role="status">
+              <span className="live-dot" aria-hidden="true" />
+              <span>{phase === 'sending' ? 'Approve the deposit in your wallet…' : STATUS_TEXT[status] || 'Waiting for your deposit'}</span>
+              {phase === 'deposit' && <button type="button" className="link-btn" onClick={startOver}>Start over</button>}
+            </div>
           </div>
         )}
 

@@ -18,7 +18,7 @@ export default function QrCode({ value, size = 168, label = 'Scan to copy the ad
   return (
     <figure className="qr" style={{ '--qr': `${size}px` }}>
       <div className="qr-box" role="img" aria-label={`QR code for ${value}`} dangerouslySetInnerHTML={svg ? { __html: svg } : undefined} />
-      <figcaption>{label}</figcaption>
+      {label ? <figcaption>{label}</figcaption> : null}
     </figure>
   );
 }

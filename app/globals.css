@@ -452,3 +452,17 @@ html.motion .fw-apps[data-reveal].is-in .fw-app:hover { transform: translateY(-2
 .redeem-btn.is-on { color: #8FE3A8; border-color: rgba(120,220,150,.35); background: rgba(120,220,150,.08); }
 .card.is-redeemed { opacity: .62; }
 .card.is-redeemed:hover { opacity: 1; }
+
+/* deposit step */
+.deposit-box { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 18px 16px 16px; border-radius: var(--radius-sm); background: var(--bg); border: 1px solid var(--line); text-align: center; }
+.deposit-box > svg, .deposit-box > canvas, .deposit-box > img, .deposit-box > div:first-child { border-radius: 12px; }
+.deposit-addr { font: 500 14px/1.5 var(--display); color: var(--text); word-break: break-all; max-width: 300px; letter-spacing: 0; }
+.deposit-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-top: 4px; }
+.deposit-actions .btn { width: 100%; justify-content: center; }
+.deposit-status { margin-top: auto; display: flex; align-items: center; gap: 10px; padding-top: 14px; border-top: 1px solid var(--line); font: 500 14px var(--display); }
+.deposit-status .link-btn { margin-left: auto; }
+.link-btn { background: none; border: 0; padding: 0; color: var(--muted); font: 500 13px var(--display); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.link-btn:hover { color: var(--text); }
+
+.deposit-box .btn { font-size: 14px; }
+.deposit-box .label, .deposit-status .link-btn { font-size: 13px; }
