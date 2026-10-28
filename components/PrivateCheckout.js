@@ -13,6 +13,7 @@ import {
 } from '@solana/spl-token';
 import QrCode from './QrCode';
 import OrderSummary from './OrderSummary';
+import CopyAmount from './CopyAmount';
 import RevealCode from './RevealCode';
 import { CHAINS, getChain, isValidAddress } from '@/lib/chains';
 import { loadCards, saveCards, statusUrl } from '@/lib/cards';
@@ -42,12 +43,12 @@ function fmtUnits(raw, decimals) {
   return frac ? `${whole}.${frac}` : whole;
 }
 
-function Copy({ value }) {
+function Copy({ value, label = 'Copy' }) {
   const [ok, setOk] = useState(false);
   return (
     <button type="button" className="btn btn-ghost" style={{ minHeight: 40, padding: '0 14px' }}
       onClick={() => { navigator.clipboard?.writeText(value); setOk(true); setTimeout(() => setOk(false), 1400); }}>
-      {ok ? 'Copied' : 'Copy'}
+      {ok ? 'Copied' : label}
     </button>
   );
 }
@@ -273,7 +274,7 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
         {q && ['deposit', 'sending', 'tracking'].includes(phase) && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}><span className="muted">Gift card</span><span>{order.entry.name} · {order.entry.value} {order.invoice.currency}</span></div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}><span className="muted">Send exactly</span><strong>{sendAmount} {q.symbol}</strong></div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}><span className="muted">Send exactly</span><CopyAmount amount={sendAmount} symbol={q.symbol} /></div>
             {q.timeEstimate ? <div style={{ display: 'flex', justifyContent: 'space-between' }}><span className="muted">Usually takes</span><span>~{q.timeEstimate}s after your deposit lands</span></div> : null}
             {phase === 'deposit' && (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'center', padding: 16, borderRadius: 14, background: 'var(--bg)', border: '1px solid var(--line)' }}>
@@ -283,7 +284,8 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
                   <code style={{ wordBreak: 'break-all', font: '500 14px var(--code)' }}>{q.depositAddress}</code>
                   {q.depositMemo && <span>Memo: <code>{q.depositMemo}</code></span>}
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                    <Copy value={q.depositAddress} />
+                    <Copy value={q.depositAddress} label="Copy address" />
+                    <Copy value={sendAmount} label="Copy amount" />
                     {chain === 'sol' && connected && <button type="button" className="btn btn-primary" style={{ minHeight: 40 }} onClick={payWithWallet}>Pay with wallet</button>}
                   </div>
                 </div>

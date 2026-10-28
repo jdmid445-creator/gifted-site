@@ -11,6 +11,7 @@ import { Buffer } from 'buffer';
 import bs58 from 'bs58';
 import QrCode from './QrCode';
 import OrderSummary from './OrderSummary';
+import CopyAmount from './CopyAmount';
 import RevealCode from './RevealCode';
 import { relay } from './TokenIcon';
 import { loadCards, saveCards, statusUrl } from '@/lib/cards';
@@ -315,7 +316,7 @@ export default function MaxPrivacy({ product, pkgId, customValue, faceValue, onL
                 <QrCode value={order.depositAddress} size={136} />
                 <div style={{ flex: '1 1 180px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
                   <span className="label">Send exactly</span>
-                  <span style={{ font: '500 20px var(--display)', fontVariantNumeric: 'tabular-nums' }}>{order.inAmount} {order.inSymbol}</span>
+                  <CopyAmount amount={order.inAmount} symbol={order.inSymbol} />
                   <span className="label">To this address{order.fromChain ? ` (${order.fromChain})` : ''}</span>
                   <code style={{ font: '500 12.5px var(--code)', wordBreak: 'break-all' }}>{order.depositAddress}</code>
                   {order.depositTag && <span style={{ fontSize: 13 }}>Memo / tag: <code>{order.depositTag}</code> <span className="muted">(required)</span></span>}
