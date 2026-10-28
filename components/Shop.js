@@ -352,7 +352,7 @@ export default function Shop() {
             onClick={() => { setCat(c); catRef.current = c; setQuery(''); search(''); }}>{c}</button>
         ))}
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 8, maxHeight: 300, overflowY: 'auto', paddingBottom: 3 }}>
+      <div className="brand-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gridAutoRows: 'max-content', alignContent: 'start', gap: 8, flex: '1 1 0', minHeight: 300, overflowY: 'auto', paddingBottom: 3 }}>
         {loadingProducts && Array.from({ length: 6 }, (_, i) => <span key={`sk${i}`} className="skeleton" style={{ height: 54 }} />)}
         {!loadingProducts && loadError && (
           <span style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, fontSize: 14 }} className="muted">

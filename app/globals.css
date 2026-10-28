@@ -437,3 +437,5 @@ html.motion .fw-apps[data-reveal].is-in .fw-app:hover { transform: translateY(-2
 .feed-wallet { flex: none; padding: 5px 10px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); font: 500 12.5px var(--code); color: var(--muted); filter: blur(3.5px); user-select: none; }
 
 .chip:disabled { opacity: .3; cursor: not-allowed; }
+
+@media (max-width: 680px) { .brand-grid { flex: none !important; max-height: 320px; } }
