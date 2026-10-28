@@ -227,7 +227,7 @@ select.input:disabled { cursor: default; }
 
 @media (prefers-reduced-motion: no-preference) {
   .site-header { animation: fade-down .6s ease both; }
-  .hero-title .line { display: block; overflow: hidden; padding-bottom: .08em; margin-bottom: -.08em; }
+  .hero-title .line { display: block; overflow: hidden; padding-bottom: .26em; margin-bottom: -.26em; }
   .hero-title .line-inner { display: inline-block; animation: line-up .9s cubic-bezier(.2,.8,.2,1) both; }
   .hero-title .line:nth-child(1) .line-inner { animation-delay: 100ms; }
   .hero-title .line:nth-child(2) .line-inner { animation-delay: 210ms; }
