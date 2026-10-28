@@ -172,19 +172,20 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
 
   async function track(entry, depositAddress) {
     const me = ++trackId.current;
-    for (let i = 0; i < 360; i++) {
+    for (let i = 0; i < 720; i++) {
       if (trackId.current !== me) return;
       try {
         const s = await fetch(`/api/private/status?depositAddress=${encodeURIComponent(depositAddress)}`).then((r) => r.json());
         if (s.status) setStatus(s.status);
-        if (['KNOWN_DEPOSIT_TX', 'PROCESSING'].includes(s.status)) setPhase((p) => (p === 'deposit' ? 'tracking' : p));
+        if (['KNOWN_DEPOSIT_TX', 'PROCESSING', 'SUCCESS'].includes(s.status)) setPhase((p) => (p === 'deposit' ? 'tracking' : p));
         if (['REFUNDED', 'FAILED'].includes(s.status)) { setPhase('idle'); setError(STATUS_TEXT[s.status]); return; }
-        if (s.status === 'SUCCESS') {
+        // Check the card itself once the shop is paid, and every few rounds anyway in case the network's status lags.
+        if (s.status === 'SUCCESS' || i % 4 === 3) {
           const inv = await fetch(statusUrl(entry)).then((r) => r.json());
           if (inv.status === 'complete' && inv.redemption) { setResult({ ...entry, redemption: inv.redemption }); setPhase('done'); return; }
         }
       } catch {}
-      await new Promise((r) => setTimeout(r, 5000));
+      await new Promise((r) => setTimeout(r, 2500));
     }
     setError('Still working on it. Your order is saved under My cards, so you can check back.');
   }
@@ -275,7 +276,7 @@ export default function PrivateCheckout({ product, pkgId, customValue, faceValue
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}><span className="muted">Gift card</span><span>{order.entry.name} · {order.entry.value} {order.invoice.currency}</span></div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}><span className="muted">Send exactly</span><CopyAmount amount={sendAmount} symbol={q.symbol} /></div>
-            {q.timeEstimate ? <div style={{ display: 'flex', justifyContent: 'space-between' }}><span className="muted">Usually takes</span><span>~{q.timeEstimate}s after your deposit lands</span></div> : null}
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}><span className="muted">Usually takes</span><span>About a minute once your deposit lands</span></div>
             {phase === 'deposit' && (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'center', padding: 16, borderRadius: 14, background: 'var(--bg)', border: '1px solid var(--line)' }}>
                 <QrCode value={q.depositAddress} size={150} />
