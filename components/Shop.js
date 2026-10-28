@@ -44,6 +44,9 @@ const BASE = [
 const POPULAR = BASE;
 
 // Start on a sensible amount (around $25-50), not the biggest one.
+// Houdini Swap's private (Monero) route won't run below this, so Max privacy starts here.
+export const MAX_MIN_USD = 25;
+
 const defaultPkg = (p) => (p.packages.slice(0, 5).find((k) => k.value >= 25) || p.packages[0])?.id || null;
 const cleanName = (n = '') => n.replace(/\s*\(.*\)$/, '');
 
@@ -89,6 +92,16 @@ export default function Shop() {
 
   const [mode, setMode] = useState('private');
   const [locked, setLocked] = useState(false);
+  const tooSmall = (k) => mode === 'max' && product?.currency === 'USD' && k.value < MAX_MIN_USD;
+  // Switching to Max privacy with a small card picked moves to the smallest amount it can route.
+  function bumpForMax() {
+    if (!product || product.currency !== 'USD' || !pkgId) return;
+    const cur = product.packages.find((k) => k.id === pkgId);
+    if (cur && cur.value < MAX_MIN_USD) {
+      const next = product.packages.find((k) => k.value >= MAX_MIN_USD);
+      if (next) setPkgId(next.id);
+    }
+  }
   const [query, setQuery] = useState('');
   const [cat, setCat] = useState('Popular');
   const [country, setCountry] = useState('US');
@@ -365,7 +378,7 @@ export default function Shop() {
           {product.packages.length > 0 ? (
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
               {product.packages.slice(0, 5).map((k) => (
-                <button key={k.id} type="button" className="chip" aria-pressed={pkgId === k.id} onClick={() => { setPkgId(k.id); resetCheckout(); }}>{product.currency === 'USD' ? '$' : ''}{k.value.toLocaleString()}</button>
+                <button key={k.id} type="button" className="chip" aria-pressed={pkgId === k.id} disabled={tooSmall(k)} title={tooSmall(k) ? `Max privacy starts at $${MAX_MIN_USD}` : undefined} onClick={() => { setPkgId(k.id); resetCheckout(); }}>{product.currency === 'USD' ? '$' : ''}{k.value.toLocaleString()}</button>
               ))}
               {product.packages.length > 5 && (() => {
                 const more = product.packages.slice(5);
@@ -379,13 +392,17 @@ export default function Shop() {
                   >
                     <option value="" disabled>More amounts</option>
                     {more.map((k) => (
-                      <option key={k.id} value={k.id}>{product.currency === 'USD' ? '$' : ''}{k.value.toLocaleString()}</option>
+                      <option key={k.id} value={k.id} disabled={tooSmall(k)}>{product.currency === 'USD' ? '$' : ''}{k.value.toLocaleString()}</option>
                     ))}
                   </select>
                 );
               })()}
             </div>
-          ) : product.range ? (
+          ) : null}
+          {mode === 'max' && product.currency === 'USD' && product.packages.some(tooSmall) && (
+            <span className="muted" style={{ fontSize: 13, lineHeight: 1.5 }}>Max privacy starts at ${MAX_MIN_USD}, the smallest amount Houdini Swap’s private route accepts. Private checkout works for any amount.</span>
+          )}
+          {product.packages.length > 0 ? null : product.range ? (
             <>
               <label htmlFor="amt" className="muted" style={{ fontSize: 13 }}>Any amount from {product.range.min} to {product.range.max}</label>
               <input id="amt" className="input" inputMode="decimal" placeholder={String(product.range.min)} value={customValue} onChange={(e) => { setCustomValue(e.target.value); setPkgId(null); resetCheckout(); }} />
@@ -509,7 +526,7 @@ export default function Shop() {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14, flexWrap: 'wrap' }}>
         <div className="mode-switch" role="group" aria-label="Checkout mode" style={{ width: 'min(100%, 360px)' }}>
           <button type="button" disabled={locked} aria-pressed={mode === 'private'} onClick={() => { setMode('private'); resetCheckout(); }}><IconEyeOff width={17} height={17} /> Private</button>
-          <button type="button" disabled={locked} aria-pressed={mode === 'max'} onClick={() => { setMode('max'); resetCheckout(); }}><IconShield width={17} height={17} /> Max privacy</button>
+          <button type="button" disabled={locked} aria-pressed={mode === 'max'} onClick={() => { setMode('max'); resetCheckout(); bumpForMax(); }}><IconShield width={17} height={17} /> Max privacy</button>
         </div>
         <span className="muted" style={{ fontSize: 14, flex: '1 1 280px', textAlign: 'right' }}>
           {mode === 'max'

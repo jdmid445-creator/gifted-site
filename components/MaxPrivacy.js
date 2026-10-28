@@ -120,7 +120,8 @@ export default function MaxPrivacy({ product, pkgId, customValue, faceValue, onL
   const secret = useMemo(() => (kp ? bs58.encode(kp.secretKey) : ''), [kp]);
   const address = kp?.publicKey.toBase58() || '';
   const list = results ?? coins;
-  const ready = enabled && product && faceValue && coin && refund.trim().length >= 8 && saved && phase === 'idle';
+  const belowMin = product?.currency === 'USD' && Number(faceValue) > 0 && Number(faceValue) < 25;
+  const ready = enabled && product && faceValue && !belowMin && coin && refund.trim().length >= 8 && saved && phase === 'idle';
 
   async function start() {
     setError('');
@@ -295,14 +296,17 @@ export default function MaxPrivacy({ product, pkgId, customValue, faceValue, onL
           <>
             <OrderSummary product={product} faceValue={faceValue} rows={[['Paying with', coin ? `${coin.symbol} on ${coin.chainName}` : '—'], ['GiftedSwaps fee', '$0'], ['Usually takes', '15–45 minutes']]} />
             <p className="muted" style={{ margin: 0, fontSize: 13.5, lineHeight: 1.55 }}>Your coins come out of Monero as SOL in this brand-new wallet, then it pays for the card on its own. Leftover SOL stays yours.</p>
-            <div className="key-line" style={{ padding: '10px 12px' }}><code style={{ fontSize: 12.5 }}>{address}</code></div>
-            <button type="button" className="key-line key-secret" data-shown={showKey} onClick={() => setShowKey(true)} style={{ padding: '10px 12px' }} aria-label={showKey ? 'Private key' : 'Show private key'}>
+            <span className="label">One-time wallet address</span>
+            <div className="key-line" style={{ padding: '10px 12px', marginTop: -8 }}><code style={{ fontSize: 12.5 }}>{address}</code></div>
+            <span className="label">Backup key <span className="dim">(keep it secret, it controls this wallet)</span></span>
+            <button type="button" className="key-line key-secret" data-shown={showKey} onClick={() => setShowKey(true)} style={{ padding: '10px 12px', marginTop: -8 }} aria-label={showKey ? 'Private key' : 'Show private key'}>
               <code className="code-text" style={{ fontSize: 12.5 }} aria-hidden={!showKey}>{secret}</code>
               {!showKey && <span className="code-cover"><IconEyeOff width={15} height={15} /> Show backup key</span>}
             </button>
             {showKey && <div><Copy value={secret} label="Copy backup key" /></div>}
             <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 12, paddingTop: 14, borderTop: '1px solid var(--line)' }}>
               <label className="fw-check"><input type="checkbox" checked={saved} onChange={(e) => setSaved(e.target.checked)} /><span>I saved the backup key</span></label>
+              {belowMin && <span className="notice notice-info" style={{ fontSize: 13 }}>Max privacy starts at $25. Pick a bigger amount, or use Private checkout for this one.</span>}
               <button type="button" className="btn btn-primary" disabled={!ready} onClick={start}>{phase === 'starting' ? 'Finding a private route…' : 'Get my deposit address'}</button>
               <p className="fw-note" style={{ fontSize: 12.5 }}><IconShield width={15} height={15} /> Houdini needs your IP, browser and timezone for its own screening. We pass them along and keep nothing.</p>
             </div>
