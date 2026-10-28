@@ -48,7 +48,12 @@ const POPULAR = BASE;
 // Houdini Swap's private (Monero) route won't run below this, so Max privacy starts here.
 export const MAX_MIN_USD = 25;
 
-const defaultPkg = (p) => (p.packages.slice(0, 5).find((k) => k.value >= 25) || p.packages[0])?.id || null;
+// Start on the middle of the amount chips shown (the 3rd of 5).
+const defaultPkg = (p, max = false) => {
+  const list = max && p.currency === 'USD' ? p.packages.filter((k) => k.value >= 25) : p.packages;
+  const chips = (list.length ? list : p.packages).slice(0, 5);
+  return chips[Math.floor((chips.length - 1) / 2)]?.id || null;
+};
 const cleanName = (n = '') => n.replace(/\s*\(.*\)$/, '');
 
 const short = (s) => (s ? `${s.slice(0, 4)}…${s.slice(-4)}` : '');
@@ -99,8 +104,8 @@ export default function Shop() {
     if (!product || product.currency !== 'USD' || !pkgId) return;
     const cur = product.packages.find((k) => k.id === pkgId);
     if (cur && cur.value < MAX_MIN_USD) {
-      const next = product.packages.find((k) => k.value >= MAX_MIN_USD);
-      if (next) setPkgId(next.id);
+      const next = defaultPkg(product, true);
+      if (next) setPkgId(next);
     }
   }
   const [query, setQuery] = useState('');
@@ -365,7 +370,7 @@ export default function Shop() {
         {!loadingProducts && !loadError && shown.length === 0 && <span className="muted" style={{ fontSize: 14, gridColumn: '1 / -1' }}>No cards found. Try another brand or country.</span>}
         {!loadingProducts && shown.map((p) => (
           <button key={p.id} type="button" className="pick" aria-pressed={product?.id === p.id} style={{ minHeight: 54 }}
-            onClick={() => { setProduct(p); setPkgId(mode === 'max' && p.currency === 'USD' ? (p.packages.find((k) => k.value >= MAX_MIN_USD) || p.packages[0])?.id || null : defaultPkg(p)); setCustomValue(''); resetCheckout(); }}>
+            onClick={() => { setProduct(p); setPkgId(defaultPkg(p, mode === 'max')); setCustomValue(''); resetCheckout(); }}>
             <CardThumb key={p.id} name={p.name} image={p.image} domain={p.domain} width={44} />
             <span style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
               <span style={{ fontWeight: 500, fontSize: 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{cleanName(p.name)}</span>

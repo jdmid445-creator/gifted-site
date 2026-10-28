@@ -57,8 +57,8 @@ export async function POST(req) {
     // The app polls the invoice for status, so no webhook is needed yet.
     const inv = await createInvoice({
       productId: product.id,
-      packageId: packageId || null,
-      value: packageId ? null : faceValue,
+      packageId: packageId && !String(packageId).startsWith('r:') ? packageId : null,
+      value: packageId && !String(packageId).startsWith('r:') ? null : faceValue,
       refundAddress: wallet,
     });
     if (!inv.payTo || !inv.price || String(inv.currency || '').toUpperCase().indexOf('USDC') === -1) {
