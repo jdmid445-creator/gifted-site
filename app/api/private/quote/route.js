@@ -61,10 +61,24 @@ export async function POST(req) {
     recipient: inv.payTo,
     recipientType: 'DESTINATION_CHAIN',
     deadline: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
-    confidentiality: confidentialityLevel(),
   };
 
-  const { ok, status, data } = await oneClick('/v0/quote', { method: 'POST', body: JSON.stringify(body) });
+  // Ask for the strongest confidentiality first. Confidential quotes have fewer solvers, so when one comes back
+  // with no liquidity, step down a level. Either way the shop is paid by the network, never by the buyer's wallet.
+  const LEVELS = ['advanced', 'basic', null];
+  const pref = confidentialityLevel();
+  const start = pref === 'public' ? 2 : Math.max(0, LEVELS.indexOf(pref));
+  let ok, status, data, used = null;
+  for (const level of LEVELS.slice(start)) {
+    const attempt = { ...body };
+    if (level) attempt.confidentiality = level;
+    ({ ok, status, data } = await oneClick('/v0/quote', { method: 'POST', body: JSON.stringify(attempt) }));
+    used = level;
+    if (ok) break;
+    const msg = errorMessage(data, '');
+    if (!/liquidity|authentication|no route|not available/i.test(msg)) break;
+  }
+  body.confidentiality = used || 'standard';
   if (!ok) return NextResponse.json({ error: errorMessage(data, 'No private route for this asset right now') }, { status });
 
   const q = data?.quote || {};
