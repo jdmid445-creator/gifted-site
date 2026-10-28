@@ -327,7 +327,7 @@ export default function Shop() {
         <input id="brand-q" className="input" style={{ paddingLeft: 44 }} placeholder="Search Nike, DoorDash, Chipotle…" value={query} onChange={(e) => setQuery(e.target.value)} />
       </form>
       <label htmlFor="country" className="sr-only">Country</label>
-      <select id="country" className="input" value={country} onChange={(e) => changeCountry(e.target.value)} style={{ width: 84, flex: 'none', paddingRight: 6 }} title="Where you'll use the card">
+      <select id="country" className="input" value={country} onChange={(e) => changeCountry(e.target.value)} style={{ width: 96, flex: 'none', paddingLeft: 16, paddingRight: 36, backgroundPosition: 'right 14px center' }} title="Where you'll use the card">
         {COUNTRIES.map(([code, name]) => <option key={code} value={code} title={name}>{code}</option>)}
       </select>
       </div>
