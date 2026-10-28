@@ -480,3 +480,7 @@ html.motion .fw-apps[data-reveal].is-in .fw-app:hover { transform: translateY(-2
 .progress-steps li.is-now::before { border-color: #F0517A; border-top-color: transparent; animation: gs-spin 1s linear infinite; }
 @keyframes gs-spin { to { transform: rotate(360deg); } }
 .progress-note { margin: 0; padding-top: 14px; border-top: 1px solid var(--line); font-size: 13px; line-height: 1.5; color: var(--muted); }
+
+/* keep the footer on the bottom edge on short pages */
+body { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
+#main { flex: 1 0 auto; }

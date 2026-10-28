@@ -79,7 +79,17 @@ export async function POST(req) {
     if (!/liquidity|authentication|no route|not available/i.test(msg)) break;
   }
   body.confidentiality = used || 'standard';
-  if (!ok) return NextResponse.json({ error: errorMessage(data, 'No private route for this asset right now') }, { status });
+  if (!ok) {
+    const msg = errorMessage(data, 'No private route for this asset right now');
+    // The network reports its minimum in USDC base units; turn it into a card size people understand.
+    const low = msg.match(/too low.*?at least\s*(\d+)/i);
+    if (low) {
+      const min = Math.ceil(Number(low[1]) / 10 ** (usdcSol.decimals ?? 6));
+      return NextResponse.json({ error: `${origin.symbol} needs a card of about $${min} or more on this route. Pick a bigger amount, or pay with another coin.` }, { status: 400 });
+    }
+    if (/refundTo/i.test(msg)) return NextResponse.json({ error: 'Enter a valid refund address on the chain you’re paying from' }, { status: 400 });
+    return NextResponse.json({ error: msg }, { status });
+  }
 
   const q = data?.quote || {};
   return NextResponse.json({
